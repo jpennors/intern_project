@@ -57,6 +57,10 @@ public class User {
 		this.is_admin = is_admin;
 		this.company_id = company_id;
 	}
+
+    public User(String parameter, String parameter0, String parameter1, String parameter2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
 	
 	/**
