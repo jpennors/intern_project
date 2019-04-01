@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package model;
 
+import model.Company;
 import java.util.Date;
 
 /**
@@ -45,27 +46,38 @@ public class User {
 	 * @param company_id
 	 */
 	
-	public User(String email, String password, String name, String first_name, Boolean etatus, String phone,
+	public User(String email, String password, String name, String first_name, Boolean status, String phone,
 			Date created_date, Boolean is_admin, Company company_id) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.first_name = first_name;
-		this.status = etatus;
+		this.status = status;
 		this.phone = phone;
 		this.created_date = created_date;
 		this.is_admin = is_admin;
 		this.company_id = company_id;
 	}
 
-    public User(String parameter, String parameter0, String parameter1, String parameter2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public User(String email, String password, String name, String first_name) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.first_name = first_name;
+        this.status = true;
+        this.phone = "06";
+        this.created_date = new Date();
+        this.is_admin = false;
+        this.company_id = null;
     }
 	
 	
 	/**
 	 * GETTERS / SETTERS
 	 * 
+     * @return 
 	 */
 	
 	public String getEmail() {
@@ -163,6 +175,7 @@ public class User {
 	/**
 	 * ToString Method
 	 * 
+     * @return 
 	 */
 	
 	@Override
@@ -173,3 +186,4 @@ public class User {
 	}
 	
 }
+
