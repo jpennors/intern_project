@@ -14,20 +14,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Questionnaire;
 import model.User;
 
 /**
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours"})
+@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours", "/create_questionnaire", "/questionnaires"})
 public class Controller extends HttpServlet {
     
     /**
      * Variables meanwhile databse doesn't exist
      */
     private static Hashtable<Integer, User> usersTable= new Hashtable<Integer, User>();
-    
+    private static Hashtable<Integer, Questionnaire> questionnaireTable= new Hashtable<Integer, Questionnaire>();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,6 +60,15 @@ public class Controller extends HttpServlet {
                 case "/intern_project/users_encours":
                     returnView(request, response, "/WEB-INF/user/index_user.html");
                     break;
+                    
+                case "/intern_project/create_questionnaire":
+                    returnView(request, response, "/WEB-INF/question/create_questionnaire.jsp");
+                    break;      
+                    
+                case "/intern_project/questionnaires":
+                    returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
+                    break;    
+                    
             }
         } else if ("POST".equals(request.getMethod())){
             switch(request.getRequestURI()){
@@ -66,6 +76,11 @@ public class Controller extends HttpServlet {
                     boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
                     usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin));
                     response.sendRedirect("/intern_project/users");
+                    break; 
+                case "/intern_project/create_questionnaire":
+                    questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
+                    response.sendRedirect("/intern_project/questionnaires");
+                    break;
                     
                     
             
