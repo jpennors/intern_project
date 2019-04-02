@@ -11,7 +11,7 @@ import java.time.Duration;
  *
  * @author lolal
  */
-public class parcours {
+public class Parcours {
     
     /*
     ATTRIBUTES 
@@ -28,7 +28,7 @@ public class parcours {
      * @param user_id
      * @param questionnaire_id 
      */
-    public parcours(Integer id, Duration duration, User user_id, Questionnaire questionnaire_id) {
+    public Parcours(Integer id, Duration duration, User user_id, Questionnaire questionnaire_id) {
         this.id = id;
         this.duration = duration;
         this.user_id = user_id;
