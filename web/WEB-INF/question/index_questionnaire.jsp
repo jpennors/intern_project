@@ -4,11 +4,14 @@
     Author     : lolal
 --%>
 
+<%@page import="java.util.Hashtable"%>
+<%@page import="model.Questionnaire"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Intern Project</title>
         
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -19,5 +22,19 @@
     </head>
     <body>
         <h1 style="text-align: center; margin: 40px">Liste des questionnaires</h1>
+        <div class="row">
+            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
+                <div class="card-body">
+            
+            <%
+               Hashtable<Integer, Questionnaire> questionnaireTable=  (Hashtable<Integer, Questionnaire>)request.getAttribute("Questionnaires");
+               for (int i=0; i< questionnaireTable.size(); i++){
+                   out.println(questionnaireTable.get(i).getSubject());
+                   out.println("</br>");
+               }
+            %> 
+                </div>
+            </div>
+        </div>
     </body>
 </html>

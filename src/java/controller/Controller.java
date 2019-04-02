@@ -66,6 +66,7 @@ public class Controller extends HttpServlet {
                     break;      
                     
                 case "/intern_project/questionnaires":
+                    request.setAttribute("Questionnaires", questionnaireTable);
                     returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
                     break;    
                     
