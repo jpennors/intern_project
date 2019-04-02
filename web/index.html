@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
     <head>
         <title>Intern Project</title>
@@ -12,47 +18,19 @@
     </head>
 
     <body>
-        <h1 style="text-align: center; margin: 40px">Ajouter un utilisateur</h1>
+        <h1 style="text-align: center; margin: 40px">Accueil</h1>
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
                 <div class="card-body">
-                    <div class="form-group">
-                        <form action="/Controller" method="post">
-                            <div class="form-group row">
-                                <label for="inputName" class="col-sm-4 col-form-label">Nom</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="inputName" name="name">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputFirstName" class="col-sm-4 col-form-label">Prénom</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="inputFirstName" name="first_name">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputPhone" class="col-sm-4 col-form-label">Téléphone</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="inputPhone" name="phone">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputEmail" class="col-sm-4 col-form-label">Email</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputEmail" name="email">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label">Password</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword" name="password">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
+                    <div class="row">
+                        <button class="btn btn-lg btn-info mb-1 col-sm-4 offset-sm-4"><a href="create_user" class="text-decoration-none text-reset">Créer un utilisateur</a></button>
                     </div>
+                    <br>
+                    <button class="btn btn-lg btn-info mb-1 col-sm-4 offset-sm-4"><a href="users" class="text-decoration-none text-reset">Lister les utilisateurs</a></button>
+                    
                 </div>
             </div>
         </div>			
     </body>
 </html>
+
