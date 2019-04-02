@@ -20,7 +20,7 @@ import model.User;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users"})
+@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours"})
 public class Controller extends HttpServlet {
     
     /**
@@ -44,38 +44,33 @@ public class Controller extends HttpServlet {
         
         System.out.println(request.getRequestURI());
         System.out.println(request.getMethod());
-        
+                
         if("GET".equals(request.getMethod())){
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
-                    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/user/create_user.html");
-                    view.forward(request, response);
+                    returnView(request, response, "/WEB-INF/user/create_user.html");
+                    break;
                     
                 case "/intern_project/users":
                     System.out.println("Bien arrivé !");
                     displayUser(request, response);
-
+                    break;
+                    
+                case "/intern_project/users_encours":
+                    returnView(request, response, "/WEB-INF/user/index_user.html");
+                    break;
             }
         } else if ("POST".equals(request.getMethod())){
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
-                    usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name") ));
-                    displayUser(request, response);
+                    boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
+                    usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin));
+                    response.sendRedirect("/intern_project/users");
+                    
+                    
             
             }
         }
-        /*try (PrintWriter out = response.getWriter()) {
-            //TODO output your page here. You may use following sample code. 
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Controller</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Controller at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -117,7 +112,13 @@ public class Controller extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
+
+    /**
+     * Retourn la liste des utilisateurs stockés dans la variable @usersTable
+     * @param request
+     * @param response
+     * @throws IOException 
+     */
     protected void displayUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
         try (PrintWriter out = response.getWriter()) {
             //TODO output your page here. You may use following sample code. 
@@ -133,19 +134,41 @@ public class Controller extends HttpServlet {
             out.println("<th>Nom</th>");
             out.println("<th>Prénom</th>");
             out.println("<th>Email</th>");
+            out.println("<th>Téléphone</th>");
+            out.println("<th>Type</th>");
             out.println("</tr>");
             int i;
             for (i=0; i< usersTable.size(); i++){
                 out.println("<tr>");
                 out.println("<td>" + usersTable.get(i).getName() + "</td>");
-                out.println("<td>" + usersTable.get(i).getName() + "</td>");
-                out.println("<td>" + usersTable.get(i).getName() + "</td>");
-                out.println("<td>" + usersTable.get(i).getName() + "</td>");
+                out.println("<td>" + usersTable.get(i).getFirst_name() + "</td>");
+                out.println("<td>" + usersTable.get(i).getEmail() + "</td>");
+                out.println("<td>" + usersTable.get(i).getPhone() + "</td>");
+                if (usersTable.get(i).getIs_admin()){
+                    out.println("<td>Administrateur</td>");
+                } else {
+                    out.println("<td>Stagiaire</td>");
+                }
                 out.println("</tr>");
             }
             out.println("</table>");
             out.println("</body>");
             out.println("</html>");
         }
+    }
+    
+    /**
+     * Retourne une vue HTML avec le @path donné en paramètre
+     * @param request
+     * @param response
+     * @param path
+     * @throws ServletException
+     * @throws IOException 
+     */
+    protected void returnView(HttpServletRequest request, HttpServletResponse response, String path) throws ServletException, IOException{
+        
+        RequestDispatcher view = request.getRequestDispatcher(path);
+        view.forward(request, response);
+
     }
 }

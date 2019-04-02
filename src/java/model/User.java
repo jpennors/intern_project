@@ -59,7 +59,7 @@ public class User {
 		this.company_id = company_id;
 	}
 
-    public User(String email, String password, String name, String first_name) {
+    public User(String email, String password, String name, String first_name, String phone, Boolean isAdmin) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     
         this.email = email;
@@ -67,9 +67,9 @@ public class User {
         this.name = name;
         this.first_name = first_name;
         this.status = true;
-        this.phone = "06";
+        this.phone = phone;
         this.created_date = new Date();
-        this.is_admin = false;
+        this.is_admin = isAdmin;
         this.company_id = null;
     }
 	
