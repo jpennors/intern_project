@@ -22,7 +22,7 @@ import model.Company;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours", "/create_questionnaire", "/questionnaires"})
+@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
 public class Controller extends HttpServlet {
     
     /**
@@ -31,6 +31,8 @@ public class Controller extends HttpServlet {
     private static Hashtable<Integer, User> usersTable= new Hashtable<Integer, User>();
     private static Hashtable<Integer, Company> companiesTable= new Hashtable<Integer, Company>();
     private static Hashtable<Integer, Questionnaire> questionnaireTable= new Hashtable<Integer, Questionnaire>();
+    
+    private static Questionnaire questionnaireCurrent; 
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,6 +75,11 @@ public class Controller extends HttpServlet {
                 case "/intern_project/questionnaires":
                     request.setAttribute("Questionnaires", questionnaireTable);
                     returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
+                    break;
+                    
+                case "/intern_project/edit_questionnaire":
+                    request.setAttribute("Questionnaire", questionnaireCurrent);
+                    returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
                     break;    
                     
             }
@@ -94,9 +101,11 @@ public class Controller extends HttpServlet {
                     usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, company));
                     response.sendRedirect("/intern_project/users");
                     break; 
+                    
                 case "/intern_project/create_questionnaire":
                     questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
-                    response.sendRedirect("/intern_project/questionnaires");
+                    questionnaireCurrent = questionnaireTable.get(questionnaireTable.size()-1);
+                    response.sendRedirect("/intern_project/edit_questionnaire");
                     break;
             }
         }

@@ -9,30 +9,36 @@ package model;
  *
  * @author lolal
  */
-public class Question {
+public class Response {
     
     /**
      * ATTRIBUTES
      */
     private Integer id; 
     private Boolean status; 
-    private String sentence; 
+    private String name; 
     private Integer order; 
+    private Boolean validity; 
+    private Integer question_id; // id question in BDD
 
+    
     /**
-     * CONSTUCTOR
+     * CONSTRUCTOR
      * @param id
      * @param status
-     * @param sentence
-     * @param order 
+     * @param name
+     * @param order
+     * @param validity
+     * @param question_id 
      */
-    public Question(Integer id, String sentence, Integer order) {
+    public Response(Integer id, String name, Integer order, Boolean validity, Integer question_id) {
         this.id = id;
         this.status = true;
-        this.sentence = sentence;
+        this.name = name;
         this.order = order;
+        this.validity = validity;
+        this.question_id = question_id;
     }
-    
     
     /**
      * GETTERS SETTERS 
@@ -53,12 +59,12 @@ public class Question {
         this.status = status;
     }
 
-    public String getSentence() {
-        return sentence;
+    public String getName() {
+        return name;
     }
 
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getOrder() {
@@ -67,6 +73,22 @@ public class Question {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public Boolean getValidity() {
+        return validity;
+    }
+
+    public void setValidity(Boolean validity) {
+        this.validity = validity;
+    }
+
+    public Integer getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(Integer question_id) {
+        this.question_id = question_id;
     }
     
     

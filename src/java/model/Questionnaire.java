@@ -16,7 +16,7 @@ public class Questionnaire {
      */
     private String subject; 
     private Boolean status; 
-    private User admin_id; 
+    private User admin_id; // (/!\ BDD access) all User info
     
     /**
      * CONSTUCTOR
@@ -24,9 +24,9 @@ public class Questionnaire {
      * @param status
      * @param admin_id 
      */
-    public Questionnaire(String subject, Boolean status, User admin_id) {
+    public Questionnaire(String subject, User admin_id) {
         this.subject = subject;
-        this.status = status;
+        this.status = true;
         this.admin_id = admin_id;
     }
     
