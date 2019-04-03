@@ -18,8 +18,8 @@ public class Parcours {
     */
     private Integer id; 
     private Duration duration; 
-    private User user_id; 
-    private Questionnaire questionnaire_id; 
+    private User user_id; // (/!\ BDD access) all User info 
+    private Questionnaire questionnaire_id; // (/!\ BDD access) all Questionnaire info
     
     /**
      * CONSTUCTOR
