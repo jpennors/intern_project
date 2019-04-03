@@ -28,7 +28,7 @@ public class User {
 	private String phone;
 	private Date created_date;
 	private Boolean is_admin;
-	private Company company_id;
+	private Company company;
 	
 	// TO DO : Add company
 	
@@ -43,20 +43,19 @@ public class User {
 	 * @param phone
 	 * @param created_date
 	 * @param is_admin
-	 * @param company_id
+	 * @param company
 	 */
 	
-	public User(String email, String password, String name, String first_name, Boolean status, String phone,
-			Date created_date, Boolean is_admin, Company company_id) {
+	public User(String email, String password, String name, String first_name, String phone, Boolean is_admin, Company company) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.first_name = first_name;
-		this.status = status;
+		this.status = true;
 		this.phone = phone;
-		this.created_date = created_date;
+		this.created_date = new Date();
 		this.is_admin = is_admin;
-		this.company_id = company_id;
+		this.company = company;
 	}
 
     public User(String email, String password, String name, String first_name, String phone, Boolean isAdmin) {
@@ -70,7 +69,7 @@ public class User {
         this.phone = phone;
         this.created_date = new Date();
         this.is_admin = isAdmin;
-        this.company_id = null;
+        this.company = null;
     }
 	
 	
@@ -163,12 +162,12 @@ public class User {
 		this.is_admin = is_admin;
 	}
 	
-	public Company getCompany_id() {
-		return company_id;
+	public Company getCompany() {
+		return company;
 	}
 	
-	public void setCompany_id(Company company_id) {
-		this.company_id = company_id;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 	
 	
@@ -182,7 +181,7 @@ public class User {
 	public String toString() {
 		return "User{" + "name=" + name + ", first_name=" + first_name + ", email=" + email + ", status=" 
 				+ status + ", phone=" + phone + ", created_date=" + created_date + ", company_id=" 
-				+ company_id + ", is_admin=" + is_admin + "}";
+				+ company + ", is_admin=" + is_admin + "}";
 	}
 	
 }

@@ -1,9 +1,13 @@
+<%-- 
+    Document   : create_user
+    Created on : 3 avr. 2019, 14:37:32
+    Author     : Josselin
+--%>
+
+<%@page import="java.util.Hashtable"%>
+<%@page import="model.Company"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Intern Project</title>
@@ -62,7 +66,30 @@ and open the template in the editor.
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                            <div class="form-group row">
+                                <label for="inputCompany" class="col-sm-4 col-form-label">Entreprise</label>
+                                <div class="col-sm-8">
+                                <%
+                                    Hashtable<Integer, Company> companiesTable = (Hashtable<Integer, Company>)request.getAttribute("Companies");
+                                    if (companiesTable.size() == 0){
+                                        out.println("<input class='form-control' id='inputCompany' name='company'>");
+                                    }
+                                    else {
+                                        out.println("<select class='form-control' id='inputCompany' name='company'>");
+                                        for (int i=0; i< companiesTable.size(); i++){     
+                                            
+                                            out.println("<option value='" + companiesTable.get(i).getName() + "'>" + companiesTable.get(i).getName() + "</option>");
+                                        }
+                                        out.println("</select>");
+                                    }
+                                 %> 
+
+                                </div>
+                                <input type="hidden" name="existingCompany" value="false"></input>
+                            </div>
+                             
+                             
+                             <button type="submit" class="btn btn-primary">Envoyer</button>
                         </form>
                     </div>
                 </div>

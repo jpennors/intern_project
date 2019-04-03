@@ -1,9 +1,12 @@
+<%-- 
+    Document   : index_user
+    Created on : 3 avr. 2019, 14:21:39
+    Author     : Josselin
+--%>
+<%@page import="java.util.Hashtable"%>
+<%@page import="model.User"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Intern Project</title>
@@ -29,35 +32,28 @@ and open the template in the editor.
                                 <th scope="col">Nom</th>
                                 <th scope="col">Prénom</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Télphone</th>
+                                <th scope="col">Télephone</th>
                                 <th scope="col">Type</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                            </tr>
+                            <%
+                                Hashtable<Integer, User> usersTable=  (Hashtable<Integer, User>)request.getAttribute("Users");
+                                for (int i=0; i< usersTable.size(); i++){
+                                    out.println("<tr>");
+                                    out.println("<td scope='row'>" + i + "</td>");
+                                    out.println("<td>" + usersTable.get(i).getName() + "</td>");
+                                    out.println("<td>" + usersTable.get(i).getFirst_name() + "</td>");
+                                    out.println("<td>" + usersTable.get(i).getEmail() + "</td>");
+                                    out.println("<td>" + usersTable.get(i).getPhone() + "</td>");
+                                    if (usersTable.get(i).getIs_admin()){
+                                        out.println("<td>Administrateur</td>");
+                                    } else {
+                                        out.println("<td>Stagiaire</td>");
+                                    }
+                                    out.println("</tr>");
+                                }
+                             %> 
                         </tbody>
                     </table>
                 </div>
@@ -65,3 +61,4 @@ and open the template in the editor.
         </div>			
     </body>
 </html>
+

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Questionnaire;
 import model.User;
+import model.Company;
 
 /**
  *
@@ -28,6 +29,7 @@ public class Controller extends HttpServlet {
      * Variables meanwhile databse doesn't exist
      */
     private static Hashtable<Integer, User> usersTable= new Hashtable<Integer, User>();
+    private static Hashtable<Integer, Company> companiesTable= new Hashtable<Integer, Company>();
     private static Hashtable<Integer, Questionnaire> questionnaireTable= new Hashtable<Integer, Questionnaire>();
     
     /**
@@ -49,16 +51,19 @@ public class Controller extends HttpServlet {
         if("GET".equals(request.getMethod())){
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
-                    returnView(request, response, "/WEB-INF/user/create_user.html");
+                    request.setAttribute("Companies", companiesTable);
+                    returnView(request, response, "/WEB-INF/user/create_user.jsp");
                     break;
                     
                 case "/intern_project/users":
                     System.out.println("Bien arrivé !");
-                    displayUser(request, response);
+                    request.setAttribute("Users", usersTable);
+                    returnView(request, response, "/WEB-INF/user/index_user.jsp");
+                    //displayUser(request, response);
                     break;
                     
                 case "/intern_project/users_encours":
-                    returnView(request, response, "/WEB-INF/user/index_user.html");
+                    returnView(request, response, "/WEB-INF/user/index_user.jsp");
                     break;
                     
                 case "/intern_project/create_questionnaire":
@@ -74,17 +79,25 @@ public class Controller extends HttpServlet {
         } else if ("POST".equals(request.getMethod())){
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
+                    
+                    boolean existingCompany = Boolean.parseBoolean(request.getParameter("existingCompany"));
+                    Integer index = companiesTable.size();
+                    if (!existingCompany){
+                        companiesTable.put(companiesTable.size(), new Company(request.getParameter("company")));
+                    } else {
+                        companiesTable.get(request.getParameter("company"));
+                    }
+                    Company company;
+                    company = companiesTable.get(companiesTable.size());
+                    
                     boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-                    usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin));
+                    usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, company));
                     response.sendRedirect("/intern_project/users");
                     break; 
                 case "/intern_project/create_questionnaire":
                     questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
                     response.sendRedirect("/intern_project/questionnaires");
                     break;
-                    
-                    
-            
             }
         }
     }

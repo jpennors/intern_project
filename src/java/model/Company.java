@@ -16,18 +16,15 @@ public class Company {
 	 * 
 	 */
 	
-	private Integer id;
 	private String name;
 
 	
 	/**
 	 * CONSTRUCTOR
-	 * @param id
 	 * @param name
 	 */
 
-	public Company(Integer id, String name) {
-		this.id = id;
+	public Company(String name) {
 		this.name = name;
 	}
 
@@ -36,10 +33,6 @@ public class Company {
 	 * GETTERS / SETTERS
 	 * 
 	 */
-	
-	public Integer getId() {
-		return id;
-	}
 
 	public String getName() {
 		return name;
