@@ -67,26 +67,32 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        
+                
         System.out.println(request.getRequestURI());
         System.out.println(request.getMethod());
                 
         if("GET".equals(request.getMethod())){
+            ResultSet data = null;
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
+                    data = st.executeQuery("SELECT * FROM company;");
+                    while(data.next()){
+                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name")));
+                    }
                     request.setAttribute("Companies", companiesTable);
                     returnView(request, response, "/WEB-INF/user/create_user.jsp");
+                    companiesTable.clear();
                     break;
                     
                 case "/intern_project/users":
-                    System.out.println("Bien arrivé !");
-                    ResultSet a = st.executeQuery("SELECT * FROM user;");
-                    while(a.next()){
-                        System.out.println(a.getString("name"));
+                    data = st.executeQuery("SELECT email, password, user.name, first_name, status, phone, is_admin, created_date, company.name AS name_cp, company.matriculation FROM user LEFT JOIN (company) ON (company.matriculation = user.company_id);");
+                    while(data.next()){
+                        Company c = new Company(data.getInt("matriculation"), data.getString("name_cp"));
+                        usersTable.put(usersTable.size(), new User(data.getString("email"),data.getString("password"),data.getString("name"),data.getString("first_name"), data.getString("phone"), data.getBoolean("is_admin"), c));   
                     }
                     request.setAttribute("Users", usersTable);
                     returnView(request, response, "/WEB-INF/user/index_user.jsp");
-                    //displayUser(request, response);
+                    usersTable.clear();
                     break;
                     
                 case "/intern_project/users_encours":

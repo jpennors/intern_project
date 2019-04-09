@@ -23,7 +23,7 @@
     <body>
         <h1 style="text-align: center; margin: 40px">Liste des utilisateurs</h1>
         <div class="row">
-            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
+            <div class="card offset-sm-2 col-sm-8" style="width: 18rem;">
                 <div class="card-body">
                     <table class="table">
                         <thead class="thead-dark">
@@ -34,6 +34,8 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Télephone</th>
                                 <th scope="col">Type</th>
+                                <th scope="col">Entreprise</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,6 +53,9 @@
                                     } else {
                                         out.println("<td>Stagiaire</td>");
                                     }
+                                    out.println("<td>" + usersTable.get(i).getCompany().getName() + "</td>");
+                                    out.println("<td><button class='btn btn-info'>Editer</button>");
+                                    out.println("<button class='btn btn-info'>Supprimer</button></td>");
                                     out.println("</tr>");
                                 }
                              %> 

@@ -30,6 +30,11 @@ public class Company {
 		this.name = name;
                 this.matriculation = matriculation;
 	}
+        
+        public Company(){
+            this.name = null;
+            this.matriculation = null;
+        }
 
 	
 	/**
