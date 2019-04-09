@@ -7,7 +7,14 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,12 +32,25 @@ import model.Company;
 @WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
 public class Controller extends HttpServlet {
     
+    @Override
+    public void init() throws ServletException {
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/intern_project", "root", "");
+            st = connexion.createStatement();
+        } catch(ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     /**
      * Variables meanwhile databse doesn't exist
      */
     private static Hashtable<Integer, User> usersTable= new Hashtable<Integer, User>();
     private static Hashtable<Integer, Company> companiesTable= new Hashtable<Integer, Company>();
     private static Hashtable<Integer, Questionnaire> questionnaireTable= new Hashtable<Integer, Questionnaire>();
+    Statement st = null;
     
     private static Questionnaire questionnaireCurrent; 
     
@@ -42,9 +62,10 @@ public class Controller extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         
         System.out.println(request.getRequestURI());
@@ -59,6 +80,10 @@ public class Controller extends HttpServlet {
                     
                 case "/intern_project/users":
                     System.out.println("Bien arrivé !");
+                    ResultSet a = st.executeQuery("SELECT * FROM user;");
+                    while(a.next()){
+                        System.out.println(a.getString("name"));
+                    }
                     request.setAttribute("Users", usersTable);
                     returnView(request, response, "/WEB-INF/user/index_user.jsp");
                     //displayUser(request, response);
@@ -90,7 +115,8 @@ public class Controller extends HttpServlet {
                     boolean existingCompany = Boolean.parseBoolean(request.getParameter("existingCompany"));
                     Integer index = companiesTable.size();
                     if (!existingCompany){
-                        companiesTable.put(companiesTable.size(), new Company(request.getParameter("company")));
+                        Integer matriculation = Integer.parseInt(request.getParameter("matriculation"));
+                        companiesTable.put(companiesTable.size(), new Company(matriculation , request.getParameter("company")));
                     } else {
                         companiesTable.get(request.getParameter("company"));
                     }
@@ -123,7 +149,11 @@ public class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -137,7 +167,11 @@ public class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

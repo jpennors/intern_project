@@ -16,22 +16,26 @@ public class Company {
 	 * 
 	 */
 	
+        private Integer matriculation;
 	private String name;
 
 	
 	/**
 	 * CONSTRUCTOR
 	 * @param name
+         * @param matriculation
 	 */
 
-	public Company(String name) {
+	public Company(Integer matriculation, String name) {
 		this.name = name;
+                this.matriculation = matriculation;
 	}
 
 	
 	/**
 	 * GETTERS / SETTERS
 	 * 
+         * @return 
 	 */
 
 	public String getName() {
@@ -41,6 +45,14 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
+        
+        public Integer getMatriculation(){
+            return matriculation; 
+        }
+        
+        public void setMatriculation(Integer matriculation){
+            this.matriculation = matriculation;
+        }
 	
 }
 

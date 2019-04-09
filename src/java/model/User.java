@@ -20,6 +20,7 @@ public class User {
 	 * 
 	 */
 	
+        private Integer id;
 	private String email;
 	private String password;
 	private String name;
@@ -39,9 +40,7 @@ public class User {
 	 * @param password
 	 * @param name
 	 * @param first_name
-	 * @param etatus
 	 * @param phone
-	 * @param created_date
 	 * @param is_admin
 	 * @param company
 	 */
