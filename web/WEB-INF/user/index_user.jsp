@@ -23,7 +23,7 @@
     <body>
         <h1 style="text-align: center; margin: 40px">Liste des utilisateurs</h1>
         <div class="row">
-            <div class="card offset-sm-2 col-sm-8" style="width: 18rem;">
+            <div class="card offset-sm-1 col-sm-10" style="width: 18rem;">
                 <div class="card-body">
                     <table class="table">
                         <thead class="thead-dark">

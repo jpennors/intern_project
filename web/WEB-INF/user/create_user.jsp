@@ -75,7 +75,7 @@
                                     out.println("<select class='form-control' id='inputCompany' name='company'>");
                                     for (int i=0; i< companiesTable.size(); i++){     
 
-                                        out.println("<option value='" + companiesTable.get(i).getName() + ")'>" + companiesTable.get(i).getName()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
+                                        out.println("<option value='" + companiesTable.get(i).getMatriculation() + "'>" + companiesTable.get(i).getName()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
                                     }
                                     out.println("</select>");
                                     

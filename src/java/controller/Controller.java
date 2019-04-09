@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -115,22 +116,26 @@ public class Controller extends HttpServlet {
                     
             }
         } else if ("POST".equals(request.getMethod())){
+            ResultSet data = null;
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
+                    System.out.println(request.getParameter("company"));
+                    data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
                     
-                    boolean existingCompany = Boolean.parseBoolean(request.getParameter("existingCompany"));
-                    Integer index = companiesTable.size();
-                    if (!existingCompany){
-                        Integer matriculation = Integer.parseInt(request.getParameter("matriculation"));
-                        companiesTable.put(companiesTable.size(), new Company(matriculation , request.getParameter("company")));
-                    } else {
-                        companiesTable.get(request.getParameter("company"));
-                    }
-                    Company company;
-                    company = companiesTable.get(companiesTable.size());
+                    if (data.first()){
+                        boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
+                        Company c = new Company(data.getInt("matriculation"), data.getString("name"));
+                        User user = new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, c);
+                   
+                        String query = "INSERT INTO user (email, password, name, first_name, status, phone, is_admin, company_id) VALUES ('" 
+                                                + user.getEmail() + "','" + user.getPassword() + "','" + user.getName() + "','" + user.getFirst_name() 
+                                                + "',1," + user.getPhone() + ",0," + user.getCompany().getMatriculation() + ")";
+                        System.out.println(query);
+                        st.execute(query);
+                        
+                        
+                    }                    
                     
-                    boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-                    usersTable.put(usersTable.size(), new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, company));
                     response.sendRedirect("/intern_project/users");
                     break; 
                     
