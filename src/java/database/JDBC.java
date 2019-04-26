@@ -54,12 +54,12 @@ public class JDBC {
     }
     
     /**
-     * Excécution SQL request
+     * Execute SQL Reading Request
      * @param query
      * @return
      * @throws SQLException 
      */
-    public ResultSet exceuteQuery(String query) throws SQLException{
+    public ResultSet exceuteReadingQuery(String query) throws SQLException{
         Statement st;
         st = this.connection.createStatement();
         ResultSet data = st.executeQuery(query);
@@ -67,6 +67,17 @@ public class JDBC {
         return data;
     }
     
-    
-    
+    /**
+     * Execute SQL Writing Request
+     * @param query
+     * @return
+     * @throws SQLException 
+     */
+    public int exectureWritingQuery(String query) throws SQLException{
+        Statement st;
+        st = this.connection.createStatement();
+        int data = st.executeUpdate(query);
+        st.close();
+        return data;
+    }
 }
