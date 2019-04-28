@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.DAOFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,12 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 import model.Questionnaire;
 import model.User;
 import model.Company;
+import dao.User.UserDao;
+import dao.User.UserDaoImpl;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/users_encours", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
+@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -69,35 +74,50 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
                 
-        System.out.println(request.getRequestURI());
-        System.out.println(request.getMethod());
-                
         if("GET".equals(request.getMethod())){
+
             ResultSet data = null;
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
                     data = st.executeQuery("SELECT * FROM company;");
                     while(data.next()){
-                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name")));
+                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name_company")));
                     }
+                    User user = new User();
                     request.setAttribute("Companies", companiesTable);
+                    request.setAttribute("user", user);
                     returnView(request, response, "/WEB-INF/user/create_user.jsp");
                     companiesTable.clear();
                     break;
                     
                 case "/intern_project/users":
-                    data = st.executeQuery("SELECT email, password, user.name, first_name, status, phone, is_admin, created_date, company.name AS name_cp, company.matriculation FROM user LEFT JOIN (company) ON (company.matriculation = user.company_id);");
-                    while(data.next()){
-                        Company c = new Company(data.getInt("matriculation"), data.getString("name_cp"));
-                        usersTable.put(usersTable.size(), new User(data.getString("email"),data.getString("password"),data.getString("name"),data.getString("first_name"), data.getString("phone"), data.getBoolean("is_admin"), c));   
-                    }
-                    request.setAttribute("Users", usersTable);
+
+                    DAOFactory dao = new DAOFactory();
+                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    List<User> users = new ArrayList();
+                    users = user_dao.index();
+                    
+                    request.setAttribute("Users", users);
                     returnView(request, response, "/WEB-INF/user/index_user.jsp");
-                    usersTable.clear();
                     break;
                     
-                case "/intern_project/users_encours":
-                    returnView(request, response, "/WEB-INF/user/index_user.jsp");
+                case "/intern_project/edit_user":
+                    data = st.executeQuery("SELECT * FROM company;");
+                    companiesTable.clear();
+                    while(data.next()){
+                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name_company")));
+                    }
+                    user = new User();
+                    request.setAttribute("Companies", companiesTable);                    
+                    
+                    dao = new DAOFactory();
+                    user_dao = new UserDaoImpl(dao);
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    user = user_dao.show(id);
+
+                    request.setAttribute("user", user);
+                    returnView(request, response, "/WEB-INF/user/create_user.jsp");
+                    companiesTable.clear();
                     break;
                     
                 case "/intern_project/create_questionnaire":
@@ -122,20 +142,19 @@ public class Controller extends HttpServlet {
                     System.out.println(request.getParameter("company"));
                     data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
                     
-                    if (data.first()){
+                    /*if (data.first()){
                         boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
                         Company c = new Company(data.getInt("matriculation"), data.getString("name"));
-                        User user = new User(request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, c);
+                        User user = new User(null, request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, c);
                    
                         String query = "INSERT INTO user (email, password, name, first_name, status, phone, is_admin, company_id) VALUES ('" 
                                                 + user.getEmail() + "','" + user.getPassword() + "','" + user.getName() + "','" + user.getFirst_name() 
-                                                + "',1," + user.getPhone() + ",0," + user.getCompany().getMatriculation() + ")";
+                                                + "'," + isAdmin + "," + user.getPhone() + ",0," + user.getCompany().getMatriculation() + ")";
                         System.out.println(query);
                         st.execute(query);
-                        
-                        
+                           
                     }                    
-                    
+                    */
                     response.sendRedirect("/intern_project/users");
                     break; 
                     
@@ -194,51 +213,6 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-
-    /**
-     * Retourn la liste des utilisateurs stockés dans la variable @usersTable
-     * @param request
-     * @param response
-     * @throws IOException 
-     */
-    protected void displayUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        try (PrintWriter out = response.getWriter()) {
-            //TODO output your page here. You may use following sample code. 
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Utilisateurs</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Liste des utilisateurs</h1>");
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<th>Nom</th>");
-            out.println("<th>Prénom</th>");
-            out.println("<th>Email</th>");
-            out.println("<th>Téléphone</th>");
-            out.println("<th>Type</th>");
-            out.println("</tr>");
-            int i;
-            for (i=0; i< usersTable.size(); i++){
-                out.println("<tr>");
-                out.println("<td>" + usersTable.get(i).getName() + "</td>");
-                out.println("<td>" + usersTable.get(i).getFirst_name() + "</td>");
-                out.println("<td>" + usersTable.get(i).getEmail() + "</td>");
-                out.println("<td>" + usersTable.get(i).getPhone() + "</td>");
-                if (usersTable.get(i).getIs_admin()){
-                    out.println("<td>Administrateur</td>");
-                } else {
-                    out.println("<td>Stagiaire</td>");
-                }
-                out.println("</tr>");
-            }
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
     
     /**
      * Retourne une vue HTML avec le @path donné en paramètre
