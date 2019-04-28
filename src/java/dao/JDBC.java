@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package dao;
 
 import controller.Controller;
 import java.sql.Connection;
@@ -62,7 +62,8 @@ public class JDBC {
     public ResultSet exceuteReadingQuery(String query) throws SQLException{
         Statement st;
         st = this.connection.createStatement();
-        ResultSet data = st.executeQuery(query);
+        ResultSet data;
+        data = st.executeQuery(query);
         st.close();
         return data;
     }
@@ -76,7 +77,9 @@ public class JDBC {
     public int exectureWritingQuery(String query) throws SQLException{
         Statement st;
         st = this.connection.createStatement();
-        int data = st.executeUpdate(query);
+        int data = st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        // TO DO Handle generated Keys
+        st.getGeneratedKeys();
         st.close();
         return data;
     }
