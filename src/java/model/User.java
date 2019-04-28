@@ -5,7 +5,6 @@
  */
 package model;
 
-import model.Company;
 import java.util.Date;
 
 /**
@@ -20,10 +19,10 @@ public class User {
 	 * 
 	 */
 	
-        private Integer id;
+        private Integer id_user;
 	private String email;
 	private String password;
-	private String name;
+	private String name_user;
 	private String first_name;
 	private Boolean status;
 	private String phone;
@@ -31,52 +30,25 @@ public class User {
 	private Boolean is_admin;
 	private Company company;
 	
-	// TO DO : Add company
 	
-
-	/**
-	 * CONSTRUCTOR
-	 * @param email
-	 * @param password
-	 * @param name
-	 * @param first_name
-	 * @param phone
-	 * @param is_admin
-	 * @param company
-	 */
-	
-	public User(String email, String password, String name, String first_name, String phone, Boolean is_admin, Company company) {
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.first_name = first_name;
-		this.status = true;
-		this.phone = phone;
-		this.created_date = new Date();
-		this.is_admin = is_admin;
-		this.company = company;
-	}
-
-    public User(String email, String password, String name, String first_name, String phone, Boolean isAdmin) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.first_name = first_name;
-        this.status = true;
-        this.phone = phone;
-        this.created_date = new Date();
-        this.is_admin = isAdmin;
-        this.company = null;
-    }
-	
+        public User(){
+            this.is_admin = false;
+            this.company = new Company();
+        }
 	
 	/**
 	 * GETTERS / SETTERS
 	 * 
      * @return 
 	 */
+    
+        public Integer getId_user(){
+            return id_user;
+        }
+        
+        public void setId_user(int id_user){
+            this.id_user = id_user;
+        }
 	
 	public String getEmail() {
 		return email;
@@ -97,15 +69,15 @@ public class User {
 		this.password = password;
 	}
 	
-	public String getName() {
-		return name;
+	public String getName_user() {
+		return name_user;
 	}
 	
-	public void setName(String name) {
+	public void setName_user(String name_user) {
 		
 		// TO DO Check chaîne de caractère
 		
-		this.name = name;
+		this.name_user = name_user;
 	}
 	
 	public String getFirst_name() {
@@ -155,9 +127,7 @@ public class User {
 	}
 	
 	public void setIs_admin(Boolean is_admin) {
-		
-		// Si user est admin, permission !
-		
+				
 		this.is_admin = is_admin;
 	}
 	
@@ -178,7 +148,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "User{" + "name=" + name + ", first_name=" + first_name + ", email=" + email + ", status=" 
+		return "User{" + "name=" + name_user + ", first_name=" + first_name + ", email=" + email + ", status=" 
 				+ status + ", phone=" + phone + ", created_date=" + created_date + ", company_id=" 
 				+ company + ", is_admin=" + is_admin + "}";
 	}
