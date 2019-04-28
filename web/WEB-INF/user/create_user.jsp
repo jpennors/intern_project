@@ -28,27 +28,28 @@
                     <div class="form-group">
                         <form action="create_user" method="post">
                             <div class="form-group row">
+                                <input type="hidden" id="inputId" name="id" value=${user.id_user}>
                                 <label for="inputName" class="col-sm-4 col-form-label">Nom</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputName" name="name">
+                                    <input class="form-control" id="inputNameUser" name="name" value=${user.name_user}>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputFirstName" class="col-sm-4 col-form-label">Prénom</label>
+                                <label for="inputFirstName" class="col-sm-4 col-form-label"}>Prénom</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputFirstName" name="first_name">
+                                    <input class="form-control" id="inputFirstName" name="first_name" value=${user.first_name}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputPhone" class="col-sm-4 col-form-label">Téléphone</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputPhone" name="phone">
+                                    <input class="form-control" id="inputPhone" name="phone" value=${user.phone}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputEmail" class="col-sm-4 col-form-label">Email</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputEmail" name="email">
+                                    <input class="form-control" id="inputEmail" name="email" value=${user.email}>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -60,7 +61,7 @@
                             <div class="form-group row">
                                 <label for="inputType" class="col-sm-4 col-form-label">Type</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="inputType" name="isAdmin">
+                                    <select class="form-control" id="inputType" name="isAdmin" value=${user.is_admin}>
                                         <option value="false">Stagiaire</option>
                                         <option value="true">Admin</option>
                                     </select>
@@ -69,24 +70,22 @@
                             <div class="form-group row">
                                 <label for="inputCompany" class="col-sm-4 col-form-label">Entreprise</label>
                                 <div class="col-sm-8">
-                                <%
-                                    Hashtable<Integer, Company> companiesTable = (Hashtable<Integer, Company>)request.getAttribute("Companies");
- 
-                                    out.println("<select class='form-control' id='inputCompany' name='company'>");
-                                    for (int i=0; i< companiesTable.size(); i++){     
+                                    <select class='form-control' id='inputCompany' name='company' value=${user.company.matriculation}>
+                                    <%
+                                        Hashtable<Integer, Company> companiesTable = (Hashtable<Integer, Company>)request.getAttribute("Companies");
 
-                                        out.println("<option value='" + companiesTable.get(i).getMatriculation() + "'>" + companiesTable.get(i).getName()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
-                                    }
-                                    out.println("</select>");
-                                    
-                                 %> 
+                                        for (int i=0; i< companiesTable.size(); i++){     
 
+                                            out.println("<option value='" + companiesTable.get(i).getMatriculation() + "' companiesTable.get(i).getMatriculation() == ${user.company.matriculation} ? selected='selected' : ''>" + companiesTable.get(i).getNameCompany()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
+                                        }
+
+                                     %> 
+                                    </select>
+                                   
                                 </div>
                                 <input type="hidden" name="existingCompany" value="false"></input>
-                            </div>
-                             
-                             
-                             <button type="submit" class="btn btn-primary">Envoyer</button>
+                            </div>                             
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
                         </form>
                     </div>
                 </div>

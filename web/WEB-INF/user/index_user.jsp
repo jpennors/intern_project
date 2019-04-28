@@ -3,6 +3,7 @@
     Created on : 3 avr. 2019, 14:21:39
     Author     : Josselin
 --%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.Hashtable"%>
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -40,22 +41,25 @@
                         </thead>
                         <tbody>
                             <%
-                                Hashtable<Integer, User> usersTable=  (Hashtable<Integer, User>)request.getAttribute("Users");
-                                for (int i=0; i< usersTable.size(); i++){
+                                List<User> users =  (List<User>)request.getAttribute("Users");
+                                for (int i=0; i < users.size(); i++){
+                                    Integer num = i + 1;
                                     out.println("<tr>");
-                                    out.println("<td scope='row'>" + i + "</td>");
-                                    out.println("<td>" + usersTable.get(i).getName() + "</td>");
-                                    out.println("<td>" + usersTable.get(i).getFirst_name() + "</td>");
-                                    out.println("<td>" + usersTable.get(i).getEmail() + "</td>");
-                                    out.println("<td>" + usersTable.get(i).getPhone() + "</td>");
-                                    if (usersTable.get(i).getIs_admin()){
+                                    out.println("<td scope='row'>" + num + "</td>");
+                                    out.println("<td>" + users.get(i).getName_user() + "</td>");
+                                    out.println("<td>" + users.get(i).getFirst_name() + "</td>");
+                                    out.println("<td>" + users.get(i).getEmail() + "</td>");
+                                    out.println("<td>" + users.get(i).getPhone() + "</td>");
+                                    if (users.get(i).getIs_admin()){
                                         out.println("<td>Administrateur</td>");
-                                    } else {
+                                    } 
+                                    else {
                                         out.println("<td>Stagiaire</td>");
                                     }
-                                    out.println("<td>" + usersTable.get(i).getCompany().getName() + "</td>");
+                                    out.println("<td>" + users.get(i).getCompany().getName_company() + "</td>");
+                                    //out.println("<td><button class='btn btn-info'><a href='edit_user/" + users.get(i).getId() + "'>Voir</a></button></td>");
                                     out.println("<td><button class='btn btn-info'>Editer</button>");
-                                    out.println("<button class='btn btn-info'>Supprimer</button></td>");
+                                    out.println("<button class='btn btn-info' data-toggle='modal' data-target='#exampleModalScrollable'>Supprimer</button></td>");
                                     out.println("</tr>");
                                 }
                              %> 
@@ -63,7 +67,27 @@
                     </table>
                 </div>
             </div>
-        </div>			
+        </div>	
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </body>
 </html>
 
