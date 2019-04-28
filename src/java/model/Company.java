@@ -17,8 +17,10 @@ public class Company {
 	 */
 	
         private Integer matriculation;
-	private String name;
+	private String name_company;
 
+        
+        
 	
 	/**
 	 * CONSTRUCTOR
@@ -26,13 +28,13 @@ public class Company {
          * @param matriculation
 	 */
 
-	public Company(Integer matriculation, String name) {
-		this.name = name;
+	public Company(Integer matriculation, String name_company) {
+		this.name_company = name_company;
                 this.matriculation = matriculation;
 	}
         
         public Company(){
-            this.name = null;
+            this.name_company = null;
             this.matriculation = null;
         }
 
@@ -43,12 +45,12 @@ public class Company {
          * @return 
 	 */
 
-	public String getName() {
-		return name;
+	public String getName_company() {
+		return name_company;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setName_company(String name_company) {
+		this.name_company = name_company;
 	}
         
         public Integer getMatriculation(){
