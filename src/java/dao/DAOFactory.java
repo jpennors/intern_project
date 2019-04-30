@@ -5,8 +5,8 @@
  */
 package dao;
 
-import dao.User.UserDao;
-import dao.User.UserDaoImpl;
+import dao.DAOInterface;
+import dao.UserDao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -56,8 +56,8 @@ public class DAOFactory {
      * Méthodes de récupération de l'implémentation des différents DAO (un seul
      * pour le moment)
      */
-    public UserDao getUtilisateurDao() {
-        return new UserDaoImpl( this );
+    public DAOInterface getUtilisateurDao() {
+        return new UserDao( this );
     }
 }
 /**/

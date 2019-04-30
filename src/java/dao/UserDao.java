@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao.User;
+package dao;
 
-import dao.DAOException;
+import static dao.DAOUtils.fermeturesSilencieuses;
+import static dao.DAOUtils.initialisationRequetePreparee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import model.User;
-import dao.DAOFactory;
-import static dao.DAOUtils.*;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,50 +17,27 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Company;
+import model.User;
 
 /**
  *
  * @author Josselin
  */
-public class UserDaoImpl implements UserDao {
-    
-    private DAOFactory          daoFactory;
+public class UserDao implements DAOInterface<User> {
 
-    public UserDaoImpl( DAOFactory daoFactory ) {
-        this.daoFactory = daoFactory;
-    }
+    private DAOFactory daoFactory;
+
     private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company = company.matriculation";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM user, company WHERE user.id_user = ? AND user.company = company.matriculation";
     private static final String SQL_INSERT = "INSERT INTO user (email, password, name_user, first_name, status, phone, is_admin, company) VALUES (?,?,?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_ALL = "";
-    private static final String SQL_SOFT_DELETE = "";
-//private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company_id = company.matriculation";
-
-    @Override
-    public void create(User user) throws DAOException {
-        
-        Connection connexion = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        
-        try {
-            /* Récupération d'une connexion depuis la Factory */
-            connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, user.getEmail(), user.getPassword(), user.getName_user(),
-                                user.getFirst_name(), user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation() );
-            int status = preparedStatement.executeUpdate();
-            System.out.println(status);
-            
-        } catch ( SQLException e ) {
-            throw new DAOException( e );
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
-        }
-        
+    private static final String SQL_UPDATE = "UPDATE user SET email=?, name_user=?, first_name=?, status=?, phone=?, is_admin=?, company=? WHERE id_user=?";
+    private static final String SQL_SOFT_DELETE = "UPDATE user SET status = 0 WHERE id_user = ?";
+    
+    public UserDao(DAOFactory daoFactory ) {
+        this.daoFactory = daoFactory;
     }
-
+    
+    
     @Override
     public List<User> index() throws DAOException {
         List<User> users = new ArrayList();
@@ -92,12 +67,35 @@ public class UserDaoImpl implements UserDao {
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         
         return users;
+    }
+
+    @Override
+    public void create(User user) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, user.getEmail(), user.getPassword(), user.getName_user(),
+                                user.getFirst_name(), user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation() );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            //Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
     }
 
     @Override
@@ -119,23 +117,57 @@ public class UserDaoImpl implements UserDao {
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         
         return user;
+    }
+
+    @Override
+    public void update(int id, User user) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE, true, user.getEmail(), user.getName_user(), user.getFirst_name(),
+                                user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation(), id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
     }
 
     @Override
-    public void update(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(int id) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_SOFT_DELETE, true, id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
     }
     
     private static User map(ResultSet resultSet) throws SQLException {
@@ -159,5 +191,4 @@ public class UserDaoImpl implements UserDao {
         company.setName_company(resultSet.getString("name_company"));
         return company;
     }
-    
 }
