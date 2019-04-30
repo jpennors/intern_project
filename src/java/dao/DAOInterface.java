@@ -19,7 +19,7 @@ public interface DAOInterface<T> {
     
     T show(int id) throws DAOException;
     
-    void update(int i) throws DAOException;
+    void update(int i, T t) throws DAOException;
     
     void delete(int i) throws DAOException;
 }
