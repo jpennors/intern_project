@@ -158,19 +158,6 @@ public class Controller extends HttpServlet {
                     UserDaoImpl user_dao = new UserDaoImpl(dao);
                     user_dao.create(user);
                     
-                    /*if (data.first()){
-                        boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-                        Company c = new Company(data.getInt("matriculation"), data.getString("name"));
-                        User user = new User(null, request.getParameter("email"),request.getParameter("password"),request.getParameter("name"),request.getParameter("first_name"), request.getParameter("phone"), isAdmin, c);
-                   
-                        String query = "INSERT INTO user (email, password, name, first_name, status, phone, is_admin, company_id) VALUES ('" 
-                                                + user.getEmail() + "','" + user.getPassword() + "','" + user.getName() + "','" + user.getFirst_name() 
-                                                + "'," + isAdmin + "," + user.getPhone() + ",0," + user.getCompany().getMatriculation() + ")";
-                        System.out.println(query);
-                        st.execute(query);
-                           
-                    }                    
-                    */
                     response.sendRedirect("/intern_project/users");
                     break; 
                     
