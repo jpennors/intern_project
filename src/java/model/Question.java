@@ -32,6 +32,10 @@ public class Question {
         this.sentence = sentence;
         this.order = order;
     }
+
+    public Question() {
+        this.status = true;
+    }
     
     
     /**

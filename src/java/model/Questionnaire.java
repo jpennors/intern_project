@@ -36,6 +36,10 @@ public class Questionnaire {
         this.status = true;
         this.admin_id = null;
     }
+
+    public Questionnaire() {
+        this.status =true;
+    }
     
     /**
      * GETTERS SETTERS 

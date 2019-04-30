@@ -6,6 +6,7 @@
 package controller;
 
 import dao.DAOFactory;
+import dao.QuestionnaireDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -72,9 +73,7 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        System.out.println(request.getPathInfo());
-        System.out.println(request.getRequestURI());
+        DAOFactory dao = new DAOFactory();
                 
         if("GET".equals(request.getMethod())){
 
@@ -94,8 +93,7 @@ public class Controller extends HttpServlet {
                     
                 case "/intern_project/users":
 
-                    DAOFactory dao = new DAOFactory();
-                    UserDao user_dao = new UserDao(dao);
+                    UserDaoImpl user_dao = new UserDaoImpl(dao);
                     List<User> users = new ArrayList();
                     users = user_dao.index();
                     
@@ -128,7 +126,11 @@ public class Controller extends HttpServlet {
                     break;      
                     
                 case "/intern_project/questionnaires":
-                    request.setAttribute("Questionnaires", questionnaireTable);
+                    QuestionnaireDao questionnaire_dao = new QuestionnaireDao(dao);
+                    List<Questionnaire> questionnaires = new ArrayList();
+                    questionnaires = questionnaire_dao.index();
+                    request.setAttribute("Questionnaire", questionnaires);
+                    
                     returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
                     break;
                     
@@ -157,8 +159,7 @@ public class Controller extends HttpServlet {
                         Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
                         user.setCompany(c);
                     }
-                    DAOFactory dao = new DAOFactory();
-                    UserDao user_dao = new UserDao(dao);
+                    UserDaoImpl user_dao = new UserDaoImpl(dao);
                     user_dao.create(user);
                     
                     response.sendRedirect("/intern_project/users");

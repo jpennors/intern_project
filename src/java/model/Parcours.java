@@ -34,6 +34,8 @@ public class Parcours {
         this.user_id = user_id;
         this.questionnaire_id = questionnaire_id;
     }
+
+    public Parcours() {}
     
     /**
      GETTERS SETTERS
