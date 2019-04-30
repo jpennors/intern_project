@@ -93,7 +93,7 @@ public class Controller extends HttpServlet {
                     
                 case "/intern_project/users":
 
-                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    UserDao user_dao = new UserDao(dao);
                     List<User> users = new ArrayList();
                     users = user_dao.index();
                     
@@ -159,7 +159,7 @@ public class Controller extends HttpServlet {
                         Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
                         user.setCompany(c);
                     }
-                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    UserDao user_dao = new UserDao(dao);
                     user_dao.create(user);
                     
                     response.sendRedirect("/intern_project/users");
