@@ -33,6 +33,7 @@ public class User {
 	
         public User(){
             this.is_admin = false;
+            this.status = true;
             this.company = new Company();
         }
 	

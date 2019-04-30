@@ -33,11 +33,34 @@ public class UserDaoImpl implements UserDao {
     }
     private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company = company.matriculation";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM user, company WHERE user.id_user = ? AND user.company = company.matriculation";
-    //private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company_id = company.matriculation";
+    private static final String SQL_INSERT = "INSERT INTO user (email, password, name_user, first_name, status, phone, is_admin, company) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_ALL = "";
+    private static final String SQL_SOFT_DELETE = "";
+//private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company_id = company.matriculation";
 
     @Override
     public void create(User user) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, user.getEmail(), user.getPassword(), user.getName_user(),
+                                user.getFirst_name(), user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation() );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        
     }
 
     @Override

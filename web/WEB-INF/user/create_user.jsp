@@ -31,7 +31,7 @@
                                 <input type="hidden" id="inputId" name="id" value=${user.id_user}>
                                 <label for="inputName" class="col-sm-4 col-form-label">Nom</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputNameUser" name="name" value=${user.name_user}>
+                                    <input class="form-control" id="inputNameUser" name="name_user" value=${user.name_user}>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputCompany" class="col-sm-4 col-form-label">Entreprise</label>
+                                <label for="inputCompany" class="col-sm-4 col-form-label">Entreprise (Immatriculation)</label>
                                 <div class="col-sm-8">
                                     <select class='form-control' id='inputCompany' name='company' value=${user.company.matriculation}>
                                     <%
@@ -76,7 +76,7 @@
 
                                         for (int i=0; i< companiesTable.size(); i++){     
 
-                                            out.println("<option value='" + companiesTable.get(i).getMatriculation() + "' companiesTable.get(i).getMatriculation() == ${user.company.matriculation} ? selected='selected' : ''>" + companiesTable.get(i).getNameCompany()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
+                                            out.println("<option value='" + companiesTable.get(i).getMatriculation() + "' companiesTable.get(i).getMatriculation() == ${user.company.matriculation} ? selected='selected' : ''>" + companiesTable.get(i).getName_company()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
                                         }
 
                                      %> 

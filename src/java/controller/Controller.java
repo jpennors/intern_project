@@ -140,7 +140,23 @@ public class Controller extends HttpServlet {
             switch(request.getRequestURI()){
                 case "/intern_project/create_user":
                     System.out.println(request.getParameter("company"));
+                    
+                    User user = new User();
+                    user.setFirst_name(request.getParameter("first_name"));
+                    user.setEmail(request.getParameter("email"));
+                    user.setName_user(request.getParameter("name_user"));
+                    user.setPhone(request.getParameter("phone"));
+                    user.setPassword(request.getParameter("password"));
+                    
+                    user.setIs_admin(Boolean.parseBoolean(request.getParameter("is_admin")));
                     data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
+                    if(data.first()){
+                        Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
+                        user.setCompany(c);
+                    }
+                    DAOFactory dao = new DAOFactory();
+                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    user_dao.create(user);
                     
                     /*if (data.first()){
                         boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
