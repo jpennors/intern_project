@@ -25,9 +25,11 @@ public class User {
 	private String name_user;
 	private String first_name;
 	private Boolean status;
+        private String status_name;
 	private String phone;
 	private Date created_date;
 	private Boolean is_admin;
+        private String type_name;
 	private Company company;
 	
 	
@@ -98,7 +100,20 @@ public class User {
 	
 	public void setStatus(Boolean status) {
 		this.status = status;
+                if (this.status){
+                    this.setStatus_name("Actif");
+                } else {
+                    this.setStatus_name("Inactif");
+                }
 	}
+        
+        public String getStatus_name(){
+            return status_name;
+        }
+        
+        private void setStatus_name(String status_name){
+            this.status_name = status_name;
+        }
 	
 	
 	public String getPhone() {
@@ -127,10 +142,22 @@ public class User {
 		return is_admin;
 	}
 	
-	public void setIs_admin(Boolean is_admin) {
-				
+	public void setIs_admin(Boolean is_admin) {				
 		this.is_admin = is_admin;
+                if(this.is_admin){
+                    this.setType_name("Administrateur");
+                } else {
+                    this.setType_name("Stagiaire");
+                }
 	}
+        
+        public String getType_name(){
+            return type_name;
+        }
+        
+        private void setType_name(String type_name){
+            this.type_name = type_name;
+        }
 	
 	public Company getCompany() {
 		return company;

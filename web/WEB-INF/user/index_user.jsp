@@ -35,6 +35,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Télephone</th>
                                 <th scope="col">Type</th>
+                                <th scope="col">Statut</th>
                                 <th scope="col">Entreprise</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -50,16 +51,19 @@
                                     out.println("<td>" + users.get(i).getFirst_name() + "</td>");
                                     out.println("<td>" + users.get(i).getEmail() + "</td>");
                                     out.println("<td>" + users.get(i).getPhone() + "</td>");
-                                    if (users.get(i).getIs_admin()){
-                                        out.println("<td>Administrateur</td>");
-                                    } 
-                                    else {
-                                        out.println("<td>Stagiaire</td>");
-                                    }
+                                    out.println("<td>" + users.get(i).getType_name() + "</td>");
+                                    out.println("<td>" + users.get(i).getStatus_name() + "</td>");
                                     out.println("<td>" + users.get(i).getCompany().getName_company() + "</td>");
                                     //out.println("<td><button class='btn btn-info'><a href='edit_user/" + users.get(i).getId() + "'>Voir</a></button></td>");
-                                    out.println("<td><button class='btn btn-info'>Editer</button>");
-                                    out.println("<button class='btn btn-info' data-toggle='modal' data-target='#exampleModalScrollable'>Supprimer</button></td>");
+                                    out.println("<form action='edit_user'method='get'>");
+                                    out.println("<input type='hidden' name='id_user' value='" + users.get(i).getId_user() + "'>");
+                                    out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
+                                    out.println("</form>");
+                                    out.println("<form action='delete_user' method='post'>");
+                                    out.println("<input type='hidden' name='id_user' value='" + users.get(i).getId_user() + "'>");
+                                    out.println("<button type='submit' class='btn btn-info' href='delete_user?id='" + users.get(i).getId_user() + ">Supprimer</button></td>");
+                                    //out.println("<button class='btn btn-info' data-toggle='modal' data-target='#exampleModalScrollable' href='delete_user?id='" + users.get(i).getId_user() + ">Supprimer</button></td>");
+                                    out.println("</form>");
                                     out.println("</tr>");
                                 }
                              %> 
@@ -79,11 +83,11 @@
                 </button>
               </div>
               <div class="modal-body">
-                ...
+                Etes-vous sûr de vouloir supprime cet utilisateur ?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button type="button" class="btn btn-primary">Oui</button>
               </div>
             </div>
           </div>

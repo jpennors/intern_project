@@ -26,8 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Questionnaire;
 import model.User;
 import model.Company;
-import dao.User.UserDao;
-import dao.User.UserDaoImpl;
+import dao.UserDao;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ import java.util.ArrayList;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
+@WebServlet(name = "Controller", urlPatterns = {"/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -73,6 +72,9 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        System.out.println(request.getPathInfo());
+        System.out.println(request.getRequestURI());
                 
         if("GET".equals(request.getMethod())){
 
@@ -93,7 +95,7 @@ public class Controller extends HttpServlet {
                 case "/intern_project/users":
 
                     DAOFactory dao = new DAOFactory();
-                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    UserDao user_dao = new UserDao(dao);
                     List<User> users = new ArrayList();
                     users = user_dao.index();
                     
@@ -111,12 +113,13 @@ public class Controller extends HttpServlet {
                     request.setAttribute("Companies", companiesTable);                    
                     
                     dao = new DAOFactory();
-                    user_dao = new UserDaoImpl(dao);
-                    int id = Integer.parseInt(request.getParameter("id"));
+                    user_dao = new UserDao(dao);
+                    int id = Integer.parseInt(request.getParameter("id_user"));
                     user = user_dao.show(id);
 
                     request.setAttribute("user", user);
-                    returnView(request, response, "/WEB-INF/user/create_user.jsp");
+                    request.setAttribute("selected_company", user.getCompany().getMatriculation());
+                    returnView(request, response, "/WEB-INF/user/edit_user.jsp");
                     companiesTable.clear();
                     break;
                     
@@ -155,11 +158,44 @@ public class Controller extends HttpServlet {
                         user.setCompany(c);
                     }
                     DAOFactory dao = new DAOFactory();
-                    UserDaoImpl user_dao = new UserDaoImpl(dao);
+                    UserDao user_dao = new UserDao(dao);
                     user_dao.create(user);
                     
                     response.sendRedirect("/intern_project/users");
                     break; 
+                
+                case "/intern_project/edit_user":
+                    System.out.println(request.getParameter("company"));
+                    
+                    user = new User();
+                    user.setId_user(Integer.parseInt(request.getParameter("id_user")));
+                    user.setFirst_name(request.getParameter("first_name"));
+                    user.setEmail(request.getParameter("email"));
+                    user.setName_user(request.getParameter("name_user"));
+                    user.setPhone(request.getParameter("phone"));
+                    user.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+                    user.setIs_admin(Boolean.parseBoolean(request.getParameter("is_admin")));
+                    data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
+                    if(data.first()){
+                        Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
+                        user.setCompany(c);
+                    }
+                    dao = new DAOFactory();
+                    user_dao = new UserDao(dao);
+                    user_dao.update(user.getId_user(), user);
+                    
+                    response.sendRedirect("/intern_project/users");
+                    break; 
+                
+                case "/intern_project/delete_user":
+                    int id = Integer.parseInt(request.getParameter("id_user"));
+                    dao = new DAOFactory();
+                    user_dao = new UserDao(dao);
+                    user_dao.delete(id);
+                                       
+                    response.sendRedirect("/intern_project/users");
+                    
+                    break;
                     
                 case "/intern_project/create_questionnaire":
                     questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
