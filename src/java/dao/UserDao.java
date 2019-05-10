@@ -27,6 +27,7 @@ public class UserDao implements DAOInterface<User> {
 
     private DAOFactory daoFactory;
 
+    // SQL Scripts
     private static final String SQL_SELECT_ALL = "SELECT * FROM user, company WHERE user.company = company.matriculation";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM user, company WHERE user.id_user = ? AND user.company = company.matriculation";
     private static final String SQL_INSERT = "INSERT INTO user (email, password, name_user, first_name, status, phone, is_admin, company) VALUES (?,?,?,?,?,?,?,?)";
@@ -45,24 +46,19 @@ public class UserDao implements DAOInterface<User> {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        //User user = null;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_ALL, false);
             resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
             
-            ResultSetMetaData metadata = resultSet.getMetaData();
-            int numberOfColumns = metadata.getColumnCount();
             while (resultSet.next()) {              
                 users.add(map(resultSet));
             }
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
                 System.out.println(resultSet);
-                //user = map( resultSet );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -92,7 +88,7 @@ public class UserDao implements DAOInterface<User> {
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            //Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -170,7 +166,13 @@ public class UserDao implements DAOInterface<User> {
         }
     }
     
-    private static User map(ResultSet resultSet) throws SQLException {
+    /**
+     * Map ResultSet to User
+     * @param resultSet
+     * @return
+     * @throws SQLException 
+     */
+    public static User map(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId_user(resultSet.getInt("id_user"));
         user.setFirst_name(resultSet.getString("first_name"));
@@ -180,15 +182,11 @@ public class UserDao implements DAOInterface<User> {
         user.setIs_admin(resultSet.getBoolean("is_admin"));
         user.setStatus(resultSet.getBoolean("status"));
         user.setCompany(mapCompany(resultSet));
-        user.setCreated_date(resultSet.getDate("created_date"));
-        
+        user.setCreated_date(resultSet.getDate("created_date"));    
         return user;
     }
     
     private static Company mapCompany(ResultSet resultSet) throws SQLException{
-        Company company = new Company();
-        company.setMatriculation(resultSet.getInt("matriculation"));
-        company.setName_company(resultSet.getString("name_company"));
-        return company;
+        return CompanyDao.map(resultSet);
     }
 }
