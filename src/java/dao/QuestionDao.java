@@ -7,7 +7,6 @@ package dao;
 
 import static dao.DAOUtils.fermeturesSilencieuses;
 import static dao.DAOUtils.initialisationRequetePreparee;
-import dao.User.UserDaoImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,7 +68,7 @@ Connection connexion = null;
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -94,7 +93,7 @@ Connection connexion = null;
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -121,17 +120,12 @@ Connection connexion = null;
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         
         return question; 
-    }
-
-    @Override
-    public void update(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -146,6 +140,11 @@ Connection connexion = null;
         question.setStatus(resultSet.getBoolean("status"));
         question.setSentence(resultSet.getString("name"));
         return question;
+    }
+
+    @Override
+    public void update(int i, Question t) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

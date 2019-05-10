@@ -7,7 +7,6 @@ package dao;
 
 import static dao.DAOUtils.fermeturesSilencieuses;
 import static dao.DAOUtils.initialisationRequetePreparee;
-import dao.User.UserDaoImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,7 +72,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionnaireDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -98,7 +97,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionnaireDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -124,17 +123,12 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuestionnaireDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         
         return questionnaire;   
-    }
-
-    @Override
-    public void update(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -170,6 +164,11 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         company.setMatriculation(resultSet.getInt("matriculation"));
         company.setName_company(resultSet.getString("name_company"));
         return company;
+    }
+
+    @Override
+    public void update(int i, Questionnaire t) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
         
 }

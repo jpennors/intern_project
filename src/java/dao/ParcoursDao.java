@@ -7,7 +7,6 @@ package dao;
 
 import static dao.DAOUtils.fermeturesSilencieuses;
 import static dao.DAOUtils.initialisationRequetePreparee;
-import dao.User.UserDaoImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,7 +73,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ParcoursDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -99,7 +98,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ParcoursDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
@@ -125,17 +124,12 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ParcoursDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         
         return questionnaire;   
-    }
-
-    @Override
-    public void update(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -147,5 +141,10 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         Parcours parcours = new Parcours();
         
         return parcours;
+    }
+
+    @Override
+    public void update(int i, Parcours t) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
