@@ -4,6 +4,7 @@
     Author     : Josselin
 --%>
 
+<%@page import="java.util.List"%>
 <%-- 
     Document   : create_user
     Created on : 3 avr. 2019, 14:37:32
@@ -82,20 +83,17 @@
                                     <select class='form-control' id='inputCompany' name='company' value=${user.company.matriculation}>
                                     
                                     <%
-                                        Hashtable<Integer, Company> companiesTable = (Hashtable<Integer, Company>)request.getAttribute("Companies");
+                                        List<Company> companies = (List<Company>)request.getAttribute("companies");
                                         Integer selected_company = (Integer)request.getAttribute("selected_company");
 
-                                        for (int i=0; i< companiesTable.size(); i++){     
-
-                                            out.println("<option value='" + companiesTable.get(i).getMatriculation() + "'");
-                                            if(companiesTable.get(i).getMatriculation() == selected_company){
+                                        for (int i=0; i< companies.size(); i++){     
+                                            out.println("<option value='" + companies.get(i).getMatriculation() + "'");
+                                            if(companies.get(i).getMatriculation() == selected_company){
                                                 out.println("selected");
                                             }
-                                            out.println(">" + companiesTable.get(i).getName_company()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
-                                            //companiesTable.get(i).getMatriculation() == selected_company
+                                            out.println(">" + companies.get(i).getName_company()+ " (" + companies.get(i).getMatriculation() + ")</option>");
                                         }
-
-                                     %> 
+                                     %>
                                     </select>
                                    
                                    

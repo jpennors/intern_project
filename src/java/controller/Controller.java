@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.CompanyDao;
 import dao.DAOFactory;
 import dao.QuestionnaireDao;
 import java.io.IOException;
@@ -72,63 +73,76 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        
+        System.out.println("OK");
+        
         response.setContentType("text/html;charset=UTF-8");
+        
+        // Init DAO Factory
         DAOFactory dao = new DAOFactory();
+        
+        // Utilisateur
+        UserDao user_dao;
+        User user;
+        
+        // Company
+        CompanyDao company_dao;
+        Company company;
+        List<Company> companies;
+        
+        // ResultSet 
+        ResultSet data;
                 
+        // GET HTTP METHOD
         if("GET".equals(request.getMethod())){
-
-            ResultSet data = null;
+            
             switch(request.getRequestURI()){
+                
+                /**
+                 * USER GET METHOD
+                 */
                 case "/intern_project/create_user":
-                    data = st.executeQuery("SELECT * FROM company;");
-                    while(data.next()){
-                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name_company")));
-                    }
-                    User user = new User();
-                    request.setAttribute("Companies", companiesTable);
+
+                    company_dao = dao.getCompanyDao();
+                    companies = company_dao.index();                         
+                    user = new User();
+                    
+                    request.setAttribute("companies", companies);
                     request.setAttribute("user", user);
                     returnView(request, response, "/WEB-INF/user/create_user.jsp");
-                    companiesTable.clear();
                     break;
                     
                 case "/intern_project/users":
-
-                    UserDao user_dao = new UserDao(dao);
-                    List<User> users = new ArrayList();
-                    users = user_dao.index();
+                    user_dao = dao.getUserDao();
+                    List<User> users = user_dao.index();
                     
                     request.setAttribute("Users", users);
                     returnView(request, response, "/WEB-INF/user/index_user.jsp");
                     break;
                     
                 case "/intern_project/edit_user":
-                    data = st.executeQuery("SELECT * FROM company;");
-                    companiesTable.clear();
-                    while(data.next()){
-                        companiesTable.put(companiesTable.size(), new Company(data.getInt("matriculation"), data.getString("name_company")));
-                    }
-                    user = new User();
-                    request.setAttribute("Companies", companiesTable);                    
-                    
-                    dao = new DAOFactory();
-                    user_dao = new UserDao(dao);
-                    int id = Integer.parseInt(request.getParameter("id_user"));
-                    user = user_dao.show(id);
+                    company_dao = dao.getCompanyDao();
+                    companies = company_dao.index();            
+                    user_dao = dao.getUserDao();
+                    int user_id = Integer.parseInt(request.getParameter("id_user"));
+                    user = user_dao.show(user_id);
 
                     request.setAttribute("user", user);
+                    request.setAttribute("companies", companies); 
                     request.setAttribute("selected_company", user.getCompany().getMatriculation());
                     returnView(request, response, "/WEB-INF/user/edit_user.jsp");
-                    companiesTable.clear();
                     break;
-                    
+                
+                /**
+                 * QUESTIONNAIRE GET METHOD
+                 */
                 case "/intern_project/create_questionnaire":
                     returnView(request, response, "/WEB-INF/question/create_questionnaire.jsp");
                     break;      
                     
                 case "/intern_project/questionnaires":
                     QuestionnaireDao questionnaire_dao = new QuestionnaireDao(dao);
-                    List<Questionnaire> questionnaires = new ArrayList();
-                    questionnaires = questionnaire_dao.index();
+                    List<Questionnaire> questionnaires = questionnaire_dao.index();
                     request.setAttribute("Questionnaire", questionnaires);
                     
                     returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
@@ -141,63 +155,52 @@ public class Controller extends HttpServlet {
                     
             }
         } else if ("POST".equals(request.getMethod())){
-            ResultSet data = null;
+            
             switch(request.getRequestURI()){
+            
+                /**
+                 * USER POST METHOD
+                 */
                 case "/intern_project/create_user":
-                    System.out.println(request.getParameter("company"));
                     
-                    User user = new User();
-                    user.setFirst_name(request.getParameter("first_name"));
-                    user.setEmail(request.getParameter("email"));
-                    user.setName_user(request.getParameter("name_user"));
-                    user.setPhone(request.getParameter("phone"));
-                    user.setPassword(request.getParameter("password"));
+                    user = User.mapRequestToUser(request);
+                    int company_id = Integer.parseInt(request.getParameter("company"));
+                    company_dao = dao.getCompanyDao();
+                    company = company_dao.show(company_id);
+                    user.setCompany(company);
                     
-                    user.setIs_admin(Boolean.parseBoolean(request.getParameter("is_admin")));
-                    data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
-                    if(data.first()){
-                        Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
-                        user.setCompany(c);
-                    }
-                    UserDao user_dao = new UserDao(dao);
+                    user_dao = dao.getUserDao();
                     user_dao.create(user);
-                    
+              
                     response.sendRedirect("/intern_project/users");
                     break; 
                 
                 case "/intern_project/edit_user":
-                    System.out.println(request.getParameter("company"));
                     
-                    user = new User();
-                    user.setId_user(Integer.parseInt(request.getParameter("id_user")));
-                    user.setFirst_name(request.getParameter("first_name"));
-                    user.setEmail(request.getParameter("email"));
-                    user.setName_user(request.getParameter("name_user"));
-                    user.setPhone(request.getParameter("phone"));
-                    user.setStatus(Boolean.parseBoolean(request.getParameter("status")));
-                    user.setIs_admin(Boolean.parseBoolean(request.getParameter("is_admin")));
-                    data = st.executeQuery("SELECT * FROM company WHERE matriculation=" + request.getParameter("company"));
-                    if(data.first()){
-                        Company c = new Company(data.getInt("matriculation"), data.getString("name_company"));
-                        user.setCompany(c);
-                    }
-                    dao = new DAOFactory();
-                    user_dao = new UserDao(dao);
-                    user_dao.update(user.getId_user(), user);
+                    user = User.mapRequestToUser(request);
+                    company_id = Integer.parseInt(request.getParameter("company"));
+                    company_dao = dao.getCompanyDao();
+                    company = company_dao.show(company_id);
+                    user.setCompany(company);
+                    user_dao = dao.getUserDao();
+                    
+                    int user_id = Integer.parseInt(request.getParameter("id_user"));
+                    user_dao.update(user_id, user);
                     
                     response.sendRedirect("/intern_project/users");
                     break; 
                 
-                case "/intern_project/delete_user":
-                    int id = Integer.parseInt(request.getParameter("id_user"));
-                    dao = new DAOFactory();
-                    user_dao = new UserDao(dao);
-                    user_dao.delete(id);
+                case "/intern_project/delete_user":                    
+                    user_dao = dao.getUserDao();
+                    user_id = Integer.parseInt(request.getParameter("id_user"));
+                    user_dao.delete(user_id);
                                        
                     response.sendRedirect("/intern_project/users");
-                    
                     break;
                     
+                /**
+                 * QUESTIONNAIRE POST METHOD
+                 */
                 case "/intern_project/create_questionnaire":
                     questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
                     questionnaireCurrent = questionnaireTable.get(questionnaireTable.size()-1);

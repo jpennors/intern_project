@@ -4,6 +4,7 @@
     Author     : Josselin
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="java.util.Hashtable"%>
 <%@page import="model.Company"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -72,13 +73,10 @@
                                 <div class="col-sm-8">
                                     <select class='form-control' id='inputCompany' name='company' value=${user.company.matriculation}>
                                     <%
-                                        Hashtable<Integer, Company> companiesTable = (Hashtable<Integer, Company>)request.getAttribute("Companies");
-
-                                        for (int i=0; i< companiesTable.size(); i++){     
-
-                                            out.println("<option value='" + companiesTable.get(i).getMatriculation() + "' companiesTable.get(i).getMatriculation() == ${user.company.matriculation} ? selected='selected' : ''>" + companiesTable.get(i).getName_company()+ " (" + companiesTable.get(i).getMatriculation() + ")</option>");
+                                        List<Company> companies = (List<Company>)request.getAttribute("companies");
+                                        for (int i=0; i< companies.size(); i++){     
+                                            out.println("<option value='" + companies.get(i).getMatriculation() + "' companies.get(i).getMatriculation() == ${user.company.matriculation} ? selected='selected' : ''>" + companies.get(i).getName_company()+ " (" + companies.get(i).getMatriculation() + ")</option>");
                                         }
-
                                      %> 
                                     </select>
                                    
