@@ -6,6 +6,7 @@
 package model;
 
 import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -76,10 +77,7 @@ public class User {
 		return name_user;
 	}
 	
-	public void setName_user(String name_user) {
-		
-		// TO DO Check chaîne de caractère
-		
+	public void setName_user(String name_user) {		
 		this.name_user = name_user;
 	}
 	
@@ -180,6 +178,26 @@ public class User {
 				+ status + ", phone=" + phone + ", created_date=" + created_date + ", company_id=" 
 				+ company + ", is_admin=" + is_admin + "}";
 	}
+        
+        static public User mapRequestToUser(HttpServletRequest request){
+            User user = new User();
+            String id_user = request.getParameter("id_user");
+            try{
+                user.setId_user(Integer.parseInt(id_user));
+             }catch(NumberFormatException ex){}
+            user.setFirst_name(request.getParameter("first_name"));
+            user.setEmail(request.getParameter("email"));
+            user.setName_user(request.getParameter("name_user"));
+            user.setPhone(request.getParameter("phone"));
+            if (request.getParameterMap().containsKey("password")){
+                user.setPassword(request.getParameter("password"));
+            }
+            if (request.getParameterMap().containsKey("status")){
+                user.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+            }
+            user.setIs_admin(Boolean.parseBoolean(request.getParameter("is_admin")));
+            return user;
+        }
 	
 }
 
