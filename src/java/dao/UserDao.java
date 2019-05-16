@@ -33,6 +33,7 @@ public class UserDao implements DAOInterface<User> {
     private static final String SQL_INSERT = "INSERT INTO user (email, password, name_user, first_name, status, phone, is_admin, company) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE user SET email=?, name_user=?, first_name=?, status=?, phone=?, is_admin=?, company=? WHERE id_user=?";
     private static final String SQL_SOFT_DELETE = "UPDATE user SET status = 0 WHERE id_user = ?";
+    private static final String SQL_LOGIN = "SELECT * FROM user, company WHERE email = ? AND password = ? AND user.company = company.matriculation";
     
     public UserDao(DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -83,7 +84,6 @@ public class UserDao implements DAOInterface<User> {
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, user.getEmail(), user.getPassword(), user.getName_user(),
                                 user.getFirst_name(), user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation() );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -188,5 +188,33 @@ public class UserDao implements DAOInterface<User> {
     
     private static Company mapCompany(ResultSet resultSet) throws SQLException{
         return CompanyDao.map(resultSet);
+    }
+    
+    public User login(String email, String password){
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        User user = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee(connexion, SQL_LOGIN, false, email, password );
+            resultSet = preparedStatement.executeQuery();
+            System.out.println(preparedStatement);
+            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
+            if ( resultSet.next() ) {
+                user = map( resultSet );
+                System.out.println("Trouvé");
+                return user;
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        return null;
     }
 }
