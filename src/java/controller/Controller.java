@@ -309,8 +309,23 @@ public class Controller extends HttpServlet {
         returnView(request, response, "/WEB-INF/user/index_user.jsp");
     }
     
-    protected void createUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void createUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        
+        // Validation
+        //List<Validation> errors = Validation.userRequestValidation(request);
+        System.out.println("ici");
+        System.out.println(request.getParameter("is_admin"));
         User user = User.mapRequestToUser(request);
+        /*if(!errors.isEmpty()){
+            CompanyDao company_dao = dao.getCompanyDao();
+            List<Company> companies = company_dao.index();
+            request.setAttribute("companies", companies);
+            request.setAttribute("errors", errors);
+            response.sendRedirect("/intern_project/create_user");
+            //returnView(request, response, "/WEB-INF/user/create_user.jsp");
+            return;
+        }*/
+                
         int company_id = Integer.parseInt(request.getParameter("company"));
         CompanyDao company_dao = dao.getCompanyDao();
         Company company = company_dao.show(company_id);
