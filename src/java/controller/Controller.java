@@ -7,16 +7,13 @@ package controller;
 
 import dao.CompanyDao;
 import dao.DAOFactory;
+import dao.ParcoursDao;
 import dao.QuestionnaireDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -30,8 +27,6 @@ import model.User;
 import model.Company;
 import dao.UserDao;
 import java.util.List;
-import java.util.ArrayList;
-import javax.servlet.http.HttpSession;
 
 /**
  *
