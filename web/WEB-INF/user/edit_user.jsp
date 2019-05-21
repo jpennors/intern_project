@@ -54,7 +54,7 @@
                             <div class="form-group row">
                                 <label for="inputType" class="col-sm-4 col-form-label">Type</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="inputType" name="isAdmin" value=${user.is_admin}>
+                                    <select class="form-control" id="inputType" name="is_admin" value=${user.is_admin}>
                                         <option value="false" ${user.is_admin == false?'selected':''}>Stagiaire</option>
                                         <option value="true" ${user.is_admin == true?'selected':''}>Admin</option>
                                     </select>

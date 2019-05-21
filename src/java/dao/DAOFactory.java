@@ -68,4 +68,8 @@ public class DAOFactory {
         return new QuestionnaireDao(this);
     }
     
+    public ParcoursDao getParcoursDao(){
+        return new ParcoursDao(this);
+    }
+
 }

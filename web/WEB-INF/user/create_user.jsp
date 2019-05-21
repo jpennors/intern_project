@@ -4,6 +4,7 @@
     Author     : Josselin
 --%>
 
+<%@page import="controller.Validation"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Hashtable"%>
 <%@page import="model.Company"%>
@@ -24,37 +25,37 @@
                                 <input type="hidden" id="inputId" name="id_user" value=${user.id_user}>
                                 <label for="inputName" class="col-sm-4 col-form-label">Nom</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputNameUser" name="name_user" value=${user.name_user}>
+                                    <input class="form-control" id="inputNameUser" name="name_user" required value=${user.name_user}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputFirstName" class="col-sm-4 col-form-label"}>Prénom</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputFirstName" name="first_name" value=${user.first_name}>
+                                    <input class="form-control" id="inputFirstName" name="first_name" required value=${user.first_name}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputPhone" class="col-sm-4 col-form-label">Téléphone</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputPhone" name="phone" value=${user.phone}>
+                                    <input class="form-control" id="inputPhone" name="phone" required value=${user.phone}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputEmail" class="col-sm-4 col-form-label">Email</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" id="inputEmail" name="email" value=${user.email}>
+                                    <input class="form-control" id="inputEmail" name="email" required value=${user.email}>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputPassword" class="col-sm-4 col-form-label">Password</label>
                                 <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword" name="password">
+                                    <input type="password" class="form-control" id="inputPassword" name="password" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputType" class="col-sm-4 col-form-label">Type</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="inputType" name="isAdmin" value=${user.is_admin}>
+                                    <select class="form-control" id="inputType" name="is_admin" required value=${user.is_admin}>
                                         <option value="false">Stagiaire</option>
                                         <option value="true">Admin</option>
                                     </select>
@@ -63,7 +64,7 @@
                             <div class="form-group row">
                                 <label for="inputCompany" class="col-sm-4 col-form-label">Entreprise (Immatriculation)</label>
                                 <div class="col-sm-8">
-                                    <select class='form-control' id='inputCompany' name='company' value=${user.company.matriculation}>
+                                    <select class='form-control' id='inputCompany' name='company' required value=${user.company.matriculation}>
                                     <%
                                         List<Company> companies = (List<Company>)request.getAttribute("companies");
                                         for (int i=0; i< companies.size(); i++){     
@@ -77,6 +78,21 @@
                             </div>                             
                             <button type="submit" class="btn btn-primary">Envoyer</button>
                         </form>
+                        <%
+                            if (request.getParameterMap().containsKey("errors")){
+                                List<Validation> errors = (List<Validation>)request.getAttribute("errors");
+                                if(!errors.isEmpty()){
+                                    out.println("<div class='alert alert-warning' role='alert'>");
+                                    out.println("<ul>");
+                                    for (int i=0; i< errors.size(); i++){   
+                                        out.println("<li>");
+                                        out.println(errors.get(i).getMessage());
+                                        out.println("</li>");
+                                    }
+                                    out.println("</ul></div>");
+                                }
+                            }
+                         %>
                     </div>
                 </div>
             </div>

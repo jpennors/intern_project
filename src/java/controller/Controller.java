@@ -7,16 +7,13 @@ package controller;
 
 import dao.CompanyDao;
 import dao.DAOFactory;
+import dao.ParcoursDao;
 import dao.QuestionnaireDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -30,8 +27,6 @@ import model.User;
 import model.Company;
 import dao.UserDao;
 import java.util.List;
-import java.util.ArrayList;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -148,6 +143,14 @@ public class Controller extends HttpServlet {
             } else {
                 switch(request.getRequestURI()){
                     case "/intern_project/home":
+                        ParcoursDao parcours_dao = dao.getParcoursDao();
+                        // To DO récupérer uer_id
+                        parcours_dao.indexForUser(0);
+                        // Itérer dans les parcous et récupérer answers et good answers
+                        request.setAttribute("parcours", dao);
+                        request.setAttribute("count_anwsers", dao);
+                        request.setAttribute("count_good_answers", dao);
+                        
                         returnView(request, response, "/WEB-INF/home.jsp");
                         break;
                     default : 
@@ -306,8 +309,23 @@ public class Controller extends HttpServlet {
         returnView(request, response, "/WEB-INF/user/index_user.jsp");
     }
     
-    protected void createUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void createUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        
+        // Validation
+        //List<Validation> errors = Validation.userRequestValidation(request);
+        System.out.println("ici");
+        System.out.println(request.getParameter("is_admin"));
         User user = User.mapRequestToUser(request);
+        /*if(!errors.isEmpty()){
+            CompanyDao company_dao = dao.getCompanyDao();
+            List<Company> companies = company_dao.index();
+            request.setAttribute("companies", companies);
+            request.setAttribute("errors", errors);
+            response.sendRedirect("/intern_project/create_user");
+            //returnView(request, response, "/WEB-INF/user/create_user.jsp");
+            return;
+        }*/
+                
         int company_id = Integer.parseInt(request.getParameter("company"));
         CompanyDao company_dao = dao.getCompanyDao();
         Company company = company_dao.show(company_id);
