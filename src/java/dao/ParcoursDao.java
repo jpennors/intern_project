@@ -45,6 +45,12 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "";   
     
+    /* Parcours lié à un utlisateur */
+    private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire";
+    private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id AND response.validity = ?";
+    private static final String SQL_COUNT_ANSWERS = "SELECT COUNT(*) FROM parcours_question WHERE parcours_question.parcours_id = ?";
+    
+    
     @Override
     public List<Parcours> index() throws DAOException {
         List<Parcours> parcours = new ArrayList();
@@ -137,9 +143,11 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private static Parcours map(ResultSet resultSet){
+    private static Parcours map(ResultSet resultSet) throws SQLException{
         Parcours parcours = new Parcours();
-        
+        parcours.setId(resultSet.getInt("id_parcours"));
+        //parcours.setQuestionnaire_id(QuestionnaireDao.);
+        parcours.setUser_id(UserDao.map(resultSet));
         return parcours;
     }
 
@@ -147,4 +155,80 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     public void update(int i, Parcours t) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public List<Parcours> indexForUser(int user_id) throws DAOException {
+        List<Parcours> parcours = new ArrayList();
+        
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_PARCOURS_USER, false, user_id);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {              
+                parcours.add(map(resultSet));
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ParcoursDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        
+        return parcours;
+    }
+    
+    public int countAnswers (int parcours_id){
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_COUNT_ANSWERS, false, parcours_id );
+            resultSet = preparedStatement.executeQuery();
+            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
+            if ( resultSet.next() ) {
+                return resultSet.getInt(0);
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        return 0;
+    }
+    
+    public int countGoodAnswers (int parcours_id){
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_COUNT_GOOD_ANSWERS, false, parcours_id );
+            resultSet = preparedStatement.executeQuery();
+            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
+            if ( resultSet.next() ) {
+                return resultSet.getInt(0);
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        return 0;
+    }
+    
 }
