@@ -37,7 +37,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire"})
+@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire/*"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -138,6 +138,7 @@ public class Controller extends HttpServlet {
                         break;
 
                     case "/intern_project/edit_questionnaire":
+                        questionnaireEdition(request, response);
                         break;  
                         
                    default:
@@ -181,6 +182,10 @@ public class Controller extends HttpServlet {
                      */
                     case "/intern_project/create_questionnaire":
                         createQuestionnaire(request, response);
+                        break;
+                        
+                    case "/intern_project/edit_questionnaire":
+                        updateQuestionnaire(request, response);
                         break;
                         
                     case "/intern_project/delete_questionnaire":                    
@@ -363,13 +368,29 @@ public class Controller extends HttpServlet {
         returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
     }
     
+    //(get)
     protected void questionnaireCreation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{                    
         Questionnaire questionnaire = new Questionnaire();
         request.setAttribute("questionnaire", questionnaire);
         returnView(request, response, "/WEB-INF/question/create_questionnaire.jsp");
     }
     
+    //traitement (post)
     protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.sendRedirect("/intern_project/questionnaires");
+    }
+    
+    //(get)
+    protected void questionnaireEdition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{          
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        int id = Integer.parseInt(request.getParameter("id_questionnaire"));
+        Questionnaire questionnaire = questionnaire_dao.show(id);
+        request.setAttribute("questionnaire", questionnaire);
+        returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
+    }
+    
+    //traitement (post)
+    protected void updateQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
         response.sendRedirect("/intern_project/questionnaires");
     }
     

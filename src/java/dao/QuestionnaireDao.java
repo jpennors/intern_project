@@ -37,8 +37,8 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         this.daoFactory = daoFactory;
     }
     
-    private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation ";
-    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.subject = ? AND questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.company = company.matriculation ";
+    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.id_questionnaire = ? AND questionnaire.createur_id = user.id_user AND user.company = company.matriculation";
     private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
@@ -112,6 +112,8 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_BY_SUBJECT, false, id );
             resultSet = preparedStatement.executeQuery();
+            System.out.println(preparedStatement.toString());
+            System.out.println(id);
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
                 questionnaire = map( resultSet );
@@ -123,7 +125,6 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
-        
         return questionnaire;   
     }
 

@@ -16,7 +16,7 @@
         <h2 style="text-align: center; margin: 40px"> 
             Sujet : 
             <%
-                   Questionnaire questionnaire = (Questionnaire)request.getAttribute("Questionnaire");
+                   Questionnaire questionnaire = (Questionnaire)request.getAttribute("questionnaire");
                    out.println(questionnaire.getSubject());
             %>
         </h2>
