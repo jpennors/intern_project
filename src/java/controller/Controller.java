@@ -149,6 +149,14 @@ public class Controller extends HttpServlet {
             } else {
                 switch(request.getRequestURI()){
                     case "/intern_project/home":
+                        ParcoursDao parcours_dao = dao.getParcoursDao();
+                        // To DO récupérer uer_id
+                        parcours_dao.indexForUser(0);
+                        // Itérer dans les parcous et récupérer answers et good answers
+                        request.setAttribute("parcours", dao);
+                        request.setAttribute("count_anwsers", dao);
+                        request.setAttribute("count_good_answers", dao);
+                        
                         returnView(request, response, "/WEB-INF/home.jsp");
                         break;
                     default : 
