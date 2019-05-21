@@ -7,10 +7,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%@ include file="section/html_head.jsp" %>
+    <%@ include file="../section/html_head.jsp" %>
     
     <body>
-        <%@ include file="section/header.jsp" %>
+        <%@ include file="../section/header.jsp" %>
         <h1 style="text-align: center; margin: 40px">Ajouter un questionnaire</h1>
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">

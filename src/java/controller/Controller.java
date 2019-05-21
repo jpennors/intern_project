@@ -130,6 +130,7 @@ public class Controller extends HttpServlet {
                      * QUESTIONNAIRE GET METHOD
                      */
                     case "/intern_project/create_questionnaire":
+                        questionnaireCreation(request, response);
                         break;      
 
                     case "/intern_project/questionnaires":
@@ -179,9 +180,7 @@ public class Controller extends HttpServlet {
                      * QUESTIONNAIRE POST METHOD
                      */
                     case "/intern_project/create_questionnaire":
-                        //questionnaireTable.put(questionnaireTable.size(), new Questionnaire(request.getParameter("subject")));
-                        //questionnaireCurrent = questionnaireTable.get(questionnaireTable.size()-1);
-                        response.sendRedirect("/intern_project/edit_questionnaire");
+                        createQuestionnaire(request, response);
                         break;
                         
                     case "/intern_project/delete_questionnaire":                    
@@ -362,6 +361,16 @@ public class Controller extends HttpServlet {
         List<Questionnaire> questionnaires = questionnaire_dao.index();
         request.setAttribute("Questionnaires", questionnaires);
         returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
+    }
+    
+    protected void questionnaireCreation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{                    
+        Questionnaire questionnaire = new Questionnaire();
+        request.setAttribute("questionnaire", questionnaire);
+        returnView(request, response, "/WEB-INF/question/create_questionnaire.jsp");
+    }
+    
+    protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.sendRedirect("/intern_project/questionnaires");
     }
     
     protected void deleteQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{

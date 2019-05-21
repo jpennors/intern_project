@@ -39,7 +39,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation ";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.subject = ? AND questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation";
-    private static final String SQL_INSERT = "INSERT INTO questionnaire (id_questionnaire, subject, status, createur_id) VALUES (?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
     
@@ -85,7 +85,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, questionnaire.getId_questionnaire(),
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true,
                     questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
