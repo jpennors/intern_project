@@ -5,6 +5,8 @@
  */
 package model;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author lolal
@@ -94,7 +96,18 @@ public class Questionnaire {
         this.status_name = status_name;
     }
     
-    
+    static public Questionnaire mapRequestToQuestionnaire(HttpServletRequest request){
+        Questionnaire questionnaire = new Questionnaire();
+        String id_questionnaire = request.getParameter("id_questionnaire");
+        try{
+            questionnaire.setId_questionnaire(Integer.parseInt(id_questionnaire));
+        }catch(NumberFormatException ex){}
+        questionnaire.setSubject(request.getParameter("subject"));
+        if (request.getParameterMap().containsKey("status")){
+            questionnaire.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+        }
+        return questionnaire;
+    }
     
 }
 

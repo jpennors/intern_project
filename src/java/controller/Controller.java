@@ -377,6 +377,11 @@ public class Controller extends HttpServlet {
     
     //traitement (post)
     protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Questionnaire questionnaire = Questionnaire.mapRequestToQuestionnaire(request);
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        User createur = Middleware.getLoggedUser(request, response);
+        questionnaire.setCreateur_id(createur);
+        questionnaire_dao.create(questionnaire);
         response.sendRedirect("/intern_project/questionnaires");
     }
     
@@ -391,6 +396,10 @@ public class Controller extends HttpServlet {
     
     //traitement (post)
     protected void updateQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Questionnaire questionnaire = Questionnaire.mapRequestToQuestionnaire(request);
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        int id = Integer.parseInt(request.getParameter("id_questionnaire"));
+        questionnaire_dao.update(id, questionnaire);     
         response.sendRedirect("/intern_project/questionnaires");
     }
     

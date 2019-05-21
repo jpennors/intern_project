@@ -27,8 +27,6 @@ import model.User;
 /** 
  TO DO 
  * get question from the questionnaire -> JOIN
- * update
- * delete
  */
 public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     
@@ -40,7 +38,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.company = company.matriculation ";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.id_questionnaire = ? AND questionnaire.createur_id = user.id_user AND user.company = company.matriculation";
     private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
-    private static final String SQL_UPDATE_ALL = "";
+    private static final String SQL_UPDATE = "UPDATE questionnaire SET subject=?, status=? WHERE id_questionnaire = ?";
     private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
     
     @Override
@@ -86,7 +84,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true,
-                    questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id());
+                     questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id().getId_user());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -129,8 +127,26 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     }
 
     @Override
-    public void update(int id, Questionnaire t) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(int id, Questionnaire questionnaire) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
+                    true, questionnaire.getSubject(), questionnaire.getStatus(), id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }       
     }
     
     @Override
