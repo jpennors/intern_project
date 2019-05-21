@@ -58,8 +58,7 @@ public class Controller extends HttpServlet {
      */
     DAOFactory dao;
     Statement st;
-    
-    private static Questionnaire questionnaireCurrent; 
+   
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -131,20 +130,13 @@ public class Controller extends HttpServlet {
                      * QUESTIONNAIRE GET METHOD
                      */
                     case "/intern_project/create_questionnaire":
-                        returnView(request, response, "/WEB-INF/question/create_questionnaire.jsp");
                         break;      
 
                     case "/intern_project/questionnaires":
-                        QuestionnaireDao questionnaire_dao = new QuestionnaireDao(dao);
-                        List<Questionnaire> questionnaires = questionnaire_dao.index();
-                        request.setAttribute("Questionnaire", questionnaires);
-
-                        returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
+                        indexQuestionnaire(request, response);
                         break;
 
                     case "/intern_project/edit_questionnaire":
-                        request.setAttribute("Questionnaire", questionnaireCurrent);
-                        returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
                         break;  
                         
                    default:
@@ -191,6 +183,10 @@ public class Controller extends HttpServlet {
                         //questionnaireCurrent = questionnaireTable.get(questionnaireTable.size()-1);
                         response.sendRedirect("/intern_project/edit_questionnaire");
                         break;
+                        
+                    case "/intern_project/delete_questionnaire":                    
+                        deleteQuestionnaire(request,response);
+                        break;    
                         
                     default :
                         response.sendRedirect("/intern_project/home");
@@ -356,4 +352,23 @@ public class Controller extends HttpServlet {
         user_dao.delete(user_id);
         response.sendRedirect("/intern_project/users");
     }
+    
+    /**
+     * QUESTIONNAIRE
+     */
+    
+    protected void indexQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        List<Questionnaire> questionnaires = questionnaire_dao.index();
+        request.setAttribute("Questionnaires", questionnaires);
+        returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
+    }
+    
+    protected void deleteQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        int id = Integer.parseInt(request.getParameter("id_questionnaire"));
+        questionnaire_dao.delete(id);
+        response.sendRedirect("/intern_project/questionnaires");
+    }
+    
 }

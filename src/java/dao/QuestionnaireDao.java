@@ -26,7 +26,6 @@ import model.User;
 
 /** 
  TO DO 
- * delete mapUser and use UserDao 
  * get question from the questionnaire -> JOIN
  * update
  * delete
@@ -38,11 +37,11 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         this.daoFactory = daoFactory;
     }
     
-    private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user WHERE questionnaire.createur_id = user.id_user ";
-    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user WHERE questionnaire.subject = ? AND questionnaire.createur_id = user.id_user";
-    private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation ";
+    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.subject = ? AND questionnaire.createur_id = user.id_user AND user.id_user = company.matriculation";
+    private static final String SQL_INSERT = "INSERT INTO questionnaire (id_questionnaire, subject, status, createur_id) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE_ALL = "";
-    private static final String SQL_SOFT_DELETE = "";
+    private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
     
     @Override
     public List<Questionnaire> index() throws DAOException {
@@ -58,10 +57,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_ALL, false);
             resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
-            
-            ResultSetMetaData metadata = resultSet.getMetaData();
-            int numberOfColumns = metadata.getColumnCount();
+
             while (resultSet.next()) {              
                 questionnaires.add(map(resultSet));
             }
@@ -89,8 +85,8 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, questionnaire.getSubject(),
-                    questionnaire.getStatus(), questionnaire.getAdmin_id() );
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, questionnaire.getId_questionnaire(),
+                    questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -132,43 +128,45 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     }
 
     @Override
-    public void delete(int i) throws DAOException {
+    public void update(int id, Questionnaire t) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void delete(int id) throws DAOException {
+               Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_SOFT_DELETE, true, id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
     }
     
     private static Questionnaire map(ResultSet resultSet) throws SQLException {
         Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId_questionnaire(resultSet.getInt("id_questionnaire"));
         questionnaire.setSubject(resultSet.getString("subject"));
         questionnaire.setStatus(resultSet.getBoolean("status"));
-        questionnaire.setAdmin_id(mapUser(resultSet));
+        questionnaire.setCreateur_id(mapUser(resultSet));
         return questionnaire;
     }
     
-    private static User mapUser(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId_user(resultSet.getInt("id_user"));
-        user.setFirst_name(resultSet.getString("first_name"));
-        user.setName_user(resultSet.getString("name_user"));
-        user.setEmail(resultSet.getString("email"));
-        user.setPhone(resultSet.getString("phone"));
-        user.setIs_admin(resultSet.getBoolean("is_admin"));
-        user.setStatus(resultSet.getBoolean("status"));
-        user.setCompany(mapCompany(resultSet));
-        user.setCreated_date(resultSet.getDate("created_date"));
-        
-        return user;
-    }
- 
-    private static Company mapCompany(ResultSet resultSet) throws SQLException{
-        Company company = new Company();
-        company.setMatriculation(resultSet.getInt("matriculation"));
-        company.setName_company(resultSet.getString("name_company"));
-        return company;
+    private static User mapUser(ResultSet resultSet) throws SQLException{
+         return UserDao.map(resultSet);
     }
 
-    @Override
-    public void update(int i, Questionnaire t) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
         
 }

@@ -14,27 +14,32 @@ public class Questionnaire {
     /**
      * ATTRIBUTES
      */
+    private int id_questionnaire;
     private String subject; 
     private Boolean status; 
-    private User admin_id; // (/!\ BDD access) all User info
-    
+    private String status_name;
+    private User createur_id; 
+
     /**
-     * CONSTUCTOR
+     * CONSTRUCTOR
+     * @param id_questionnaire
      * @param subject
      * @param status
-     * @param admin_id 
+     * @param createur_id 
      */
-    public Questionnaire(String subject, User admin_id) {
+    public Questionnaire(int id_questionnaire, String subject, Boolean status, User createur_id) {
+        this.id_questionnaire = id_questionnaire;
         this.subject = subject;
-        this.status = true;
-        this.admin_id = admin_id;
+        this.status = status;
+        this.createur_id = createur_id;
     }
     
     public Questionnaire(String subject){
     // temporary, need get admin_id 
+        this.id_questionnaire = id_questionnaire;
         this.subject = subject;
         this.status = true;
-        this.admin_id = null;
+        this.createur_id = null;
     }
 
     public Questionnaire() {
@@ -58,17 +63,36 @@ public class Questionnaire {
 
     public void setStatus(Boolean status) {
         this.status = status;
+        if (this.status == true)
+            this.setStatus_name("Actif");
+        else 
+            this.setStatus_name("Inactif");
+            
+    }    
+
+    public int getId_questionnaire() {
+        return id_questionnaire;
     }
 
-    public User getAdmin_id() {
-        return admin_id;
+    public void setId_questionnaire(int id_questionnaire) {
+        this.id_questionnaire = id_questionnaire;
     }
 
-    public void setAdmin_id(User admin_id) {
-        this.admin_id = admin_id;
+    public User getCreateur_id() {
+        return createur_id;
+    }
+
+    public void setCreateur_id(User createur_id) {
+        this.createur_id = createur_id;
     }
     
-    
+    public String getStatus_name(){
+        return status_name;
+        }
+        
+    private void setStatus_name(String status_name){
+        this.status_name = status_name;
+    }
     
 }
 
