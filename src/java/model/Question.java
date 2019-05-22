@@ -5,6 +5,8 @@
  */
 package model;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author lolal
@@ -85,6 +87,19 @@ public class Question {
 
     public void setStatus_name(String status_name) {
         this.status_name = status_name;
+    }
+    
+    static public Question mapRequestToQuestion(HttpServletRequest request){
+        Question question = new Question();
+        String id_question = request.getParameter("id_question");
+        try{
+            question.setId_question(Integer.parseInt(id_question));
+        }catch(NumberFormatException ex){}
+        question.setSentence(request.getParameter("sentence"));
+        if (request.getParameterMap().containsKey("status")){
+            question.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+        }
+        return question;
     }
     
     

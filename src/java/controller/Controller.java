@@ -34,7 +34,9 @@ import model.Question;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire/*", "/questions"})
+@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller",
+    "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
+    "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -142,7 +144,7 @@ public class Controller extends HttpServlet {
                      * QUESTION GET METHOD
                      */
                     case "/intern_project/create_question":
-                        //questionCreation(request, response);
+                        questionCreation(request, response);
                         break;      
 
                     case "/intern_project/questions":
@@ -150,7 +152,7 @@ public class Controller extends HttpServlet {
                         break;
 
                     case "/intern_project/edit_question":
-                        //questionEdition(request, response);
+                        questionEdition(request, response);
                         break;    
                         
                    default:
@@ -216,11 +218,11 @@ public class Controller extends HttpServlet {
                      * QUESTIONNAIRE POST METHOD
                      */
                     case "/intern_project/create_question":
-                        //createQuestion(request, response);
+                        createQuestion(request, response);
                         break;
                         
                     case "/intern_project/edit_question":
-                        //updateQuestion(request, response);
+                        updateQuestion(request, response);
                         break;
                         
                     case "/intern_project/delete_question":                    
@@ -477,5 +479,38 @@ public class Controller extends HttpServlet {
         questionnaire_dao.delete(id);
         response.sendRedirect("/intern_project/questions");
     }
+    
+    //(get)
+    protected void questionEdition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{          
+        QuestionDao question_dao = dao.getQuestionDao();
+        int id = Integer.parseInt(request.getParameter("id_question"));
+        Question question = question_dao.show(id);
+        request.setAttribute("question", question);
+        returnView(request, response, "/WEB-INF/question/edit_question.jsp");
+    }
+    
+    //traitement (post)
+    protected void updateQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Question question = Question.mapRequestToQuestion(request);
+        QuestionDao question_dao = dao.getQuestionDao();
+        int id = Integer.parseInt(request.getParameter("id_question"));
+        question_dao.update(id, question);     
+        response.sendRedirect("/intern_project/questions");
+    }
+    
+    //(get)
+    protected void questionCreation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{                    
+        Question question = new Question();
+        request.setAttribute("question", question);
+        returnView(request, response, "/WEB-INF/question/create_question.jsp");
+    }
+    
+    //traitement (post)
+    protected void createQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Question question = Question.mapRequestToQuestion(request);
+        QuestionDao question_dao = dao.getQuestionDao();
+        question_dao.create(question);
+        response.sendRedirect("/intern_project/questions");
+    }    
     
 }

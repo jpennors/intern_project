@@ -37,7 +37,7 @@
                                         out.println("<td>" + questions.get(i).getSentence() + "</td>");
                                         out.println("<td>" + questions.get(i).getStatus_name() + "</td>" );
                                         //edit
-                                        out.println("<form action='edit_questionnaire' method='get'>");
+                                        out.println("<form action='edit_question' method='get'>");
                                         out.println("<input type='hidden' name='id_question' value='" + questions.get(i).getId_question() + "'>");
                                         out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
                                         out.println("</form>");

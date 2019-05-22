@@ -36,7 +36,7 @@ public class QuestionDao implements DAOInterface<Question>{
     }
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM question";
-    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question, question_questionnaire WHERE question.id_question = ? AND question.id_question=question_questionnaire.question.id";
+    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question WHERE question.id_question = ?";
     private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name) VALUES (?,?,?)";
     private static final String SQL_UPDATE = "UPDATE question SET status=?, name=?WHERE id_question = ?";
     private static final String SQL_SOFT_DELETE = "UPDATE question SET status = 0 WHERE question.id_question = ?";
@@ -82,7 +82,7 @@ public class QuestionDao implements DAOInterface<Question>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, question.getId_question(),
-                    question.getStatus(), question.getSentence(), null );
+                    question.getStatus(), question.getSentence());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -156,7 +156,7 @@ public class QuestionDao implements DAOInterface<Question>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
-                    true, question.getStatus(), question.getSentence(), null, id );
+                    true, question.getStatus(), question.getSentence(), id );
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
