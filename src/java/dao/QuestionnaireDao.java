@@ -151,7 +151,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     
     @Override
     public void delete(int id) throws DAOException {
-               Connection connexion = null;
+        Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         

@@ -38,13 +38,13 @@ public class QuestionDao implements DAOInterface<Question>{
     private static final String SQL_SELECT_ALL = "SELECT * FROM question";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question WHERE question.id_question = ?";
     private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name, ordre) VALUES (?,?,?,?)";
-    private static final String SQL_UPDATE_ALL = "";
-    private static final String SQL_SOFT_DELETE = "";
+    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=?, ordre=? WHERE id_question = ?";
+    private static final String SQL_SOFT_DELETE = "UPDATE question set status = 0 WHERE question.id_question = ?";
     
     @Override
     public List<Question> index() throws DAOException {
         List<Question> questions = new ArrayList();
-Connection connexion = null;
+        Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         //User user = null;
@@ -54,10 +54,7 @@ Connection connexion = null;
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_ALL, false);
             resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
             
-            ResultSetMetaData metadata = resultSet.getMetaData();
-            int numberOfColumns = metadata.getColumnCount();
             while (resultSet.next()) {              
                 questions.add(map(resultSet));
             }
@@ -129,8 +126,48 @@ Connection connexion = null;
     }
 
     @Override
-    public void delete(int i) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(int id) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_SOFT_DELETE, true, id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }    
+    }
+    
+    @Override
+    public void update(int id, Question question) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
+                    true, question.getStatus(), question.getSentence(), question.getOrder(), id );
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
     }
     
     private static Question map(ResultSet resultSet) throws SQLException {
@@ -140,11 +177,5 @@ Connection connexion = null;
         question.setStatus(resultSet.getBoolean("status"));
         question.setSentence(resultSet.getString("name"));
         return question;
-    }
-
-    @Override
-    public void update(int i, Question t) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }

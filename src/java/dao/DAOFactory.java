@@ -71,5 +71,9 @@ public class DAOFactory {
     public ParcoursDao getParcoursDao(){
         return new ParcoursDao(this);
     }
+    
+    public QuestionDao getQuestionDao(){
+        return new QuestionDao(this);
+    }
 
 }
