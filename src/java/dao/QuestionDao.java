@@ -38,7 +38,7 @@ public class QuestionDao implements DAOInterface<Question>{
     private static final String SQL_SELECT_ALL = "SELECT * FROM question";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question WHERE question.id_question = ?";
     private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name) VALUES (?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=?WHERE id_question = ?";
+    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=? WHERE id_question = ?";
     private static final String SQL_SOFT_DELETE = "UPDATE question SET status = 0 WHERE question.id_question = ?";
     
     @Override
@@ -99,7 +99,7 @@ public class QuestionDao implements DAOInterface<Question>{
 
     @Override
     public Question show(int id) throws DAOException {
-                Connection connexion = null;
+        Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Question question = null;
@@ -174,7 +174,6 @@ public class QuestionDao implements DAOInterface<Question>{
         question.setId_question(resultSet.getInt("id_question"));
         question.setStatus(resultSet.getBoolean("status"));
         question.setSentence(resultSet.getString("name"));
-        //question.setOrder(resultSet.getInt("question_order"));
         return question;
     }    
 }

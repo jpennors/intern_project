@@ -474,9 +474,9 @@ public class Controller extends HttpServlet {
     }
     
     protected void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        QuestionDao question_dao = dao.getQuestionDao();
         int id = Integer.parseInt(request.getParameter("id_question"));
-        questionnaire_dao.delete(id);
+        question_dao.delete(id);
         response.sendRedirect("/intern_project/questions");
     }
     
