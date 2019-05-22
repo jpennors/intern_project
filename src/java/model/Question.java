@@ -14,23 +14,25 @@ public class Question {
     /**
      * ATTRIBUTES
      */
-    private Integer id; 
     private Boolean status; 
+    private String status_name;
     private String sentence; 
     private Integer order; 
+    private Integer id_question;
 
     /**
      * CONSTUCTOR
-     * @param id
+     * @param id_question
      * @param status
      * @param sentence
      * @param order 
      */
-    public Question(Integer id, String sentence, Integer order) {
-        this.id = id;
-        this.status = true;
+    public Question(Boolean status, String status_name, String sentence, Integer order, Integer id_question) {
+        this.status = status;
+        this.status_name = status_name;
         this.sentence = sentence;
         this.order = order;
+        this.id_question = id_question;
     }
 
     public Question() {
@@ -41,12 +43,12 @@ public class Question {
     /**
      * GETTERS SETTERS 
      */
-    public Integer getId() {
-        return id;
+    public Integer getId_question() {
+        return id_question;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId_question(Integer id) {
+        this.id_question = id;
     }
 
     public Boolean getStatus() {
@@ -55,6 +57,10 @@ public class Question {
 
     public void setStatus(Boolean status) {
         this.status = status;
+        if (this.status == true)
+            this.setStatus_name("Actif");
+        else 
+            this.setStatus_name("Inactif");
     }
 
     public String getSentence() {
@@ -72,8 +78,14 @@ public class Question {
     public void setOrder(Integer order) {
         this.order = order;
     }
-    
-    
+
+    public String getStatus_name() {
+        return status_name;
+    }
+
+    public void setStatus_name(String status_name) {
+        this.status_name = status_name;
+    }
     
     
     

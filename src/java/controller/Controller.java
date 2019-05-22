@@ -8,6 +8,7 @@ package controller;
 import dao.CompanyDao;
 import dao.DAOFactory;
 import dao.ParcoursDao;
+import dao.QuestionDao;
 import dao.QuestionnaireDao;
 import java.io.IOException;
 import java.sql.Connection;
@@ -27,12 +28,13 @@ import model.User;
 import model.Company;
 import dao.UserDao;
 import java.util.List;
+import model.Question;
 
 /**
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire/*"})
+@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller", "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire", "/questionnaires", "/edit_questionnaire/*", "/questions"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -134,7 +136,22 @@ public class Controller extends HttpServlet {
 
                     case "/intern_project/edit_questionnaire":
                         questionnaireEdition(request, response);
-                        break;  
+                        break;
+                        
+                    /**
+                     * QUESTION GET METHOD
+                     */
+                    case "/intern_project/create_question":
+                        //questionCreation(request, response);
+                        break;      
+
+                    case "/intern_project/questions":
+                        indexQuestion(request, response);
+                        break;
+
+                    case "/intern_project/edit_question":
+                        //questionEdition(request, response);
+                        break;    
                         
                    default:
                        returnView(request, response, "/WEB-INF/home.jsp");
@@ -193,6 +210,21 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_questionnaire":                    
                         deleteQuestionnaire(request,response);
+                        break;
+                        
+                    /**
+                     * QUESTIONNAIRE POST METHOD
+                     */
+                    case "/intern_project/create_question":
+                        //createQuestion(request, response);
+                        break;
+                        
+                    case "/intern_project/edit_question":
+                        //updateQuestion(request, response);
+                        break;
+                        
+                    case "/intern_project/delete_question":                    
+                        deleteQuestion(request,response);
                         break;    
                         
                     default :
@@ -382,7 +414,7 @@ public class Controller extends HttpServlet {
     protected void indexQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
         List<Questionnaire> questionnaires = questionnaire_dao.index();
-        request.setAttribute("Questionnaires", questionnaires);
+        request.setAttribute("questionnaires", questionnaires);
         returnView(request, response, "/WEB-INF/question/index_questionnaire.jsp");
     }
     
@@ -426,6 +458,24 @@ public class Controller extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id_questionnaire"));
         questionnaire_dao.delete(id);
         response.sendRedirect("/intern_project/questionnaires");
+    }
+    
+    /**
+     * QUESTION
+     */
+    
+    protected void indexQuestion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        QuestionDao question_dao = dao.getQuestionDao();
+        List<Question> questions = question_dao.index();
+        request.setAttribute("questions", questions);
+        returnView(request, response, "/WEB-INF/question/index_question.jsp");
+    }
+    
+    protected void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        int id = Integer.parseInt(request.getParameter("id_question"));
+        questionnaire_dao.delete(id);
+        response.sendRedirect("/intern_project/questions");
     }
     
 }

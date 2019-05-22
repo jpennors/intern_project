@@ -36,10 +36,10 @@ public class QuestionDao implements DAOInterface<Question>{
     }
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM question";
-    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question WHERE question.id_question = ?";
-    private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name, ordre) VALUES (?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=?, ordre=? WHERE id_question = ?";
-    private static final String SQL_SOFT_DELETE = "UPDATE question set status = 0 WHERE question.id_question = ?";
+    private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM question, question_questionnaire WHERE question.id_question = ? AND question.id_question=question_questionnaire.question.id";
+    private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name) VALUES (?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=?WHERE id_question = ?";
+    private static final String SQL_SOFT_DELETE = "UPDATE question SET status = 0 WHERE question.id_question = ?";
     
     @Override
     public List<Question> index() throws DAOException {
@@ -47,7 +47,6 @@ public class QuestionDao implements DAOInterface<Question>{
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        //User user = null;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
@@ -82,8 +81,8 @@ public class QuestionDao implements DAOInterface<Question>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, question.getId(),
-                    question.getStatus(), question.getSentence(), question.getOrder() );
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, question.getId_question(),
+                    question.getStatus(), question.getSentence(), null );
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -157,7 +156,7 @@ public class QuestionDao implements DAOInterface<Question>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
-                    true, question.getStatus(), question.getSentence(), question.getOrder(), id );
+                    true, question.getStatus(), question.getSentence(), null, id );
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -172,10 +171,10 @@ public class QuestionDao implements DAOInterface<Question>{
     
     private static Question map(ResultSet resultSet) throws SQLException {
         Question question = new Question();
-        question.setId(resultSet.getInt("id_question"));
-        question.setOrder(resultSet.getInt("order"));
+        question.setId_question(resultSet.getInt("id_question"));
         question.setStatus(resultSet.getBoolean("status"));
         question.setSentence(resultSet.getString("name"));
+        //question.setOrder(resultSet.getInt("question_order"));
         return question;
     }    
 }

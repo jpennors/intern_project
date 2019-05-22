@@ -31,6 +31,9 @@
                                 "</button></div><br><div class='row'>" +
                                 "<button class='btn btn-lg btn-info mb-1 col-sm-4 offset-sm-4'>" +
                                 "<a href='create_questionnaire' class='text-decoration-none text-reset'>Créer un questionnaire</a>" +
+                                "</button></div><br><div class='row'>" +
+                                "<button class='btn btn-lg btn-info mb-1 col-sm-4 offset-sm-4'>" +
+                                "<a href='questions' class='text-decoration-none text-reset'>Lister les questions</a>" +
                                 "</button></div>"
                             );
                         } else {
