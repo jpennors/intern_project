@@ -17,7 +17,9 @@
                     "<a href='create_user' class='text-muted text-decoration-none'>Créer un utilisateur</a><br>" +
                     "<a href='users' class='text-muted text-decoration-none'>Lister les utilisateurs</a><br>" +
                     "<a href='questionnaires' class='text-muted text-decoration-none'>Lister les questionnaires</a><br>" +
-                    "<a href='create_questionnaire' class='text-muted text-decoration-none'>Créer un questionnaire</a><br>" 
+                    "<a href='create_questionnaire' class='text-muted text-decoration-none'>Créer un questionnaire</a><br>" +
+                    "<a href='questions' class='text-muted text-decoration-none'>Lister les questions</a><br>" +
+                    "<a href='create_question' class='text-muted text-decoration-none'>Créer une question</a><br>"         
                 );
             } else {
                 out.println(

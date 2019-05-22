@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Company;
+import model.Question;
 import model.Questionnaire;
 import model.User;
 /**
@@ -40,6 +41,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
     private static final String SQL_UPDATE = "UPDATE questionnaire SET subject=?, status=? WHERE id_questionnaire = ?";
     private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
+    private static final String SQL_SELECT_QUESTION ="SELECT * FROM questionnaire, question, question_questionnaire WHERE questionnaire.id_questionnaire = ? AND question_questionnaire.questionnaire_id=questionnaire.id_questionnaire AND question_questionnaire.question_id = question.id_question";
     
     @Override
     public List<Questionnaire> index() throws DAOException {
@@ -124,7 +126,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
         return questionnaire;   
-    }
+    } 
 
     @Override
     public void update(int id, Questionnaire questionnaire) throws DAOException {
@@ -171,6 +173,38 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         }
     }
     
+    //get the questions from a questionnaire
+    public List<Question> getQuestion(int id) throws DAOException {
+        List<Question> questions = new ArrayList();  
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        //User user = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_QUESTION, false);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {              
+                questions.add(mapQuestion(resultSet));
+            }
+            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
+            if ( resultSet.next() ) {
+                System.out.println(resultSet);
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QuestionnaireDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+    
+    return questions;
+    }
+    
     private static Questionnaire map(ResultSet resultSet) throws SQLException {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setId_questionnaire(resultSet.getInt("id_questionnaire"));
@@ -178,6 +212,15 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         questionnaire.setStatus(resultSet.getBoolean("status"));
         questionnaire.setCreateur_id(mapUser(resultSet));
         return questionnaire;
+    }
+    
+    private static Question mapQuestion(ResultSet resultSet) throws SQLException{
+        Question question = new Question();
+        question.setId_question(resultSet.getInt("id_question"));
+        question.setStatus(resultSet.getBoolean("status"));
+        question.setSentence(resultSet.getString("name"));
+        question.setOrder(resultSet.getInt("question_order"));
+        return question;
     }
     
     private static User mapUser(ResultSet resultSet) throws SQLException{

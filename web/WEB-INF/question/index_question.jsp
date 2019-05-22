@@ -47,7 +47,7 @@
                                         out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + questions.get(i).getId_question() + ">Supprimer</button></td>");
                                         out.println("</form>");
                                         out.println("</tr>");
-               }
+                                    }
                              %> 
                         </tbody>
                     </table>

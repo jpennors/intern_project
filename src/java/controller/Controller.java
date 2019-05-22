@@ -442,7 +442,9 @@ public class Controller extends HttpServlet {
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
         int id = Integer.parseInt(request.getParameter("id_questionnaire"));
         Questionnaire questionnaire = questionnaire_dao.show(id);
+        List<Question> questions = questionnaire_dao.getQuestion(id);
         request.setAttribute("questionnaire", questionnaire);
+        request.setAttribute("questions", questions);
         returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
     }
     
