@@ -524,10 +524,10 @@ public class Controller extends HttpServlet {
         System.out.println("XXXXXXX");
         System.out.println(request.getParameter("id_questionnaire"));
         System.out.println("XXXXXXX");
-        if (request.getParameter("id_questionnaire") == null)
-                id_questionnaire = null;
+        if (!request.getParameter("id_questionnaire").equals(""))
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         else 
-            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));     
+            id_questionnaire = null;     
         if (id_questionnaire != null)           
             this.questionnaireEdition(request, response);
         else 
