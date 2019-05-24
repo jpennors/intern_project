@@ -184,7 +184,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_QUESTION, false);
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_QUESTION, false, id);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {              
