@@ -37,9 +37,9 @@ public class QuestionDao implements DAOInterface<Question>{
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM question";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM question WHERE question.id_question = ?";
-    private static final String SQL_INSERT = "INSERT INTO question (id_question, status, name) VALUES (?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE question SET status=?, name=? WHERE id_question = ?";
-    private static final String SQL_SOFT_DELETE = "UPDATE question SET status = 0 WHERE question.id_question = ?";
+    private static final String SQL_INSERT = "INSERT INTO question (id_question, status_question, name) VALUES (?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE question SET status_question=?, name=? WHERE id_question = ?";
+    private static final String SQL_SOFT_DELETE = "UPDATE question SET status_question = 0 WHERE question.id_question = ?";
     
     @Override
     public List<Question> index() throws DAOException {
@@ -172,7 +172,7 @@ public class QuestionDao implements DAOInterface<Question>{
     private static Question map(ResultSet resultSet) throws SQLException {
         Question question = new Question();
         question.setId_question(resultSet.getInt("id_question"));
-        question.setStatus(resultSet.getBoolean("status"));
+        question.setStatus(resultSet.getBoolean("status_question"));
         question.setSentence(resultSet.getString("name"));
         return question;
     }    

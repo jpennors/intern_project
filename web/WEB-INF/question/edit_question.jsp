@@ -20,6 +20,7 @@
                         <form action="edit_question" method="post">
                                 <div class="form-group row">
                                     <input type="hidden" id="inputId" name="id_question" value=${question.id_question}>
+                                    <input type="hidden" id="inputId" name="id_questionnaire" value=${id_questionnaire}>
                                     <label for="inputSentence" class="col-sm-4 col-form-label">Intitulé</label>
                                     <div class="col-sm-8">
                                         <input class="form-control" id="inputSubject" name="sentence" value="${question.sentence}">

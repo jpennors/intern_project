@@ -36,6 +36,13 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="inputSubject" class="col-sm-4 col-form-label">Nouvelle Question</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="inputSubject" name="subject" value="Ajout question TO DO">
+                                    </div>
+                                </div>        
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
                         </form>
                     </div>                
                 </div>
@@ -64,12 +71,16 @@
                                         out.println("<td>" + questions.get(i).getSentence() + "</td>");
                                         out.println("<td>" + questions.get(i).getStatus_name() + "</td>" );
                                         //edit
-                                        out.println("<form action='edit_question' method='get'>");
+                                        out.println("<form action='edit_question' method='get'>");%>
+                                        <input type="hidden" id="inputId" name="id_questionnaire" value=${questionnaire.id_questionnaire}>
+                                        <%
                                         out.println("<input type='hidden' name='id_question' value='" + questions.get(i).getId_question() + "'>");
                                         out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
                                         out.println("</form>");
                                         //delete
-                                        out.println("<form action='delete_question' method='post'>");
+                                        out.println("<form action='delete_question' method='post'>");%>
+                                        <input type="hidden" id="inputId" name="id_questionnaire" value=${questionnaire.id_questionnaire}>
+                                        <%
                                         out.println("<input type='hidden' name='id_question' value='" + questions.get(i).getId_question() + "'>");
                                         out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + questions.get(i).getId_question() + ">Supprimer</button></td>");
                                         out.println("</form>");
@@ -80,23 +91,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
-                <div class="card-body">
-                    <div class="form-group">
-                        <form action="edit_questionnaire" method="post">
-                                <div class="form-group row">
-                                    <label for="inputSubject" class="col-sm-4 col-form-label">Nouvelle Question</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="inputSubject" name="subject" value="Ajout question TO DO">
-                                    </div>
-                                </div>        
-                                <button type="submit" class="btn btn-primary">Envoyer</button>
-                        </form>
-                    </div>                
-                </div>
-            </div>
-        </div>                
+        </div>    
     </body>
 </html>

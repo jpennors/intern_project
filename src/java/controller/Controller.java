@@ -475,29 +475,63 @@ public class Controller extends HttpServlet {
         returnView(request, response, "/WEB-INF/question/index_question.jsp");
     }
     
-    protected void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         QuestionDao question_dao = dao.getQuestionDao();
         int id = Integer.parseInt(request.getParameter("id_question"));
         question_dao.delete(id);
-        response.sendRedirect("/intern_project/questions");
+        
+        //retour: liste question ou questionnaire en édition
+        Integer id_questionnaire;
+        if (request.getParameter("id_questionnaire") == null)
+                id_questionnaire = null;
+        else 
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+        if (id_questionnaire != null)           
+            this.questionnaireEdition(request, response);
+        else 
+            response.sendRedirect("/intern_project/questions");
     }
     
     //(get)
     protected void questionEdition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{          
         QuestionDao question_dao = dao.getQuestionDao();
+        Integer id_questionnaire;
         int id = Integer.parseInt(request.getParameter("id_question"));
+        
+        //édition via un questionnaire ou non 
+        if (request.getParameter("id_questionnaire") == null){
+            id_questionnaire = null;
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }        
+        else{ 
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }    
         Question question = question_dao.show(id);
         request.setAttribute("question", question);
         returnView(request, response, "/WEB-INF/question/edit_question.jsp");
     }
     
     //traitement (post)
-    protected void updateQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void updateQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Question question = Question.mapRequestToQuestion(request);
         QuestionDao question_dao = dao.getQuestionDao();
         int id = Integer.parseInt(request.getParameter("id_question"));
-        question_dao.update(id, question);     
-        response.sendRedirect("/intern_project/questions");
+        question_dao.update(id, question);
+        
+        //retour: liste question ou questionnaire en édition
+        Integer id_questionnaire = null;
+        System.out.println("XXXXXXX");
+        System.out.println(request.getParameter("id_questionnaire"));
+        System.out.println("XXXXXXX");
+        if (request.getParameter("id_questionnaire") == null)
+                id_questionnaire = null;
+        else 
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));     
+        if (id_questionnaire != null)           
+            this.questionnaireEdition(request, response);
+        else 
+            response.sendRedirect("/intern_project/questions");
     }
     
     //(get)

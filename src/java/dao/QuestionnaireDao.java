@@ -38,9 +38,9 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM questionnaire, user, company WHERE questionnaire.createur_id = user.id_user AND user.company = company.matriculation ";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM questionnaire, user, company WHERE questionnaire.id_questionnaire = ? AND questionnaire.createur_id = user.id_user AND user.company = company.matriculation";
-    private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status, createur_id) VALUES (?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE questionnaire SET subject=?, status=? WHERE id_questionnaire = ?";
-    private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status = 0 WHERE questionnaire.id_questionnaire = ?";
+    private static final String SQL_INSERT = "INSERT INTO questionnaire (subject, status_questionnaire, createur_id) VALUES (?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE questionnaire SET subject=?, status_questionnaire=? WHERE id_questionnaire = ?";
+    private static final String SQL_SOFT_DELETE = "UPDATE questionnaire SET status_questionnaire = 0 WHERE questionnaire.id_questionnaire = ?";
     private static final String SQL_SELECT_QUESTION ="SELECT * FROM questionnaire, question, question_questionnaire WHERE questionnaire.id_questionnaire = ? AND question_questionnaire.questionnaire_id=questionnaire.id_questionnaire AND question_questionnaire.question_id = question.id_question";
     
     @Override
@@ -209,7 +209,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setId_questionnaire(resultSet.getInt("id_questionnaire"));
         questionnaire.setSubject(resultSet.getString("subject"));
-        questionnaire.setStatus(resultSet.getBoolean("status"));
+        questionnaire.setStatus(resultSet.getBoolean("status_questionnaire"));
         questionnaire.setCreateur_id(mapUser(resultSet));
         return questionnaire;
     }
@@ -217,7 +217,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     private static Question mapQuestion(ResultSet resultSet) throws SQLException{
         Question question = new Question();
         question.setId_question(resultSet.getInt("id_question"));
-        question.setStatus(resultSet.getBoolean("status"));
+        question.setStatus(resultSet.getBoolean("status_question"));
         question.setSentence(resultSet.getString("name"));
         question.setOrder(resultSet.getInt("question_order"));
         return question;

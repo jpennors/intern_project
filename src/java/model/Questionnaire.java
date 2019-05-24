@@ -16,7 +16,7 @@ public class Questionnaire {
     /**
      * ATTRIBUTES
      */
-    private int id_questionnaire;
+    private Integer id_questionnaire;
     private String subject; 
     private Boolean status; 
     private String status_name;
@@ -29,7 +29,7 @@ public class Questionnaire {
      * @param status
      * @param createur_id 
      */
-    public Questionnaire(int id_questionnaire, String subject, Boolean status, User createur_id) {
+    public Questionnaire(Integer id_questionnaire, String subject, Boolean status, User createur_id) {
         this.id_questionnaire = id_questionnaire;
         this.subject = subject;
         this.status = status;
@@ -38,7 +38,6 @@ public class Questionnaire {
     
     public Questionnaire(String subject){
     // temporary, need get admin_id 
-        this.id_questionnaire = id_questionnaire;
         this.subject = subject;
         this.status = true;
         this.createur_id = null;
@@ -76,7 +75,7 @@ public class Questionnaire {
         return id_questionnaire;
     }
 
-    public void setId_questionnaire(int id_questionnaire) {
+    public void setId_questionnaire(Integer id_questionnaire) {
         this.id_questionnaire = id_questionnaire;
     }
 
