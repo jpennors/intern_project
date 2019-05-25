@@ -564,9 +564,14 @@ public class Controller extends HttpServlet {
         else 
             id_questionnaire = null;
         //retour: liste question ou questionnaire en édition
-        if (id_questionnaire != null)
-            // TO DO ajout base question_questionnaire
+        if (id_questionnaire != null){
+            //lie la question au questionnaire 
+            
+            // PB ON NE PEUT PAS RECUPéRER L'ID (sinon fonctionne)
+            
+            question_dao.linkQuestionnaire(id_questionnaire, question.getId_question());
             this.questionnaireEdition(request, response);
+        }    
         else 
             response.sendRedirect("/intern_project/questions");
     }    

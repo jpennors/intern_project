@@ -40,6 +40,7 @@ public class QuestionDao implements DAOInterface<Question>{
     private static final String SQL_INSERT = "INSERT INTO question (id_question, status_question, name) VALUES (?,?,?)";
     private static final String SQL_UPDATE = "UPDATE question SET status_question=?, name=? WHERE id_question = ?";
     private static final String SQL_SOFT_DELETE = "UPDATE question SET status_question = 0 WHERE question.id_question = ?";
+    private static final String SQL_LINK_WITH_QUESTIONNAIRE ="INSERT INTO question_questionnaire (questionnaire_id, question_id, question_order) VALUES (?,?,?)";
     
     @Override
     public List<Question> index() throws DAOException {
@@ -92,9 +93,7 @@ public class QuestionDao implements DAOInterface<Question>{
             Logger.getLogger(QuestionDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
-        }
-                
-        
+        }  
     }
 
     @Override
@@ -168,6 +167,29 @@ public class QuestionDao implements DAOInterface<Question>{
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
     }
+    
+    
+    public void linkQuestionnaire(int id_questionnaire, int id_question) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_LINK_WITH_QUESTIONNAIRE, true, id_questionnaire, id_question, null);
+            int status = preparedStatement.executeUpdate();
+            System.out.println(status);
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QuestionDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }  
+    }
+    
     
     private static Question map(ResultSet resultSet) throws SQLException {
         Question question = new Question();

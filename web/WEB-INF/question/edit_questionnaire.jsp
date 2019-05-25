@@ -14,8 +14,7 @@
     
     <body>
         <%@ include file="../section/header.jsp" %>
-        <h1 style="text-align: center; margin: 40px">Editer un questionnaire</h1>
-        <h2 style="text-align: center; margin: 40px">${questionnaire.subject}</h2>
+        <h1 style="text-align: center; margin: 40px">Editer le questionnaire: ${questionnaire.subject}</h1>
         <h3 style="text-align: center; margin: 40px">Questions du questionnaire:</h3>                             
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
