@@ -519,15 +519,13 @@ public class Controller extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id_question"));
         question_dao.update(id, question);
         
-        //retour: liste question ou questionnaire en édition
+        //lié à un questionnaire?
         Integer id_questionnaire = null;
-        System.out.println("XXXXXXX");
-        System.out.println(request.getParameter("id_questionnaire"));
-        System.out.println("XXXXXXX");
         if (!request.getParameter("id_questionnaire").equals(""))
             id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         else 
-            id_questionnaire = null;     
+            id_questionnaire = null;
+        //retour: liste question ou questionnaire en édition
         if (id_questionnaire != null)           
             this.questionnaireEdition(request, response);
         else 
@@ -537,16 +535,40 @@ public class Controller extends HttpServlet {
     //(get)
     protected void questionCreation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{                    
         Question question = new Question();
+        Integer id_questionnaire;
+        //création via un questionnaire ou non 
+        if (request.getParameter("id_questionnaire") == null){
+            id_questionnaire = null;
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }        
+        else{ 
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }
         request.setAttribute("question", question);
         returnView(request, response, "/WEB-INF/question/create_question.jsp");
     }
     
     //traitement (post)
-    protected void createQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void createQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Question question = Question.mapRequestToQuestion(request);
         QuestionDao question_dao = dao.getQuestionDao();
         question_dao.create(question);
-        response.sendRedirect("/intern_project/questions");
+        
+        //lié à un questionnaire?
+        Integer id_questionnaire = null;
+        System.out.println("id questionnaire");
+        System.out.println(request.getParameter("id_questionnaire"));
+        if (!request.getParameter("id_questionnaire").equals(""))
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+        else 
+            id_questionnaire = null;
+        //retour: liste question ou questionnaire en édition
+        if (id_questionnaire != null)
+            // TO DO ajout base question_questionnaire
+            this.questionnaireEdition(request, response);
+        else 
+            response.sendRedirect("/intern_project/questions");
     }    
     
 }

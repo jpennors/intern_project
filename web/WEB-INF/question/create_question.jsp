@@ -18,6 +18,7 @@
                     <div class="form-group">
                         <form action="create_question" method="post">
                             <div class="form-group row">
+                                <input type="hidden" id="inputId" name="id_questionnaire" value=${id_questionnaire}>
                                 <label for="inputSentence" class="col-sm-4 col-form-label">Intitulé</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" id="inputSubject" name="sentence">
