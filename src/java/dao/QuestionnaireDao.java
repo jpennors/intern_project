@@ -7,6 +7,7 @@ package dao;
 
 import static dao.DAOUtils.fermeturesSilencieuses;
 import static dao.DAOUtils.initialisationRequetePreparee;
+import static java.lang.Math.toIntExact;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,6 +90,16 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
                      questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id().getId_user());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
+            
+            // récupération id du questionnaire
+            ResultSet valeursAutoGenerees = preparedStatement.getGeneratedKeys();
+            if ( valeursAutoGenerees.next() ) {
+                long key = valeursAutoGenerees.getLong(1);
+                int k = toIntExact(key);
+                questionnaire.setId_questionnaire(k);
+            } else {
+                throw new DAOException( "Échec de la création du questionnaire en base, aucun ID auto-généré retourné." );
+            }
             
         } catch ( SQLException e ) {
             throw new DAOException( e );

@@ -215,7 +215,7 @@ public class Controller extends HttpServlet {
                         break;
                         
                     /**
-                     * QUESTIONNAIRE POST METHOD
+                     * QUESTION POST METHOD
                      */
                     case "/intern_project/create_question":
                         createQuestion(request, response);
@@ -428,7 +428,7 @@ public class Controller extends HttpServlet {
     }
     
     //traitement (post)
-    protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Questionnaire questionnaire = Questionnaire.mapRequestToQuestionnaire(request);
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
         User createur = Middleware.getLoggedUser(request, response);
@@ -566,9 +566,6 @@ public class Controller extends HttpServlet {
         //retour: liste question ou questionnaire en édition
         if (id_questionnaire != null){
             //lie la question au questionnaire 
-            
-            // PB ON NE PEUT PAS RECUPéRER L'ID (sinon fonctionne)
-            
             question_dao.linkQuestionnaire(id_questionnaire, question.getId_question());
             this.questionnaireEdition(request, response);
         }    

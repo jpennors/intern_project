@@ -93,13 +93,7 @@
                                             <option value="false"${questionnaire.status == false?'selected':''}>Inactif</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputSubject" class="col-sm-4 col-form-label">Nouvelle Question</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="inputSubject" name="subject" value="Ajout question TO DO">
-                                    </div>
-                                </div>        
+                                </div>      
                                 <button type="submit" class="btn btn-primary">Envoyer</button>
                         </form>
                     </div>                
