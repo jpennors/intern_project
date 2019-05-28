@@ -20,20 +20,9 @@ public class Parcours {
     private Duration duration; 
     private User user_id; // (/!\ BDD access) all User info 
     private Questionnaire questionnaire_id; // (/!\ BDD access) all Questionnaire info
+    private Integer count_answers;
+    private Integer count_good_answers;
     
-    /**
-     * CONSTUCTOR
-     * @param id
-     * @param duration
-     * @param user_id
-     * @param questionnaire_id 
-     */
-    public Parcours(Integer id, Duration duration, User user_id, Questionnaire questionnaire_id) {
-        this.id = id;
-        this.duration = duration;
-        this.user_id = user_id;
-        this.questionnaire_id = questionnaire_id;
-    }
 
     public Parcours() {}
     
@@ -70,6 +59,22 @@ public class Parcours {
 
     public void setQuestionnaire_id(Questionnaire questionnaire_id) {
         this.questionnaire_id = questionnaire_id;
+    }
+    
+    public Integer getCount_answers(){
+        return count_answers;
+    }
+    
+    public void setCount_answers(Integer count_answers){
+        this.count_answers = count_answers;
+    }
+    
+    public Integer getCount_good_answers(){
+        return count_good_answers;
+    }
+    
+    public void setCount_good_answers(Integer count_good_answers){
+        this.count_good_answers = count_good_answers;
     }
 
 
