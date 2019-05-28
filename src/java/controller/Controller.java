@@ -172,12 +172,19 @@ public class Controller extends HttpServlet {
                 switch(request.getRequestURI()){
                     case "/intern_project/home":
                         ParcoursDao parcours_dao = dao.getParcoursDao();
-                        // To DO récupérer uer_id
-                        parcours_dao.indexForUser(0);
-                        // Itérer dans les parcous et récupérer answers et good answers
-                        request.setAttribute("parcours", dao);
-                        request.setAttribute("count_anwsers", dao);
-                        request.setAttribute("count_good_answers", dao);
+                        User user = (User)request.getAttribute("logged_user");
+
+                        /*List<Parcours> parcours = parcours_dao.indexForUser(user.getId_user());
+
+                        for (int i = 0; i < parcours.size(); i++){
+                            parcours.get(i).setCount_answers(parcours_dao.countAnswers(parcours.get(i).getQuestionnaire_id().getId_questionnaire()));
+                            parcours.get(i).setCount_good_answers(parcours_dao.countGoodAnswers(parcours.get(i).getQuestionnaire_id().getId_questionnaire()));
+                        }
+                        request.setAttribute("parcours", parcours);*/
+                        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+                        List<Questionnaire> questionnaires = questionnaire_dao.index();
+                        System.out.println(questionnaires);
+                        request.setAttribute("questionnaires", questionnaires);
                         
                         returnView(request, response, "/WEB-INF/home.jsp");
                         break;
