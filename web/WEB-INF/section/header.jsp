@@ -21,12 +21,9 @@
                     "<a href='questions' class='text-muted text-decoration-none'>Lister les questions</a><br>" +
                     "<a href='create_question' class='text-muted text-decoration-none'>Créer une question</a><br>"         
                 );
-            } else {
-                out.println(
-                    "<a href='home' class='text-muted text-decoration-none'>A venir ... </a><br>"
-                );
             }
          %>
+         <a href="logout" class="text-muted text-decoration-none">Se déconnecter</a><br>
     </div>
   </div>
   <nav class="navbar navbar-dark bg-dark">

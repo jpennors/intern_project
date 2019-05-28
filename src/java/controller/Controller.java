@@ -34,7 +34,7 @@ import model.Question;
  *
  * @author Josselin
  */
-@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/Controller",
+@WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
     "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question"})
 public class Controller extends HttpServlet {
@@ -96,6 +96,11 @@ public class Controller extends HttpServlet {
             return;
         }
         
+        if("/intern_project/logout".equals(request.getRequestURI()) && "GET".equals(request.getMethod())){
+            logout(request,response);
+            return;
+        }
+            
         setRequestAttributes(request,response);
         
         // GET HTTP METHOD
@@ -318,6 +323,11 @@ public class Controller extends HttpServlet {
         if(user != null){
             request.getSession().setAttribute("user", user);
         }
+    }
+    
+    protected void logout(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Middleware.logout(request, response);
+        response.sendRedirect("/intern_project/");
     }
     
     protected void setRequestAttributes(HttpServletRequest request, HttpServletResponse response){

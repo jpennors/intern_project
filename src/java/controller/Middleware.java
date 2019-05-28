@@ -44,4 +44,9 @@ public class Middleware {
         }
         return null;
     }
+    
+    static public void logout(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
+        session.invalidate();
+    }
 }
