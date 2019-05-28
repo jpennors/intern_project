@@ -10,6 +10,7 @@
   <div class="collapse" id="navbarToggleExternalContent">
     <div class="bg-dark p-4">
         <h5 class="text-white h4">Menu</h5>
+        <a href="home" class="text-muted text-decoration-none">Accueil</a><br>
       <%
             boolean is_admin = Boolean.parseBoolean(request.getAttribute("is_admin").toString());
             if (is_admin){
