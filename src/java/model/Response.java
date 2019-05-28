@@ -40,6 +40,8 @@ public class Response {
         this.question_id = question_id;
     }
     
+    public Response(){}
+    
     /**
      * GETTERS SETTERS 
      */
