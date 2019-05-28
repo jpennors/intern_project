@@ -64,14 +64,42 @@
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
                 <div class="card-body">
                    <form action="create_question" method="get">
-                                <div class="form-group row">
-                                    <input type="hidden" id="inputId" name="id_questionnaire" value=${questionnaire.id_questionnaire}>
-                                </div>        
-                                <button type="submit" class="btn btn-primary">Créer une nouvelle question</button>
-                        </form>
+                            <div class="form-group row">
+                                <input type="hidden" id="inputId" name="id_questionnaire" value=${questionnaire.id_questionnaire}>
+                            </div>        
+                            <button type="submit" class="btn btn-primary">Créer une nouvelle question</button>
+                    </form>
                 </div>
             </div>
-        </div>                
+        </div>
+        <br>                    
+        <div class="row">
+            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
+                <div class="card-body">
+                    <form action="add_question" method="post">
+                            <div class="form-group row">    
+                                    <label for="inputStatus" class="col-sm-4 col-form-label">Questions existantes</label>
+                                    <input type="hidden" id="inputId" name="id_questionnaire" value=${questionnaire.id_questionnaire}>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="inputQuestions" name="id_question">
+                                            <% 
+                                                List<Question> all_questions =  (List<Question>)request.getAttribute("all_questions");
+                                                for(int i=0; i <all_questions.size(); i ++)
+                                                {
+                                                    Question q = all_questions.get(i);
+                                                    System.out.println(q.getSentence());
+                                                    out.println("<option value=" +q.getId_question()+">"+q.getSentence()+"</option>");
+                                                }
+                                            %>            
+                                        </select>
+                                    </div>
+                                </div>     
+                            <button type="submit" class="btn btn-primary">Ajouter la question</button>
+                    </form>        
+                            
+                </div>
+            </div>
+        </div>                                
         <h3 style="text-align: center; margin: 40px">Informations du questionnaire:</h3>                 
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
