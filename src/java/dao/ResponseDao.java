@@ -38,7 +38,7 @@ public class ResponseDao implements DAOInterface<Response>{
     private static final String SQL_SELECT_BY_QUESTION_ID = "SELECT * FROM response WHERE response.question_id = ?";
     private static final String SQL_SOFT_DELETE ="UPDATE response SET status_response = 0 WHERE response.id_response = ?";
     private static final String SQL_INSERT = "INSERT INTO response (status_response, name, ordre, validity, question_id) VALUES (?,?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE response SET status_response=?, name=?, ordre=?, validity=? WHERE id_response=?";
+    private static final String SQL_UPDATE = "UPDATE response SET status_response=?, name=?, ordre=? WHERE id_response=?";
     private static final String SQL_UPDATE_VALIDITY_FALSE ="UPDATE response SET validity = 0 WHERE id_question=?";
     private static final String SQL_UPDATE_VALIDITY_TRUE ="UPDATE response SET validity = 1 WHERE id_response=?";
     
@@ -58,7 +58,7 @@ public class ResponseDao implements DAOInterface<Response>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, 
-                    response.getStatus(), response.getName(), response.getOrder(), response.getValidity(), response.getQuestion_id());
+                    response.getStatus(), response.getName(), response.getOrder(), response.getQuestion_id());
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
@@ -155,7 +155,7 @@ public class ResponseDao implements DAOInterface<Response>{
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE, 
-                    response.getStatus(), response.getName(), response.getOrder(), response.getValidity(), id );
+                    response.getStatus(), response.getName(), response.getOrder(), id );
             int status = preparedStatement.executeUpdate();
             System.out.println(status);
             
