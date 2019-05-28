@@ -46,7 +46,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     private static final String SQL_SOFT_DELETE = "";   
     
     /* Parcours lié à un utlisateur */
-    private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire";
+    private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire, company WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire AND user.company = company.matriculation";
     private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id AND response.validity = ?";
     private static final String SQL_COUNT_ANSWERS = "SELECT COUNT(*) FROM parcours_question WHERE parcours_question.parcours_id = ?";
     
