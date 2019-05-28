@@ -248,11 +248,10 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_question":                    
                         deleteQuestion(request,response);
-                        break;  
+                        break;
                         
                     /**
                      * PARCOURS
-                     */
                     case "/intern_project/parcours":
                         accessParcours(request,response);
                         break;
@@ -475,9 +474,22 @@ public class Controller extends HttpServlet {
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
         int id = Integer.parseInt(request.getParameter("id_questionnaire"));
         Questionnaire questionnaire = questionnaire_dao.show(id);
-        List<Question> questions = questionnaire_dao.getQuestion(id);
         request.setAttribute("questionnaire", questionnaire);
+        //questions du questionnaire
+        List<Question> questions = questionnaire_dao.getQuestion(id);
         request.setAttribute("questions", questions);
+        //questions de l'ensemble de la base 
+        QuestionDao question_dao = dao.getQuestionDao();
+        List<Question> all_questions = question_dao.index();
+        for(int i =0; i < all_questions.size(); i ++){
+            for(int j =0; j < questions.size(); j ++){
+                if(all_questions.get(i).getId_question().intValue() == questions.get(j).getId_question().intValue())
+                    all_questions.remove(i);
+            }
+        }
+        for(int i =0; i < all_questions.size(); i ++){
+        System.out.println(all_questions.get(i).getId_question());}
+        request.setAttribute("all_questions", all_questions);
         returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
     }
     
@@ -604,7 +616,16 @@ public class Controller extends HttpServlet {
         }    
         else 
             response.sendRedirect("/intern_project/questions");
-    }  
+    }
+
+    protected void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        QuestionDao question_dao = dao.getQuestionDao();
+        int id_question = Integer.parseInt(request.getParameter("id_question"));
+        int id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+        question_dao.linkQuestionnaire(id_questionnaire, id_question);
+                
+        this.questionnaireEdition(request, response);
+    }
     
     /**
      * PARCOURS
