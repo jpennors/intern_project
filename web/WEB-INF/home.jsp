@@ -60,10 +60,26 @@
                                 "</div>"+
                                 "</div>" +
                                 "</div>" +
-                                "</div><br><div class='row'>"
+                                "</div><br>" +
+                                "<form action='parcours'><div class='row' method='post'>" +
+                                "<select class='form-control col-md-4 offset-md-4' id='inputQuestionnaire' name='questionnaire' required>"
                             );
+                        
+                            List<Questionnaire> questionnaires = (List<Questionnaire>)request.getAttribute("questionnaires");
+                            for (int i=0; i< questionnaires.size(); i++){     
+                                out.println("<option value='" + questionnaires.get(i).getId_questionnaire() + "' selected>" + questionnaires.get(i).getSubject() + "</option>");
+                            }
                         }
                      %>
+                    </select>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <button type="submit" class="col-md-2 offset-md-5 btn btn-info">
+                            Commencer un parcours
+                         </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>			
