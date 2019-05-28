@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -21,6 +22,7 @@ public class Question {
     private String sentence; 
     private Integer order; 
     private Integer id_question;
+    private List<Response> responses;
 
     /**
      * CONSTUCTOR
@@ -87,6 +89,14 @@ public class Question {
 
     public void setStatus_name(String status_name) {
         this.status_name = status_name;
+    }
+    
+    public List<Response> get_reponses(){
+        return responses;
+    }
+    
+    public void set_response(List<Response> responses){
+        this.responses = responses;
     }
     
     static public Question mapRequestToQuestion(HttpServletRequest request){
