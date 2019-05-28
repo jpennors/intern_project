@@ -27,8 +27,11 @@ import model.Questionnaire;
 import model.User;
 import model.Company;
 import dao.UserDao;
+import java.util.ArrayList;
 import java.util.List;
+import model.Parcours;
 import model.Question;
+import model.Response;
 
 /**
  *
@@ -36,7 +39,8 @@ import model.Question;
  */
 @WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
-    "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question"})
+    "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question",
+    "/parcours"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -177,6 +181,11 @@ public class Controller extends HttpServlet {
                         
                         returnView(request, response, "/WEB-INF/home.jsp");
                         break;
+                        
+                    case "/intern_project/parcours":
+                        getParcours(request,response);
+                        break;
+                    
                     default : 
                         response.sendRedirect("/intern_project/home");
                         break;
@@ -232,7 +241,14 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_question":                    
                         deleteQuestion(request,response);
-                        break;    
+                        break;  
+                        
+                    /**
+                     * PARCOURS
+                     */
+                    case "/intern_project/parcours":
+                        accessParcours(request,response);
+                        break;
                         
                     default :
                         response.sendRedirect("/intern_project/home");
@@ -581,6 +597,42 @@ public class Controller extends HttpServlet {
         }    
         else 
             response.sendRedirect("/intern_project/questions");
-    }    
+    }  
+    
+    /**
+     * PARCOURS
+     */
+    
+    protected void accessParcours(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Integer questionnaire_id = (Integer)request.getAttribute("questionnaire");
+        response.sendRedirect("/intern_project/parcours?questionnaire=" + questionnaire_id.toString());
+    }
+    
+    protected void getParcours(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        Integer questionnaire_id;
+        questionnaire_id = Integer.parseInt(request.getParameter("questionnaire"));
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        Questionnaire questionnaire = questionnaire_dao.show(questionnaire_id);
+        List<Question> questions = questionnaire_dao.getQuestion(questionnaire_id);
+
+        for(int i=0; i<questions.size(); i++){
+            List<Response> responses =  new ArrayList();
+            responses.add(new Response(1,"a", 1, true,1));
+            responses.add(new Response(2,"b", 0, true,1));
+            responses.add(new Response(3,"c", 0, true,1));
+            responses.add(new Response(4,"d", 0, true,1));
+            questions.get(i).set_response(responses);
+        }
+
+        /**
+         * TO DO : Récupérer réponses pour chaque question
+         */
+
+        System.out.println("here");
+
+        request.setAttribute("questions", questions);
+        request.setAttribute("questionnaire", questionnaire);
+        returnView(request, response, "/WEB-INF/stagiaire/parcours.jsp");
+    }
     
 }
