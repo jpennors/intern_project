@@ -4,6 +4,10 @@
     Author     : Josselin
 --%>
 
+<%@page import="model.Questionnaire"%>
+<%@page import="model.Parcours"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.List"%>
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -46,9 +50,21 @@
                                 "<div class='card' style='width: 18rem;'>" +
                                 "<div class='card-body'>" +
                                 "<h5 class='card-title'>Mes parcours</h5>" +
-                                "<p class='card-text'></p>"+
-                                "<a href='#' class='card-link'>Card link</a>"+
-                                "</div>"+
+                                "<p class='card-text'></p>"
+                            );
+                            /*List<Parcours> parcours = (List<Parcours>)request.getAttribute("parcours");
+                            for (int i=0; i< parcours.size(); i++){ 
+                                
+                                out.println(
+                                    "<div class='alert alert-secondary' role='alert'><h6>" +
+                                    parcours.get(i).getQuestionnaire_id().getSubject() +
+                                    "</h6><br><span><strong>Réponse : </strong>" +
+                                    parcours.get(i).getCount_good_answers().toString() +
+                                    "/" +
+                                    parcours.get(i).getCount_answers()                                    
+                                );
+                            }*/
+                            out.println("</div>"+
                                 "</div>" +
                                 "</div>" +
                                 "<div class='col-md-6'>" +
