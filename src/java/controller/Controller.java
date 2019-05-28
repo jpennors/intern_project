@@ -248,10 +248,11 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_question":                    
                         deleteQuestion(request,response);
-                        break;
-                        
+                        break;  
+                       
                     /**
                      * PARCOURS
+                     */
                     case "/intern_project/parcours":
                         accessParcours(request,response);
                         break;
@@ -315,7 +316,7 @@ public class Controller extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
     
     /**
      * Retourne une vue HTML avec le @path donné en paramètre
