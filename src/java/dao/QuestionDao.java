@@ -24,11 +24,6 @@ import model.Question;
  * @author lolal
  */
 
-/**
- TO DO 
- * update
- * delete
- */
 public class QuestionDao implements DAOInterface<Question>{
     
     private DAOFactory daoFactory;

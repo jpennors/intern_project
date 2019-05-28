@@ -5,6 +5,8 @@
  */
 package model;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author lolal
@@ -38,6 +40,10 @@ public class Response {
         this.order = order;
         this.validity = validity;
         this.question_id = question_id;
+    }
+
+    public Response() {
+        this.status = true; //To change body of generated methods, choose Tools | Templates.
     }
     
     /**
@@ -89,11 +95,7 @@ public class Response {
 
     public void setQuestion_id(Integer question_id) {
         this.question_id = question_id;
-    }
-    
-    
-    
-    
+    }   
     
     
 }
