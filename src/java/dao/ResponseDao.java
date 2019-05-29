@@ -49,18 +49,22 @@ public class ResponseDao implements DAOInterface<Response>{
     }
 
     @Override
-    public void create(Response response) throws DAOException {
+    public int create(Response response) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        int new_id = 0;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, 
-                    response.getStatus(), response.getName(), response.getOrder(), response.getQuestion_id());
+                    response.getStatus(), response.getName(), response.getOrder(), response.getValidity(), response.getQuestion_id());
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
             
             // récupération id de la question
             ResultSet valeursAutoGenerees = preparedStatement.getGeneratedKeys();
@@ -75,11 +79,9 @@ public class ResponseDao implements DAOInterface<Response>{
             if(response.getValidity()== true){
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, response.getQuestion_id() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe toutes réponses à faux"+status);
                 
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_TRUE, true, response.getId() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe la réponse vrai"+status);
             
             }
             
@@ -90,6 +92,7 @@ public class ResponseDao implements DAOInterface<Response>{
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
+        return new_id;
     }
 
     @Override

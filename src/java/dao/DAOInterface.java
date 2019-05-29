@@ -15,7 +15,7 @@ import java.util.List;
 public interface DAOInterface<T> {
     List<T> index() throws DAOException;
     
-    void create(T t) throws DAOException;
+    int create(T t) throws DAOException;
     
     T show(int id) throws DAOException;
     

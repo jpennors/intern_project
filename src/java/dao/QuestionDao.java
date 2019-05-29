@@ -56,7 +56,6 @@ public class QuestionDao implements DAOInterface<Question>{
             }
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
-                System.out.println(resultSet);
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -70,10 +69,11 @@ public class QuestionDao implements DAOInterface<Question>{
     }
 
     @Override
-    public void create(Question question) throws DAOException {
+    public int create(Question question) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        int new_id = 0;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
@@ -81,7 +81,10 @@ public class QuestionDao implements DAOInterface<Question>{
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, question.getId_question(),
                     question.getStatus(), question.getSentence());
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
             
             // récupération id de la question
             ResultSet valeursAutoGenerees = preparedStatement.getGeneratedKeys();
@@ -100,6 +103,7 @@ public class QuestionDao implements DAOInterface<Question>{
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }  
+        return new_id;
     }
 
     @Override
@@ -140,7 +144,6 @@ public class QuestionDao implements DAOInterface<Question>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SOFT_DELETE, true, id );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -163,7 +166,6 @@ public class QuestionDao implements DAOInterface<Question>{
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
                     true, question.getStatus(), question.getSentence(), id );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -185,7 +187,6 @@ public class QuestionDao implements DAOInterface<Question>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_LINK_WITH_QUESTIONNAIRE, true, id_questionnaire, id_question, null);
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );

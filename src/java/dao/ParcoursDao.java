@@ -41,9 +41,10 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM parcours, user, questionnaire WHERE parcours.user_id = user.id_user AND parcours.user_id = questionnaire.createur_id ";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM parcours, questionnaire, user WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.user_id = questionnaire.createur_id ";
-    private static final String SQL_INSERT = "INSERT INTO questionnaire (id, duration, user_id, questionnaire_id) VALUES (?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO parcours (id_parcours, user_id, questionnaire_id, duration) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "";   
+    private static final String SQL_INSERT_PARCOURS_QUESTION = "INSERT INTO parcours_question (parcours_id, question_id, response_id) VALUES (?,?,?)";
     
     /* Parcours lié à un utlisateur */
     private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire, company WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire AND user.company = company.matriculation";
@@ -88,18 +89,22 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     }
 
     @Override
-    public void create(Parcours parcours) throws DAOException {
+    public int create(Parcours parcours) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        int new_id = 0;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, parcours.getId(), parcours.getQuestionnaire_id(),
-                    parcours.getUser_id(), parcours.getDuration());
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, parcours.getId(), parcours.getQuestionnaire_id().getId_questionnaire(),
+                    parcours.getUser_id().getId_user(), parcours.getDuration());
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -108,6 +113,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
+        return new_id;
         
     }
 

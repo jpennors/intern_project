@@ -73,10 +73,11 @@ public class UserDao implements DAOInterface<User> {
     }
 
     @Override
-    public void create(User user) throws DAOException {
+    public int create(User user) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        int new_id = 0;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
@@ -84,6 +85,10 @@ public class UserDao implements DAOInterface<User> {
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, user.getEmail(), user.getPassword(), user.getName_user(),
                                 user.getFirst_name(), user.getStatus(), user.getPhone(), user.getIs_admin(), user.getCompany().getMatriculation() );
             int status = preparedStatement.executeUpdate();
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -92,6 +97,7 @@ public class UserDao implements DAOInterface<User> {
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
+        return new_id;
     }
 
     @Override

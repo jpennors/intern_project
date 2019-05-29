@@ -62,10 +62,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             while (resultSet.next()) {              
                 questionnaires.add(map(resultSet));
             }
-            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
-            if ( resultSet.next() ) {
-                System.out.println(resultSet);
-            }
+            
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
@@ -78,10 +75,11 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     }
 
     @Override
-    public void create(Questionnaire questionnaire) throws DAOException {
+    public int create(Questionnaire questionnaire) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        int new_id = 0;
         
         try {
             /* Récupération d'une connexion depuis la Factory */
@@ -89,7 +87,10 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true,
                      questionnaire.getSubject(), questionnaire.getStatus(), questionnaire.getCreateur_id().getId_user());
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
             
             // récupération id du questionnaire
             ResultSet valeursAutoGenerees = preparedStatement.getGeneratedKeys();
@@ -108,6 +109,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connexion );
         }
+        return new_id;
         
     }
 
@@ -123,8 +125,6 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_BY_SUBJECT, false, id );
             resultSet = preparedStatement.executeQuery();
-            System.out.println(preparedStatement.toString());
-            System.out.println(id);
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
                 questionnaire = map( resultSet );
@@ -151,7 +151,6 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE,
                     true, questionnaire.getSubject(), questionnaire.getStatus(), id );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -173,7 +172,6 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SOFT_DELETE, true, id );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -201,10 +199,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
             while (resultSet.next()) {              
                 questions.add(mapQuestion(resultSet));
             }
-            //Parcours de la ligne de données de l'éventuel ResulSet retourné */
-            if ( resultSet.next() ) {
-                System.out.println(resultSet);
-            }
+            
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } catch (ClassNotFoundException ex) {
