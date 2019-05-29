@@ -74,7 +74,14 @@ public class Controller extends HttpServlet {
      * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, ClassNotFoundException {
+        
+        /*try{
+           Seeder.mainScript(); 
+        } catch(SQLException ex){
+            System.out.println("errur");
+        }*/
+        
         
         response.setContentType("text/html;charset=UTF-8");
         
@@ -287,6 +294,8 @@ public class Controller extends HttpServlet {
             processRequest(request, response);       
         } catch (SQLException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -304,6 +313,8 @@ public class Controller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -656,8 +667,6 @@ public class Controller extends HttpServlet {
         /**
          * TO DO : Récupérer réponses pour chaque question
          */
-
-        System.out.println("here");
 
         request.setAttribute("questions", questions);
         request.setAttribute("questionnaire", questionnaire);
