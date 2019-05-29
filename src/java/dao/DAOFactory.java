@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.DriverManager;
+import model.Response;
 
 
 /**
@@ -74,6 +75,10 @@ public class DAOFactory {
     
     public QuestionDao getQuestionDao(){
         return new QuestionDao(this);
+    }
+    
+    public ResponseDao getResponseDao(){
+        return new ResponseDao(this);
     }
 
 }
