@@ -237,4 +237,31 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         return 0;
     }
     
+    public int insertParcoursQuestion(int parcours_id, int question_id, int response_id) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int new_id = 0;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT_PARCOURS_QUESTION, true, parcours_id, question_id, response_id);
+            int status = preparedStatement.executeUpdate();
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
+            
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ParcoursDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        return new_id;
+        
+    }
+    
 }
