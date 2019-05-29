@@ -17,7 +17,7 @@ public class Parcours {
     ATTRIBUTES 
     */
     private Integer id; 
-    private Duration duration; 
+    private Integer duration; 
     private User user_id; // (/!\ BDD access) all User info 
     private Questionnaire questionnaire_id; // (/!\ BDD access) all Questionnaire info
     private Integer count_answers;
@@ -37,11 +37,11 @@ public class Parcours {
         this.id = id;
     }
 
-    public Duration getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
