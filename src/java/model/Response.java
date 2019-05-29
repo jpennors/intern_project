@@ -46,8 +46,6 @@ public class Response {
         this.status = true; //To change body of generated methods, choose Tools | Templates.
     }
     
-    public Response(){}
-    
     /**
      * GETTERS SETTERS 
      */

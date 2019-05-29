@@ -32,6 +32,7 @@ public class CompanyDao implements DAOInterface<Company> {
 
     // SQL Script
     private static final String SQL_SELECT_ALL = "SELECT * FROM company";
+    private static final String SQL_INSERT = "INSERT INTO company (matriculation, name_company) VALUES (?,?)" ;
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM company WHERE matriculation = ?";
     
     
@@ -67,8 +68,29 @@ public class CompanyDao implements DAOInterface<Company> {
 
     
     @Override
-    public void create(Company t) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int create(Company t) throws DAOException {
+        Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int new_id = 0;
+        
+        try {
+            /* Récupération d'une connexion depuis la Factory */
+            connexion = DAOFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, t.getMatriculation(), t.getName_company());
+            int status = preparedStatement.executeUpdate();
+            ResultSet value = preparedStatement.getGeneratedKeys();
+            if ( value.next() ) {
+                new_id = value.getInt(1);
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connexion );
+        }
+        return new_id;
     }
 
     

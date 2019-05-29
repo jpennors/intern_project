@@ -39,7 +39,7 @@ public class ResponseDao implements DAOInterface<Response>{
     private static final String SQL_SOFT_DELETE ="UPDATE response SET status_response = 0 WHERE response.id_response = ?";
     private static final String SQL_INSERT = "INSERT INTO response (status_response, name, ordre, validity, question_id) VALUES (?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE response SET status_response=?, name=?, ordre=? WHERE id_response=?";
-    private static final String SQL_UPDATE_VALIDITY_FALSE ="UPDATE response SET validity = 0 WHERE id_question=?";
+    private static final String SQL_UPDATE_VALIDITY_FALSE ="UPDATE response SET validity = 0 WHERE question_id=?";
     private static final String SQL_UPDATE_VALIDITY_TRUE ="UPDATE response SET validity = 1 WHERE id_response=?";
     
     // not usefull
@@ -207,7 +207,7 @@ public class ResponseDao implements DAOInterface<Response>{
     private static Response map(ResultSet resultSet) throws SQLException{
     Response response = new Response();
     response.setId(resultSet.getInt("id_response"));
-    response.setName(resultSet.getString("sentence"));
+    response.setName(resultSet.getString("name"));
     response.setOrder(resultSet.getInt("ordre"));
     response.setQuestion_id(resultSet.getInt("question_id"));
     response.setStatus(resultSet.getBoolean("status_response"));
