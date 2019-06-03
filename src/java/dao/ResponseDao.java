@@ -159,10 +159,9 @@ public class ResponseDao implements DAOInterface<Response>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE, 
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE, true,
                     response.getStatus(), response.getName(), response.getOrder(), id );
             int status = preparedStatement.executeUpdate();
-            System.out.println(status);
             
             if(response.getValidity()== true){
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, response.getQuestion_id() );
