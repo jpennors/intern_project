@@ -4,6 +4,8 @@
     Author     : lolal
 --%>
 
+<%@page import="model.Response"%>
+<%@page import="java.util.List"%>
 <%@page import="model.Question"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,7 +14,53 @@
     
     <body>
         <%@ include file="../section/header.jsp" %>
-        <h1 style="text-align: center; margin: 40px">Editer une question</h1>
+        <h1 style="text-align: center; margin: 40px">Editer la question: ${question.sentence}</h1>
+        <h3 style="text-align: center; margin: 40px">Réponses de la question</h3>
+        <div class="row">
+            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Sujet</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Validité</th>
+                                <th scope="col">Action</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                List<Response> responses =  (List<Response>)request.getAttribute("responses");
+                                Integer id_questionnaire = (Integer)request.getAttribute("id_questionnaire");
+                                    for (int i=0; i< responses.size(); i++){
+                                        Integer num = i + 1;
+                                        out.println("<tr>");
+                                        out.println("<td scope='row'>" + num + "</td>");
+                                        out.println("<td>" + responses.get(i).getName() + "</td>");
+                                        out.println("<td>" + responses.get(i).getStatus_name() + "</td>" );
+                                        out.println("<td>" + responses.get(i).getValidity_name() + "</td>" );
+                                        //edit
+                                        out.println("<form action='edit_response' method='get'>");
+                                        out.println("<input type='hidden' id='inputId' name='id_questionnaire' value='" + id_questionnaire + "'>");
+                                        out.println("<input type='hidden' name='id_response' value='" + responses.get(i).getId() + "'>");
+                                        out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
+                                        out.println("</form>");
+                                        //delete
+                                        out.println("<form action='delete_response' method='post'>");
+                                        out.println("<input type='hidden' id='inputId' name='id_questionnaire' value='" + id_questionnaire + "'>");
+                                        out.println("<input type='hidden' name='id_response' value='" + responses.get(i).getId() + "'>");
+                                        out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + responses.get(i).getId() + ">Supprimer</button></td>");
+                                        out.println("</form>");
+                                        out.println("</tr>");
+                                    }
+                             %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+        <h3 style="text-align: center; margin: 40px">Informations de la question</h3>                
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
                 <div class="card-body">
@@ -40,7 +88,7 @@
                     </div>                
                 </div>
             </div>
-        </div>
+        </div>                               
     </body>
 </html>
 

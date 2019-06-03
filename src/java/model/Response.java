@@ -18,9 +18,11 @@ public class Response {
      */
     private Integer id; 
     private Boolean status; 
+    private String status_name;
     private String name; 
     private Integer order; 
     private Boolean validity; 
+    private String validity_name;
     private Integer question_id; // id question in BDD
 
     
@@ -33,7 +35,7 @@ public class Response {
      * @param validity
      * @param question_id 
      */
-    public Response(Integer id, String name, Integer order, Boolean validity, Integer question_id) {
+    public Response(Integer id, String name,Integer order, Boolean validity, Integer question_id) {
         this.id = id;
         this.status = true;
         this.name = name;
@@ -63,6 +65,10 @@ public class Response {
 
     public void setStatus(Boolean status) {
         this.status = status;
+        if (this.status == true)
+            this.setStatus_name("Actif");
+        else 
+            this.setStatus_name("Inactif");
     }
 
     public String getName() {
@@ -87,6 +93,10 @@ public class Response {
 
     public void setValidity(Boolean validity) {
         this.validity = validity;
+        if (this.validity == true)
+            this.setValidity_name("Valide");
+        else 
+            this.setValidity_name("Non valide");
     }
 
     public Integer getQuestion_id() {
@@ -95,7 +105,23 @@ public class Response {
 
     public void setQuestion_id(Integer question_id) {
         this.question_id = question_id;
-    }   
-    
+    } 
+
+    public String getStatus_name() {
+        return status_name;
+    }
+
+    public void setStatus_name(String status_name) {
+        this.status_name = status_name;
+    }
+
+    public String getValidity_name() {
+        return validity_name;
+    }
+
+    public void setValidity_name(String validity_name) {
+        this.validity_name = validity_name;
+    }
+        
     
 }

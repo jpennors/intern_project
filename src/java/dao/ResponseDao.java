@@ -133,9 +133,11 @@ public class ResponseDao implements DAOInterface<Response>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_BY_QUESTION_ID, false, id );
             resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {              
+                responses.add(map(resultSet));
+            }
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
-                responses.add(map( resultSet ));
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );

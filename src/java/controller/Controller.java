@@ -10,6 +10,7 @@ import dao.DAOFactory;
 import dao.ParcoursDao;
 import dao.QuestionDao;
 import dao.QuestionnaireDao;
+import dao.ResponseDao;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,7 +41,7 @@ import model.Response;
 @WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
     "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question",
-    "/parcours"})
+    "/delete_response", "/parcours"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -255,7 +256,22 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_question":                    
                         deleteQuestion(request,response);
-                        break;  
+                        break;
+                        
+                    /**
+                     * QUESTION POST METHOD
+                     */
+                    case "/intern_project/create_response":
+                        //createResponse(request, response);
+                        break;
+                        
+                    case "/intern_project/edit_response":
+                        //updateResponse(request, response);
+                        break;
+                        
+                    case "/intern_project/delete_response":                    
+                        deleteResponse(request,response);
+                        break;     
                        
                     /**
                      * PARCOURS
@@ -552,8 +568,9 @@ public class Controller extends HttpServlet {
     //(get)
     protected void questionEdition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{          
         QuestionDao question_dao = dao.getQuestionDao();
+        ResponseDao response_dao = dao.getResponseDao();
         Integer id_questionnaire;
-        int id = Integer.parseInt(request.getParameter("id_question"));
+        Integer id = Integer.parseInt(request.getParameter("id_question"));
         
         //édition via un questionnaire ou non 
         if (request.getParameter("id_questionnaire") == null){
@@ -565,7 +582,9 @@ public class Controller extends HttpServlet {
             request.setAttribute("id_questionnaire", id_questionnaire);
         }    
         Question question = question_dao.show(id);
+        List<Response> responses = response_dao.showByIdQuestion(question.getId_question());
         request.setAttribute("question", question);
+        request.setAttribute("responses", responses);
         returnView(request, response, "/WEB-INF/question/edit_question.jsp");
     }
     
@@ -637,6 +656,33 @@ public class Controller extends HttpServlet {
         question_dao.linkQuestionnaire(id_questionnaire, id_question);
                 
         this.questionnaireEdition(request, response);
+    }
+    
+    /**
+     * RESPONSE
+     */
+    
+    protected void deleteResponse(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        ResponseDao response_dao = dao.getResponseDao();
+        int id = Integer.parseInt(request.getParameter("id_response"));
+        Response r = response_dao.show(id);
+        Integer question_id = r.getQuestion_id();
+        
+        //pas de suppression si seule réponse valide
+        if (r.getValidity() == false)
+            response_dao.delete(r.getId());
+        
+        //retour: liste question ou question en édition
+        Integer id_questionnaire;
+        if (!request.getParameter("id_questionnaire").equals("null")){
+            System.out.println("id questionnaire" + request.getParameter("id_questionnaire"));
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));}
+        else 
+            id_questionnaire = null;
+        if (id_questionnaire != null)           
+            response.sendRedirect("/intern_project/edit_question?id_questionnaire="+ id_questionnaire +"&id_question=" + question_id.toString());
+        else 
+            response.sendRedirect("/intern_project/edit_question?id_question=" + question_id.toString());
     }
     
     /**
