@@ -122,6 +122,21 @@ public class Response {
     public void setValidity_name(String validity_name) {
         this.validity_name = validity_name;
     }
+    
+    static public Response mapRequestToResponse(HttpServletRequest request){
+        Response response = new Response();
+        String id = request.getParameter("id_response");
+        try{
+            response.setId(Integer.parseInt(id));
+        }catch(NumberFormatException ex){}
+        response.setName(request.getParameter("name"));
+        response.setValidity(Boolean.parseBoolean(request.getParameter("validity")));
+        response.setOrder(Integer.parseInt(request.getParameter("ordre")));
+        if (request.getParameterMap().containsKey("status")){
+            response.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+        }
+        return response;
+    }
         
     
 }

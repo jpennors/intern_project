@@ -41,7 +41,7 @@ import model.Response;
 @WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
     "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question",
-    "/delete_response", "/parcours"})
+    "/delete_response", "/create_response", "/edit_response", "/parcours"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -175,6 +175,18 @@ public class Controller extends HttpServlet {
                    default:
                        returnView(request, response, "/WEB-INF/home.jsp");
                        break;
+                       
+                    /** 
+                    * RESPONSE GET METHOD
+                    */ 
+                    case "/intern_project/create_response":
+                       // responseCreation(request, response);
+                        break;
+                        
+                    case "/intern_project/edit_response":
+                        responseEdition(request, response);
+                        break;   
+                       
                 }
             } else {
                 switch(request.getRequestURI()){
@@ -259,14 +271,14 @@ public class Controller extends HttpServlet {
                         break;
                         
                     /**
-                     * QUESTION POST METHOD
+                     * RESPONSE POST METHOD
                      */
                     case "/intern_project/create_response":
                         //createResponse(request, response);
                         break;
                         
                     case "/intern_project/edit_response":
-                        //updateResponse(request, response);
+                        updateResponse(request, response);
                         break;
                         
                     case "/intern_project/delete_response":                    
@@ -683,6 +695,42 @@ public class Controller extends HttpServlet {
             response.sendRedirect("/intern_project/edit_question?id_questionnaire="+ id_questionnaire +"&id_question=" + question_id.toString());
         else 
             response.sendRedirect("/intern_project/edit_question?id_question=" + question_id.toString());
+    }
+    
+    protected void responseEdition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{          
+        ResponseDao response_dao = dao.getResponseDao();
+        Integer id_questionnaire;
+        Integer id = Integer.parseInt(request.getParameter("id_response"));
+        
+        //édition via une question liée à questionnaire ou non 
+        if (!request.getParameter("id_questionnaire").equals("null")){
+            System.out.println("id questionnaire" + request.getParameter("id_questionnaire"));
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+        }        
+        else{
+            id_questionnaire = null;
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }    
+        Response r = response_dao.show(id);
+        request.setAttribute("r", r);
+        returnView(request, response, "/WEB-INF/question/edit_response.jsp");
+    }
+    
+    //traitement (post)
+    protected void updateResponse(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        Response r = Response.mapRequestToResponse(request);
+        ResponseDao response_dao = dao.getResponseDao();
+        int id = Integer.parseInt(request.getParameter("id_question"));
+        response_dao.update(id, r);
+        
+        //edition question lié à un questionnaire
+        Integer id_questionnaire = null;
+        if (!request.getParameter("id_questionnaire").equals(""))
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+        else 
+            id_questionnaire = null;
+        //retour sur la question      
+        this.questionEdition(request, response);
     }
     
     /**
