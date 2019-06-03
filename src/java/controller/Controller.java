@@ -605,6 +605,7 @@ public class Controller extends HttpServlet {
         Question question = Question.mapRequestToQuestion(request);
         QuestionDao question_dao = dao.getQuestionDao();
         int id = Integer.parseInt(request.getParameter("id_question"));
+        System.out.println("id"+id);
         question_dao.update(id, question);
         
         //lié à un questionnaire?
@@ -720,7 +721,7 @@ public class Controller extends HttpServlet {
     protected void updateResponse(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Response r = Response.mapRequestToResponse(request);
         ResponseDao response_dao = dao.getResponseDao();
-        int id = Integer.parseInt(request.getParameter("id_question"));
+        int id = Integer.parseInt(request.getParameter("id"));
         response_dao.update(id, r);
         
         //edition question lié à un questionnaire

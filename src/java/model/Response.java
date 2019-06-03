@@ -125,13 +125,15 @@ public class Response {
     
     static public Response mapRequestToResponse(HttpServletRequest request){
         Response response = new Response();
-        String id = request.getParameter("id_response");
+        String id = request.getParameter("id");
         try{
             response.setId(Integer.parseInt(id));
         }catch(NumberFormatException ex){}
         response.setName(request.getParameter("name"));
         response.setValidity(Boolean.parseBoolean(request.getParameter("validity")));
-        response.setOrder(Integer.parseInt(request.getParameter("ordre")));
+        if (request.getParameterMap().containsKey("order")){
+            response.setOrder(Integer.parseInt(request.getParameter("order")));
+        }
         if (request.getParameterMap().containsKey("status")){
             response.setStatus(Boolean.parseBoolean(request.getParameter("status")));
         }
