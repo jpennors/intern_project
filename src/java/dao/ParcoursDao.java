@@ -48,8 +48,8 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     
     /* Parcours lié à un utlisateur */
     private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire, company WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire AND user.company = company.matriculation";
-    private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id AND response.validity = ?";
-    private static final String SQL_COUNT_ANSWERS = "SELECT COUNT(*) FROM parcours_question WHERE parcours_question.parcours_id = ?";
+    private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) AS total FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id_response AND response.validity = 1";
+    private static final String SQL_COUNT_ANSWERS = "SELECT COUNT(*) AS total FROM parcours_question WHERE parcours_question.parcours_id = ?";
     
     
     @Override
@@ -152,7 +152,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     private static Parcours map(ResultSet resultSet) throws SQLException{
         Parcours parcours = new Parcours();
         parcours.setId(resultSet.getInt("id_parcours"));
-        //parcours.setQuestionnaire_id(QuestionnaireDao.);
+        parcours.setQuestionnaire_id(QuestionnaireDao.map(resultSet));
         parcours.setUser_id(UserDao.map(resultSet));
         return parcours;
     }
@@ -201,7 +201,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
             resultSet = preparedStatement.executeQuery();
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
-                return resultSet.getInt(0);
+                return resultSet.getInt("total");
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -225,7 +225,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
             resultSet = preparedStatement.executeQuery();
             //Parcours de la ligne de données de l'éventuel ResulSet retourné */
             if ( resultSet.next() ) {
-                return resultSet.getInt(0);
+                return resultSet.getInt("total");
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );

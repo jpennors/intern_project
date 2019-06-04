@@ -10,11 +10,13 @@
 <%@page import="java.util.List"%>
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <%@ include file="section/html_head.jsp" %>
-
+    
     <body>
+        
         <%@ include file="section/header.jsp" %>
         <h1 style="text-align: center; margin: 40px">Bonjour ${logged_user.first_name}</h1>
         <div class="row">
@@ -52,7 +54,8 @@
                                 "<h5 class='card-title'>Mes parcours</h5>" +
                                 "<p class='card-text'></p>"
                             );
-                            /*List<Parcours> parcours = (List<Parcours>)request.getAttribute("parcours");
+
+                            List<Parcours> parcours = (List<Parcours>)request.getAttribute("parcours");
                             for (int i=0; i< parcours.size(); i++){ 
                                 
                                 out.println(
@@ -61,9 +64,10 @@
                                     "</h6><br><span><strong>Réponse : </strong>" +
                                     parcours.get(i).getCount_good_answers().toString() +
                                     "/" +
-                                    parcours.get(i).getCount_answers()                                    
+                                    parcours.get(i).getCount_answers() +
+                                    "</div>"
                                 );
-                            }*/
+                            }
                             out.println("</div>"+
                                 "</div>" +
                                 "</div>" +
