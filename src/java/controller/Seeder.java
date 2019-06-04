@@ -136,8 +136,8 @@ public class Seeder {
         User u3 = new User();
         u3.setFirst_name("Josselin");
         u3.setName_user("Pennors");
-        u3.setEmail("josselin.pennors@etu.utc.fr");
-        u3.setIs_admin(true);
+        u3.setEmail("josselin.pennors@hotmail.fr");
+        u3.setIs_admin(false);
         u3.setPassword("mll");
         u3.setPhone("0644444444");
         u3.setCompany(c2);
