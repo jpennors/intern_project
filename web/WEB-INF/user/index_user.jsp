@@ -49,8 +49,8 @@
                                     out.println("<form action='edit_user'method='get'>");
                                     out.println("<input type='hidden' name='id_user' value='" + users.get(i).getId_user() + "'>");
                                     out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
+                                    out.println("</form>");
                                     if(users.get(i).getStatus()){
-                                        out.println("</form>");
                                         out.println("<form action='delete_user' method='post'>");
                                         out.println("<input type='hidden' name='id_user' value='" + users.get(i).getId_user() + "'>");
                                         out.println("<button type='submit' class='btn btn-info' href='delete_user?id='" + users.get(i).getId_user() + ">Supprimer</button></td>");

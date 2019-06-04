@@ -42,11 +42,13 @@
                                         out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
                                         out.println("</form>");
                                         //delete
-                                        out.println("<form action='delete_questionnaire' method='post'>");
-                                        out.println("<input type='hidden' name='id_questionnaire' value='" + questionnaires.get(i).getId_questionnaire() + "'>");
-                                        out.println("<button type='submit' class='btn btn-info' href='delete_questionnaire?id='" + questionnaires.get(i).getId_questionnaire() + ">Supprimer</button></td>");
-                                        out.println("</form>");
-                                        out.println("</tr>");
+                                        if(questionnaires.get(i).getStatus()){
+                                            out.println("<form action='delete_questionnaire' method='post'>");
+                                            out.println("<input type='hidden' name='id_questionnaire' value='" + questionnaires.get(i).getId_questionnaire() + "'>");
+                                            out.println("<button type='submit' class='btn btn-info' href='delete_questionnaire?id='" + questionnaires.get(i).getId_questionnaire() + ">Supprimer</button></td>");
+                                            out.println("</form>");
+                                            out.println("</tr>");
+                                        }
                }
                              %> 
                         </tbody>
