@@ -41,7 +41,7 @@ import model.Response;
 @WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
     "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question",
-    "/delete_response", "/create_response", "/edit_response", "/parcours"})
+    "/delete_response", "/create_response", "/edit_response", "/parcours", "/parcours/validate"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -299,6 +299,11 @@ public class Controller extends HttpServlet {
                 }
             } else {
                 switch(request.getRequestURI()){
+                    
+                    case "/intern_project/parcours/validate":
+                        validateParcours(request, response);
+                        break;
+                        
                     default :
                         response.sendRedirect("/intern_project/home");
                         break;
@@ -767,6 +772,32 @@ public class Controller extends HttpServlet {
         request.setAttribute("questions", questions);
         request.setAttribute("questionnaire", questionnaire);
         returnView(request, response, "/WEB-INF/stagiaire/parcours.jsp");
+    }
+    
+    protected void validateParcours(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Integer questionnaire_id;
+        questionnaire_id = Integer.parseInt(request.getParameter("questionnaire"));
+        User user = (User)request.getAttribute("logged_user");
+        QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        Questionnaire questionnaire = questionnaire_dao.show(questionnaire_id);
+               
+        Parcours parcours = new Parcours();
+        parcours.setQuestionnaire_id(questionnaire);
+        parcours.setUser_id(user);
+        long duration = System.currentTimeMillis() - Long.parseLong(request.getParameter("duration"));
+        parcours.setDuration((int)duration/1000);
+        ParcoursDao parcours_dao = dao.getParcoursDao();
+        Integer parcours_id = parcours_dao.create(parcours);
+        
+        List<Question> questions = questionnaire_dao.getQuestion(questionnaire_id);
+        ResponseDao response_dao = dao.getResponseDao();
+        
+        for(int i=0; i<questions.size(); i++){
+            Integer response_id = Integer.parseInt(request.getParameter(questions.get(i).getId_question().toString()));
+            parcours_dao.insertParcoursQuestion(parcours_id, questions.get(i).getId_question(), response_id);
+        }
+        
+        response.sendRedirect("/intern_project");
     }
     
 }

@@ -41,11 +41,11 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     
     private static final String SQL_SELECT_ALL = "SELECT * FROM parcours, user, questionnaire WHERE parcours.user_id = user.id_user AND parcours.user_id = questionnaire.createur_id ";
     private static final String SQL_SELECT_BY_SUBJECT = "SELECT * FROM parcours, questionnaire, user WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.user_id = questionnaire.createur_id ";
-    private static final String SQL_INSERT = "INSERT INTO parcours (id_parcours, user_id, questionnaire_id, duration) VALUES (?,?,?,?)";
+    private static final String SQL_INSERT = "INSERT INTO parcours (user_id, questionnaire_id, duration) VALUES (?,?,?)";
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "";   
     private static final String SQL_INSERT_PARCOURS_QUESTION = "INSERT INTO parcours_question (parcours_id, question_id, response_id) VALUES (?,?,?)";
-    
+        
     /* Parcours lié à un utlisateur */
     private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire, company WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire AND user.company = company.matriculation";
     private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) AS total FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id_response AND response.validity = 1";
@@ -98,8 +98,8 @@ public class ParcoursDao implements DAOInterface<Parcours>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, parcours.getId(), parcours.getQuestionnaire_id().getId_questionnaire(),
-                    parcours.getUser_id().getId_user(), parcours.getDuration());
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true,parcours.getUser_id().getId_user(), parcours.getQuestionnaire_id().getId_questionnaire(),
+                    parcours.getDuration());
             int status = preparedStatement.executeUpdate();
             ResultSet value = preparedStatement.getGeneratedKeys();
             if ( value.next() ) {

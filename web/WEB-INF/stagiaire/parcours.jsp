@@ -4,6 +4,8 @@
     Author     : Josselin
 --%>
 
+<%@page import="java.sql.Date"%>
+<%@page import="model.Questionnaire"%>
 <%@page import="model.Question"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,14 +14,23 @@
     <%@ include file="../section/html_head.jsp" %>
 
     <body>
+        <%
+            long startTime = System.currentTimeMillis();
+        %>
         <%@ include file="../section/header.jsp" %>
         <h1 style="text-align: center; margin: 40px">Parcours ${questionnaire.subject}</h1>
         <div class="row">
             <div class="card offset-sm-1 col-sm-10" style="width: 18rem;">
                 <div class="card-body">
-                    <form>
+                    <form method="post" action="parcours/validate">
                         <%
+                            out.println("<input type=\"hidden\" name=\"duration\" value =\"" + (startTime) + "\">");
+                            
                             List<Question> questions = (List<Question>)request.getAttribute("questions");
+                            Questionnaire questionnaire = (Questionnaire)request.getAttribute("questionnaire");
+                            
+                            out.println("<input type=\"hidden\" name=\"questionnaire\" value=\"" + questionnaire.getId_questionnaire() + "\">");
+                            
                             for (int i=0; i< questions.size(); i++){  
 
                                 out.println(
