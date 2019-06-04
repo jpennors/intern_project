@@ -24,6 +24,7 @@
                                 <div class="form-group row">
                                     <input type="hidden" id="inputId" name="id" value=${r.id}>
                                     <input type="hidden" id="inputId" name="id_questionnaire" value=${id_questionnaire}>
+                                    <input type="hidden" id="inputId" name="id_question" value=${r.question_id}>
                                     <label for="inputSentence" class="col-sm-4 col-form-label">Intitulé</label>
                                     <div class="col-sm-8">
                                         <input class="form-control" id="inputName" name="name" value="${r.name}">

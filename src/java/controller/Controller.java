@@ -585,7 +585,7 @@ public class Controller extends HttpServlet {
         Integer id = Integer.parseInt(request.getParameter("id_question"));
         
         //édition via un questionnaire ou non 
-        if (request.getParameter("id_questionnaire") == null){
+        if (request.getParameter("id_questionnaire") == null || request.getParameter("id_questionnaire").equals("") ){
             id_questionnaire = null;
             request.setAttribute("id_questionnaire", id_questionnaire);
         }        
