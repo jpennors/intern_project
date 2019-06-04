@@ -126,6 +126,7 @@ public class Response {
     static public Response mapRequestToResponse(HttpServletRequest request){
         Response response = new Response();
         String id = request.getParameter("id");
+        response.setQuestion_id(Integer.parseInt(request.getParameter("id_question")));
         try{
             response.setId(Integer.parseInt(id));
         }catch(NumberFormatException ex){}
