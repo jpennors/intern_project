@@ -425,8 +425,6 @@ public class Controller extends HttpServlet {
         
         // Validation
         //List<Validation> errors = Validation.userRequestValidation(request);
-        System.out.println("ici");
-        System.out.println(request.getParameter("is_admin"));
         User user = User.mapRequestToUser(request);
         /*if(!errors.isEmpty()){
             CompanyDao company_dao = dao.getCompanyDao();
@@ -534,9 +532,9 @@ public class Controller extends HttpServlet {
             }
         }
         for(int i =0; i < all_questions.size(); i ++){
-        System.out.println(all_questions.get(i).getId_question());}
         request.setAttribute("all_questions", all_questions);
         returnView(request, response, "/WEB-INF/question/edit_questionnaire.jsp");
+        }
     }
     
     //traitement (post)
@@ -611,7 +609,6 @@ public class Controller extends HttpServlet {
         Question question = Question.mapRequestToQuestion(request);
         QuestionDao question_dao = dao.getQuestionDao();
         int id = Integer.parseInt(request.getParameter("id_question"));
-        System.out.println("id"+id);
         question_dao.update(id, question);
         
         //lié à un questionnaire?
@@ -652,8 +649,6 @@ public class Controller extends HttpServlet {
         
         //lié à un questionnaire?
         Integer id_questionnaire = null;
-        System.out.println("id questionnaire");
-        System.out.println(request.getParameter("id_questionnaire"));
         if (!request.getParameter("id_questionnaire").equals(""))
             id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         else 
@@ -694,7 +689,6 @@ public class Controller extends HttpServlet {
         //retour: liste question ou question en édition
         Integer id_questionnaire;
         if (!request.getParameter("id_questionnaire").equals("null")){
-            System.out.println("id questionnaire" + request.getParameter("id_questionnaire"));
             id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));}
         else 
             id_questionnaire = null;
@@ -711,7 +705,6 @@ public class Controller extends HttpServlet {
         
         //édition via une question liée à questionnaire ou non 
         if (!request.getParameter("id_questionnaire").equals("null")){
-            System.out.println("id questionnaire" + request.getParameter("id_questionnaire"));
             id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         }        
         else{
