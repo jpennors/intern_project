@@ -11,12 +11,12 @@
 *.ear
 *.sar
 *.class
+*.properties
 
 # NetBeans specific
 nbproject/
 nbproject/private/
 build/
-nbproject/private/private.properties
 nbbuild/
 dist/
 nbdist/
