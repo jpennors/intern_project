@@ -748,19 +748,13 @@ public class Controller extends HttpServlet {
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
         Questionnaire questionnaire = questionnaire_dao.show(questionnaire_id);
         List<Question> questions = questionnaire_dao.getQuestion(questionnaire_id);
-
+        ResponseDao response_dao = dao.getResponseDao();
+        
         for(int i=0; i<questions.size(); i++){
-            List<Response> responses =  new ArrayList();
-            responses.add(new Response(1,"a", 1, true,1));
-            responses.add(new Response(2,"b", 0, true,1));
-            responses.add(new Response(3,"c", 0, true,1));
-            responses.add(new Response(4,"d", 0, true,1));
+            
+            List<Response> responses =  response_dao.showByIdQuestion(questions.get(i).getId_question());
             questions.get(i).set_response(responses);
         }
-
-        /**
-         * TO DO : Récupérer réponses pour chaque question
-         */
 
         request.setAttribute("questions", questions);
         request.setAttribute("questionnaire", questionnaire);
