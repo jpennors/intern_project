@@ -211,7 +211,7 @@ public class QuestionnaireDao implements DAOInterface<Questionnaire>{
     return questions;
     }
     
-    private static Questionnaire map(ResultSet resultSet) throws SQLException {
+    public static Questionnaire map(ResultSet resultSet) throws SQLException {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setId_questionnaire(resultSet.getInt("id_questionnaire"));
         questionnaire.setSubject(resultSet.getString("subject"));
