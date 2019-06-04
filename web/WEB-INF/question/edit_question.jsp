@@ -47,11 +47,13 @@
                                         out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
                                         out.println("</form>");
                                         //delete
-                                        out.println("<form action='delete_response' method='post'>");
-                                        out.println("<input type='hidden' id='inputId' name='id_questionnaire' value='" + id_questionnaire + "'>");
-                                        out.println("<input type='hidden' name='id_response' value='" + responses.get(i).getId() + "'>");
-                                        out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + responses.get(i).getId() + ">Supprimer</button></td>");
-                                        out.println("</form>");
+                                        if(responses.get(i).getStatus() && !responses.get(i).getValidity()){
+                                            out.println("<form action='delete_response' method='post'>");
+                                            out.println("<input type='hidden' id='inputId' name='id_questionnaire' value='" + id_questionnaire + "'>");
+                                            out.println("<input type='hidden' name='id_response' value='" + responses.get(i).getId() + "'>");
+                                            out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + responses.get(i).getId() + ">Supprimer</button></td>");
+                                            out.println("</form>");
+                                        }
                                         out.println("</tr>");
                                     }
                              %> 
@@ -60,6 +62,44 @@
                 </div>
             </div>
         </div> 
+        <h3 style="text-align: center; margin: 40px">Ajout d'une réponse</h3>                
+        <div class="row">
+            <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
+                <div class="card-body">
+                    <div class="form-group">
+                        <form action="add_response" method="post">
+                                <div class="form-group row">
+                                    <input type="hidden" id="inputId" name="id_question" value=${question.id_question}>
+                                    <input type="hidden" id="inputId" name="id_questionnaire" value=${id_questionnaire}>
+                                    <label for="inputName" class="col-sm-4 col-form-label">Intitulé</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="inputSubject" name="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">    
+                                    <label for="inputName" class="col-sm-4 col-form-label">Validité</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="inputType" name="validity">
+                                            <option value="true">Vraie</option>
+                                            <option value="false">Fausse</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">    
+                                    <label for="inputName" class="col-sm-4 col-form-label">Ordre</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="inputType" name="order">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                </div>      
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </form>
+                    </div>                
+                </div>
+            </div>
+        </div>                
         <h3 style="text-align: center; margin: 40px">Informations de la question</h3>                
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">

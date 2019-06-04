@@ -42,10 +42,12 @@
                                         out.println("<td><button class='btn btn-info' type='submit'>Editer</button>");
                                         out.println("</form>");
                                         //delete
-                                        out.println("<form action='delete_question' method='post'>");
-                                        out.println("<input type='hidden' name='id_question' value='" + questions.get(i).getId_question() + "'>");
-                                        out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + questions.get(i).getId_question() + ">Supprimer</button></td>");
-                                        out.println("</form>");
+                                        if(questions.get(i).getStatus()){
+                                            out.println("<form action='delete_question' method='post'>");
+                                            out.println("<input type='hidden' name='id_question' value='" + questions.get(i).getId_question() + "'>");
+                                            out.println("<button type='submit' class='btn btn-info' href='delete_question?id='" + questions.get(i).getId_question() + ">Supprimer</button></td>");
+                                            out.println("</form>");
+                                        }
                                         out.println("</tr>");
                                     }
                              %> 

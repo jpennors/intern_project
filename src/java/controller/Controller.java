@@ -80,7 +80,7 @@ public class Controller extends HttpServlet {
         /*try{
            Seeder.mainScript(); 
         } catch(SQLException ex){
-            System.out.println("errur");
+            System.out.println("erreur");
         }*/
         
         
@@ -269,6 +269,10 @@ public class Controller extends HttpServlet {
                     case "/intern_project/delete_question":                    
                         deleteQuestion(request,response);
                         break;
+                    
+                    case "/intern_project/add_question":                    
+                        addQuestion(request,response);
+                        break;    
                         
                     /**
                      * RESPONSE POST METHOD
@@ -283,7 +287,11 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/delete_response":                    
                         deleteResponse(request,response);
-                        break;     
+                        break; 
+                        
+                    case "/intern_project/add_response":                    
+                        addResponse(request,response);
+                        break;    
                        
                     /**
                      * PARCOURS
@@ -510,7 +518,8 @@ public class Controller extends HttpServlet {
         User createur = Middleware.getLoggedUser(request, response);
         questionnaire.setCreateur_id(createur);
         questionnaire_dao.create(questionnaire);
-        response.sendRedirect("/intern_project/questionnaires");
+        //response.sendRedirect("/intern_project/questionnaires");
+        response.sendRedirect("/intern_project/edit_questionnaire?id_questionnaire=" + questionnaire.getId_questionnaire());
     }
     
     //(get)
@@ -619,7 +628,7 @@ public class Controller extends HttpServlet {
             id_questionnaire = null;
         //retour: liste question ou questionnaire en édition
         if (id_questionnaire != null)           
-            this.questionnaireEdition(request, response);
+            response.sendRedirect("/intern_project/edit_questionnaire?id_questionnaire=" + id_questionnaire);
         else 
             response.sendRedirect("/intern_project/questions");
     }
@@ -657,10 +666,11 @@ public class Controller extends HttpServlet {
         if (id_questionnaire != null){
             //lie la question au questionnaire 
             question_dao.linkQuestionnaire(id_questionnaire, question.getId_question());
-            this.questionnaireEdition(request, response);
+            response.sendRedirect("/intern_project/edit_questionnaire?id_questionnaire=" + id_questionnaire);
         }    
         else 
-            response.sendRedirect("/intern_project/questions");
+            //response.sendRedirect("/intern_project/questions");
+            response.sendRedirect("/intern_project/edit_question?id_question=" + question.getId_question().toString());
     }
 
     protected void addQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -669,7 +679,8 @@ public class Controller extends HttpServlet {
         int id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         question_dao.linkQuestionnaire(id_questionnaire, id_question);
                 
-        this.questionnaireEdition(request, response);
+        response.sendRedirect("/intern_project/edit_questionnaire?id_questionnaire="+ id_questionnaire);
+
     }
     
     /**
@@ -709,9 +720,9 @@ public class Controller extends HttpServlet {
         }        
         else{
             id_questionnaire = null;
-            request.setAttribute("id_questionnaire", id_questionnaire);
         }    
         Response r = response_dao.show(id);
+        request.setAttribute("id_questionnaire", id_questionnaire);
         request.setAttribute("r", r);
         returnView(request, response, "/WEB-INF/question/edit_response.jsp");
     }
@@ -722,16 +733,42 @@ public class Controller extends HttpServlet {
         ResponseDao response_dao = dao.getResponseDao();
         int id = Integer.parseInt(request.getParameter("id"));
         response_dao.update(id, r);
-        
+       
         //edition question lié à un questionnaire
         Integer id_questionnaire = null;
+        System.out.println("update response" +request.getParameter("id_questionnaire"));
         if (!request.getParameter("id_questionnaire").equals(""))
             id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
         else 
             id_questionnaire = null;
         //retour sur la question      
-        this.questionEdition(request, response);
+        if (id_questionnaire != null)           
+            response.sendRedirect("/intern_project/edit_question?id_questionnaire="+ id_questionnaire +"&id_question=" + r.getQuestion_id().toString());
+        else 
+            response.sendRedirect("/intern_project/edit_question?id_question=" + r.getQuestion_id().toString());
     }
+    
+    protected void addResponse(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        Response r = Response.mapRequestToResponse(request);   
+        ResponseDao response_dao = dao.getResponseDao();
+        response_dao.create(r);
+        Integer id_questionnaire;
+      
+        //édition via un questionnaire ou non 
+        if (request.getParameter("id_questionnaire") == null || request.getParameter("id_questionnaire").equals("") ){
+            id_questionnaire = null;
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        }        
+        else{ 
+            id_questionnaire = Integer.parseInt(request.getParameter("id_questionnaire"));
+            request.setAttribute("id_questionnaire", id_questionnaire);
+        } 
+        if (id_questionnaire != null)           
+            response.sendRedirect("/intern_project/edit_question?id_questionnaire="+ id_questionnaire +"&id_question=" + r.getQuestion_id().toString());
+        else 
+            response.sendRedirect("/intern_project/edit_question?id_question=" + r.getQuestion_id().toString());
+    }
+    
     
     /**
      * PARCOURS
