@@ -20,14 +20,14 @@
                     <table id="user" class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nom</th>
-                                <th scope="col">Prénom</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Télephone</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Statut</th>
-                                <th scope="col">Entreprise</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> #</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Nom</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Prénom</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Email</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Télephone</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Type</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Statut</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Entreprise</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>

@@ -22,10 +22,10 @@
                     <table id="reponse" class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Sujet</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Validité</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> #</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Sujet</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Status</th>
+                                <th scope="col"><i class="material-icons">arrow_drop_down</i> Validité</th>
                                 <th scope="col">Action</th> 
                             </tr>
                         </thead>
