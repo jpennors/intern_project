@@ -19,7 +19,7 @@
         <div class="row">
             <div class="card offset-sm-3 col-sm-6" style="width: 18rem;">
                 <div class="card-body">
-                    <table class="table">
+                    <table id="question" class="table">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
@@ -129,6 +129,11 @@
                     </div>                
                 </div>
             </div>
-        </div>                
+        </div>   
+        <script>
+            $(document).ready(function() {
+                $('#question').DataTable();
+            } );
+        </script>
     </body>
 </html>

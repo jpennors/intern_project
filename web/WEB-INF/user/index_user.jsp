@@ -17,7 +17,7 @@
         <div class="row">
             <div class="card offset-sm-1 col-sm-10" style="width: 18rem;">
                 <div class="card-body">
-                    <table class="table">
+                    <table id="user" class="table">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
@@ -84,6 +84,11 @@
             </div>
           </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                $('#user').DataTable();
+            } );
+        </script>
     </body>
 </html>
 
