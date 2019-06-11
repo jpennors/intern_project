@@ -515,6 +515,14 @@ public class Controller extends HttpServlet {
     protected void createQuestionnaire(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         Questionnaire questionnaire = Questionnaire.mapRequestToQuestionnaire(request);
         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
+        List<Questionnaire> questionnaires = questionnaire_dao.index();
+        
+        for(int i=0; i<questionnaires.size(); i++){
+  
+            if(questionnaires.get(i).getSubject().equals(questionnaire.getSubject()))
+                questionnaireCreation(request, response);
+        }
+        
         User createur = Middleware.getLoggedUser(request, response);
         questionnaire.setCreateur_id(createur);
         questionnaire_dao.create(questionnaire);
