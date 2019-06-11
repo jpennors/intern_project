@@ -203,6 +203,7 @@ public class QuestionDao implements DAOInterface<Question>{
         question.setId_question(resultSet.getInt("id_question"));
         question.setStatus(resultSet.getBoolean("status_question"));
         question.setSentence(resultSet.getString("name"));
+        //question.setOrder(resultSet.getInt("order"));
         return question;
     }    
 }

@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Response;
@@ -35,12 +36,13 @@ public class ResponseDao implements DAOInterface<Response>{
     }
     
     private static final String SQL_SELECT_BY_ID_RESPONSE = "SELECT * FROM response WHERE response.id_response = ?";
-    private static final String SQL_SELECT_BY_QUESTION_ID = "SELECT * FROM response WHERE response.question_id = ?";
+    private static final String SQL_SELECT_BY_QUESTION_ID = "SELECT * FROM response WHERE response.question_id = ? ORDER BY response.ordre";
     private static final String SQL_SOFT_DELETE ="UPDATE response SET status_response = 0 WHERE response.id_response = ?";
     private static final String SQL_INSERT = "INSERT INTO response (status_response, name, ordre, validity, question_id) VALUES (?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE response SET status_response=?, name=?, ordre=? WHERE id_response=?";
     private static final String SQL_UPDATE_VALIDITY_FALSE ="UPDATE response SET validity = 0 WHERE question_id=?";
     private static final String SQL_UPDATE_VALIDITY_TRUE ="UPDATE response SET validity = 1 WHERE id_response=?";
+    private static final String SQL_UPDATE_ORDER ="UPDATE response SET ordre = ? WHERE id_response=?";
     
     // not usefull
     @Override
@@ -58,6 +60,8 @@ public class ResponseDao implements DAOInterface<Response>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
+            
+            //update
             preparedStatement = initialisationRequetePreparee( connexion, SQL_INSERT, true, 
                     response.getStatus(), response.getName(), response.getOrder(), response.getValidity(), response.getQuestion_id());
             int status = preparedStatement.executeUpdate();
@@ -76,16 +80,35 @@ public class ResponseDao implements DAOInterface<Response>{
                 throw new DAOException( "Échec de la création de la reponse en base, aucun ID auto-généré retourné." );
             }
             
+            //gestion de la validité
             if(response.getValidity()== true){
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, response.getQuestion_id() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe toutes réponses à faux" +status);
+                System.out.println("passe toutes réponses à faux " +status);
                 
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_TRUE, true, response.getId() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe la réponse vrai"+status);
+                System.out.println("passe la réponse vrai "+status);
             
             }
+            //gestion de l'ordre
+            List<Response> responses = showByIdQuestion(response.getQuestion_id());
+            for(int i =0; i <responses.size(); i++){
+                if(response.getOrder()<= responses.get(i).getOrder() && !response.getId().equals(responses.get(i).getId())){
+                    int o = responses.get(i).getOrder();
+                    responses.get(i).setOrder(o+1);
+                    preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_ORDER, true, responses.get(i).getOrder(), responses.get(i).getId() );
+                    status = preparedStatement.executeUpdate();
+                    System.out.println("set new order "+ responses.get(i).getOrder() + "id " + responses.get(i).getId());
+                    
+                }                    
+            }
+            if(response.getOrder()>responses.size()){
+                response.setOrder(responses.size());
+                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_ORDER, true, response.getOrder(), response.getId() );
+                status = preparedStatement.executeUpdate();
+            }
+            
             
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -153,7 +176,7 @@ public class ResponseDao implements DAOInterface<Response>{
     }
 
     @Override
-    public void update(int id, Response response) throws DAOException {
+    public void update(int id, Response r) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -161,19 +184,52 @@ public class ResponseDao implements DAOInterface<Response>{
         try {
             /* Récupération d'une connexion depuis la Factory */
             connexion = DAOFactory.getConnection();
+            
+            //recupère ancien ordre
+            Response resp = show(id);
+            int oldOrder = resp.getOrder();
+            System.out.println("ancien ordre "+ oldOrder);
+            
+            
+            //update
             preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE, true,
-                    response.getStatus(), response.getName(), response.getOrder(), id );
+                    r.getStatus(), r.getName(), r.getOrder(), id );
             int status = preparedStatement.executeUpdate();
             
-            if(response.getValidity()== true){
-                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, response.getQuestion_id() );
+            //gestion de la validité
+            if(r.getValidity()== true){
+                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, r.getQuestion_id() );
                 status = preparedStatement.executeUpdate();
                 System.out.println("passe toutes réponses à faux" +status);
                 
-                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_TRUE, true, response.getId() );
+                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_TRUE, true, r.getId() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe la réponse vrai"+status);
+                System.out.println("passe la réponse vrai"+status);    
             
+            }   
+            
+            //gestion de l'ordre
+            List<Response> responses = showByIdQuestion(r.getQuestion_id());
+            for(int i =0; i <responses.size(); i++){
+                if(r.getOrder()<= responses.get(i).getOrder() && !r.getId().equals(responses.get(i).getId())){
+                    int o = responses.get(i).getOrder();
+                    responses.get(i).setOrder(o+1);
+                    preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_ORDER, true, responses.get(i).getOrder(), responses.get(i).getId() );
+                    status = preparedStatement.executeUpdate();
+                    System.out.println("set new order "+ responses.get(i).getOrder() + "id " + responses.get(i).getId()); 
+                }
+                if(responses.get(i).getOrder() > oldOrder && !r.getId().equals(responses.get(i).getId())){
+                    int o = responses.get(i).getOrder();
+                    responses.get(i).setOrder(o-1);
+                    preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_ORDER, true, responses.get(i).getOrder(), responses.get(i).getId() );
+                    status = preparedStatement.executeUpdate();
+                    System.out.println("set new order "+ responses.get(i).getOrder() + "id " + responses.get(i).getId()); 
+                }
+            }
+            if(r.getOrder()>responses.size()){
+                r.setOrder(responses.size());
+                preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_ORDER, true, r.getOrder(), r.getId() );
+                status = preparedStatement.executeUpdate();
             }
             
         } catch ( SQLException e ) {
