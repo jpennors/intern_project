@@ -483,6 +483,19 @@ public class Controller extends HttpServlet {
         request.setAttribute("user", user);
         request.setAttribute("companies", companies); 
         request.setAttribute("selected_company", user.getCompany().getMatriculation());
+        
+        ParcoursDao parcours_dao = dao.getParcoursDao();
+
+        List<Parcours> parcours = parcours_dao.indexForUser(user.getId_user());
+
+        for (int i = 0; i < parcours.size(); i++){
+            parcours.get(i).setCount_answers(parcours_dao.countAnswers(parcours.get(i).getId()));
+            parcours.get(i).setCount_good_answers(parcours_dao.countGoodAnswers(parcours.get(i).getId()));
+
+
+        }
+        request.setAttribute("parcours", parcours);
+        
         returnView(request, response, "/WEB-INF/user/edit_user.jsp");
     }
     

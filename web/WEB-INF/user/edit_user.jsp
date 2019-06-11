@@ -4,6 +4,7 @@
     Author     : Josselin
 --%>
 
+<%@page import="model.Parcours"%>
 <%@page import="java.util.List"%>
 <%-- 
     Document   : create_user
@@ -93,6 +94,31 @@
                             </div>                             
                             <button type="submit" class="btn btn-primary">Mettre à jour</button>
                         </form>
+                        <br>
+                        <div class="row">
+                            <div class="card col-md-10 offset-md-1">
+                                <div class="card-body row">
+                                    <%
+                                        List<Parcours> parcours = (List<Parcours>)request.getAttribute("parcours");
+                                        for (int i=0; i< parcours.size(); i++){ 
+
+                                            out.println(
+                                                "<div class='alert alert-secondary col-md-4 offset-md-1' role='alert'><h6>" +
+                                                parcours.get(i).getQuestionnaire_id().getSubject() +
+                                                "</h6><br><span><strong>Réponse : </strong>" +
+                                                parcours.get(i).getCount_good_answers().toString() +
+                                                "/" +
+                                                parcours.get(i).getCount_answers() + "<br>" +
+                                                "<strong>Temps : </strong>" +
+                                                parcours.get(i).durationToString() +
+                                                "</span></div>"
+                                            );
+                                        }  
+                                    %>
+                                </div>
+                                
+                            </div>
+                        
                     </div>
                 </div>
             </div>
