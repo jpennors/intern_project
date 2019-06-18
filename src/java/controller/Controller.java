@@ -192,22 +192,39 @@ public class Controller extends HttpServlet {
                        
                 }
             } else {
+                System.out.println(request.getRequestURI());
                 switch(request.getRequestURI()){
+                    
                     case "/intern_project/home":
                         ParcoursDao parcours_dao = dao.getParcoursDao();
                         User user = (User)request.getAttribute("logged_user");
                         
+                        Parcours best_parcours = null;
+                        double best_rapport = -1;
+                        
                         List<Parcours> parcours = parcours_dao.indexForUser(user.getId_user());
 
                         for (int i = 0; i < parcours.size(); i++){
-                            //parcours.get(i).setCount_answers(parcours_dao.countAnswers(parcours.get(i).getQuestionnaire_id().getId_questionnaire()));
                             parcours.get(i).setCount_answers(parcours_dao.countAnswers(parcours.get(i).getId()));
                             parcours.get(i).setCount_good_answers(parcours_dao.countGoodAnswers(parcours.get(i).getId()));
+                            
+                            if(parcours.get(i).getDuration()>0){
+                                double rapport = (double) parcours.get(i).getCount_good_answers()/parcours.get(i).getDuration();
+                                System.out.println(rapport);
+                                System.out.println(parcours.get(i).getCount_good_answers());
+                                System.out.println(parcours.get(i).getDuration());
+                                if (best_rapport < rapport){
+                                    best_parcours = parcours.get(i);
+                                    best_rapport = rapport;
+                                }
+                            }
+                            
                         }
                         request.setAttribute("parcours", parcours);
                         QuestionnaireDao questionnaire_dao = dao.getQuestionnaireDao();
                         List<Questionnaire> questionnaires = questionnaire_dao.index();
                         request.setAttribute("questionnaires", questionnaires);
+                        request.setAttribute("best_parcours", best_parcours);
                         
                         returnView(request, response, "/WEB-INF/home.jsp");
                         break;
