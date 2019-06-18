@@ -48,58 +48,86 @@
                         } else {
                             out.println(
                                 "<div class='row'>" +
-                                "<div class='col-md-6'>" +
-                                "<div class='card' style='width: 18rem;'>" +
+                                "<div class='col-md-8'>" +
+                                "<div class='card'>" +
                                 "<div class='card-body'>" +
                                 "<h5 class='card-title'>Mes parcours</h5>" +
-                                "<p class='card-text'></p>"
+                                "<div class='row'>"
                             );
 
                             List<Parcours> parcours = (List<Parcours>)request.getAttribute("parcours");
                             for (int i=0; i< parcours.size(); i++){ 
                                 
                                 out.println(
-                                    "<div class='alert alert-secondary' role='alert'><h6>" +
+                                    "<div class='alert alert-secondary col-md-4 offset-md-1' role='alert'><h6>" +
                                     parcours.get(i).getQuestionnaire_id().getSubject() +
                                     "</h6><br><span><strong>Réponse : </strong>" +
                                     parcours.get(i).getCount_good_answers().toString() +
                                     "/" +
-                                    parcours.get(i).getCount_answers() +
-                                    "</div>"
+                                    parcours.get(i).getCount_answers() + "<br>" +
+                                    "<strong>Temps : </strong>" +
+                                    parcours.get(i).durationToString() +
+                                    "</span></div>"
                                 );
                             }
-                            out.println("</div>"+
+                            out.println("</div></div>"+
                                 "</div>" +
                                 "</div>" +
-                                "<div class='col-md-6'>" +
+                                "<div class='col-md-4'>"
+                            );
+                            
+                            Parcours best_parcours = (Parcours)request.getAttribute("best_parcours");
+                            if(best_parcours != null){
+                                out.println(
+                                    "<div class='card' style='width: 18rem;'>" +
+                                    "<div class='card-body'>" +
+                                    "<h5 class='card-title'>Mon meilleur parcours</h5>" +
+                                    "<p>" + best_parcours.getQuestionnaire_id().getSubject() + "<br>" +
+                                    "<strong>Réponse : </strong>" +
+                                    best_parcours.getCount_good_answers() + "/" + best_parcours.getCount_answers() +
+                                    "<br><strong>Temps : </strong>" + best_parcours.durationToString() + "</p>" +
+                                    "</div></div>"
+                                );
+                            }
+                            out.println( 
+                                "<br><br>" +
                                 "<div class='card' style='width: 18rem;'>" +
                                 "<div class='card-body'>" +
-                                "<h5 class='card-title'>Mes statistiques</h5>" +
-                                "<p class='card-text'></p>"+
-                                "<a href='#' class='card-link'>Card link</a>"+
+                                "<h5 class='card-title'>Commencer un parcours</h5>" +
+                                "<br>" +
+                                "<form action='parcours'><div class='row' method='post'>" +
+                                "<select class='form-control col-md-8 offset-md-2' id='inputQuestionnaire' name='questionnaire' required>"
+                            );
+                            
+                            List<Questionnaire> questionnaires = (List<Questionnaire>)request.getAttribute("questionnaires");
+                            for (int i=0; i< questionnaires.size(); i++){  
+                                if(questionnaires.get(i).getStatus()){
+                                    out.println("<option value='" + questionnaires.get(i).getId_questionnaire() + "' selected>" + questionnaires.get(i).getSubject() + "</option>");
+                                }
+                            }
+                    %>
+                            </select>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <button type="submit" class="col-md-8 offset-md-2 btn btn-info">
+                                    C'est parti ! 
+                                 </button>
+                                </form>
+                            </div>
+                    
+                    <%
+                            out.println(
                                 "</div>"+
                                 "</div>" +
                                 "</div>" +
-                                "</div><br>" +
-                                "<form action='parcours'><div class='row' method='post'>" +
-                                "<select class='form-control col-md-4 offset-md-4' id='inputQuestionnaire' name='questionnaire' required>"
+                                "</div>"
                             );
                         
-                            List<Questionnaire> questionnaires = (List<Questionnaire>)request.getAttribute("questionnaires");
-                            for (int i=0; i< questionnaires.size(); i++){     
-                                out.println("<option value='" + questionnaires.get(i).getId_questionnaire() + "' selected>" + questionnaires.get(i).getSubject() + "</option>");
-                            }
+                            
                         }
                      %>
-                    </select>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <button type="submit" class="col-md-2 offset-md-5 btn btn-info">
-                            Commencer un parcours
-                         </button>
-                        </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>			
