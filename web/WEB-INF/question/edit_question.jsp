@@ -88,10 +88,7 @@
                                 <div class="form-group row">    
                                     <label for="inputName" class="col-sm-4 col-form-label">Ordre</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="inputType" name="order">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
+                                        <input class="form-control" id="inputOrder" name="order" value="${responses.size()+1}">
                                     </div>
                                 </div>      
                                 <button type="submit" class="btn btn-primary">Envoyer</button>

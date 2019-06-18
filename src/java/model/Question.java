@@ -106,6 +106,7 @@ public class Question {
             question.setId_question(Integer.parseInt(id_question));
         }catch(NumberFormatException ex){}
         question.setSentence(request.getParameter("sentence"));
+        //question.setOrder(Integer.parseInt(request.getParameter("order")));
         if (request.getParameterMap().containsKey("status")){
             question.setStatus(Boolean.parseBoolean(request.getParameter("status")));
         }
