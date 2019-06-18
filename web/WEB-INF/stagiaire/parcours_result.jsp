@@ -42,7 +42,7 @@
                     if(questions.get(i).getStatus()){
 
                         out.println(
-                            "<div class='alert alert-success' role='alert'>" +
+                            "<div class='alert alert-secondary' role='alert'>" +
                             "<h4>Question n°" + (index) + "</h4><br>" +
                             "<p>"+ questions.get(i).getSentence() + "</p>" 
                         );

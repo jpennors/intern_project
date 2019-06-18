@@ -152,6 +152,78 @@ public class Seeder {
         u4.setPhone("0623232320");
         u4.setCompany(c2);
         user_dao.create(u4);
+        
+        User u = new User();
+        u.setFirst_name("César");
+        u.setName_user("Lejeune");
+        u.setEmail("cesar.lejeune@sfr.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Vincent");
+        u.setName_user("Lainée");
+        u.setEmail("vincent.l@sfr.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Adrien");
+        u.setName_user("Ledoux");
+        u.setEmail("adr.ledouuuu@hotmail.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Clémence");
+        u.setName_user("Kraaijenk");
+        u.setEmail("clemence.kra@sfr.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Pierre");
+        u.setName_user("Tea");
+        u.setEmail("p.tea@gmail.com");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Aymeric");
+        u.setName_user("Obled");
+        u.setEmail("aymeric.obled@yahoo.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0623254215");
+        u.setCompany(c1);
+        user_dao.create(u);
+        
+        u = new User();
+        u.setFirst_name("Samir");
+        u.setName_user("Nastu");
+        u.setEmail("samy.nas@sfr.fr");
+        u.setIs_admin(false);
+        u.setPassword("mll");
+        u.setPhone("0625487651");
+        u.setCompany(c2);
+        user_dao.create(u);
+        
+        
     }
     
     static protected void createQuestionnnaires(Statement st, DAOFactory dao) throws SQLException{
@@ -348,7 +420,31 @@ public class Seeder {
         r4.setQuestion_id(q_id);
         response_dao.create(r4);
         
+        question_dao.linkQuestionnaire(questionnaire2, q_id);
         question_dao.linkQuestionnaire(questionnaire1, q_id);
+        
+        q = new Question();
+        q.setSentence("Qu'est que MVC 2 ... ?");
+        q_id = question_dao.create(q);
+        r1 = new Response();
+        r1.setValidity(true);
+        r1.setName("Un design pattern avec 1 contrôleur");
+        r1.setOrder(1);
+        r1.setQuestion_id(q_id);
+        response_dao.create(r1);
+        r2 = new Response();
+        r2.setValidity(false);
+        r2.setName("Un design pattern avec plusieurs contrôleur");
+        r2.setOrder(2);
+        r2.setQuestion_id(q_id);
+        response_dao.create(r2);
+        r3 = new Response();
+        r3.setValidity(false);
+        r3.setName("Un design pattern sans contrôleur");
+        r3.setOrder(3);
+        r3.setQuestion_id(q_id);
+        response_dao.create(r3);
+        
         question_dao.linkQuestionnaire(questionnaire2, q_id);
         
     }
