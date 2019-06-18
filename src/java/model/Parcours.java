@@ -88,6 +88,18 @@ public class Parcours {
         return "parcours{" + "id=" + id + ", duration=" + duration + ", user_id=" + user_id + ", questionnaire_id=" + questionnaire_id + '}';
     }
     
+    public String durationToString(){
+        
+        int duration = this.duration;
+        
+        int h = duration/3600;
+        int min = (duration - h*3600)/60;
+        int s = ((duration - h*3600)-min*60);
+        
+        return String.format("%02d", h) + ":" + String.format("%02d", min) + ":" + String.format("%02d", s);
+        
+    }
+    
     //TO DO getScore() 
     //get the score thanks to the number of validated answers
    

@@ -45,7 +45,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     private static final String SQL_UPDATE_ALL = "";
     private static final String SQL_SOFT_DELETE = "";   
     private static final String SQL_INSERT_PARCOURS_QUESTION = "INSERT INTO parcours_question (parcours_id, question_id, response_id) VALUES (?,?,?)";
-        
+    
     /* Parcours lié à un utlisateur */
     private static final String SQL_PARCOURS_USER = "SELECT * FROM parcours, user, questionnaire, company WHERE parcours.user_id = ? AND parcours.user_id = user.id_user AND parcours.questionnaire_id = questionnaire.id_questionnaire AND user.company = company.matriculation";
     private static final String SQL_COUNT_GOOD_ANSWERS = "SELECT COUNT(*) AS total FROM parcours_question, response WHERE parcours_question.parcours_id = ? AND parcours_question.response_id = response.id_response AND response.validity = 1";
@@ -66,7 +66,6 @@ public class ParcoursDao implements DAOInterface<Parcours>{
             connexion = DAOFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_SELECT_ALL, false);
             resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
             
             ResultSetMetaData metadata = resultSet.getMetaData();
             int numberOfColumns = metadata.getColumnCount();
@@ -152,6 +151,7 @@ public class ParcoursDao implements DAOInterface<Parcours>{
     private static Parcours map(ResultSet resultSet) throws SQLException{
         Parcours parcours = new Parcours();
         parcours.setId(resultSet.getInt("id_parcours"));
+        parcours.setDuration(resultSet.getInt("duration"));
         parcours.setQuestionnaire_id(QuestionnaireDao.map(resultSet));
         parcours.setUser_id(UserDao.map(resultSet));
         return parcours;
