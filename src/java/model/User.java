@@ -189,9 +189,7 @@ public class User {
             user.setEmail(request.getParameter("email"));
             user.setName_user(request.getParameter("name_user"));
             user.setPhone(request.getParameter("phone"));
-            if (request.getParameterMap().containsKey("password")){
-                user.setPassword(request.getParameter("password"));
-            }
+            user.setPassword((String) request.getAttribute("password"));
             if (request.getParameterMap().containsKey("status")){
                 user.setStatus(Boolean.parseBoolean(request.getParameter("status")));
             }
