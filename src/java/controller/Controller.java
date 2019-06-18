@@ -28,8 +28,10 @@ import model.Questionnaire;
 import model.User;
 import model.Company;
 import dao.UserDao;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import model.Parcours;
 import model.Question;
 import model.Response;
@@ -431,8 +433,9 @@ public class Controller extends HttpServlet {
     
     protected void createUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         
-        // Validation
-        //List<Validation> errors = Validation.userRequestValidation(request);
+
+        String password = RandomString.generateRandomString();
+        request.setAttribute("password", password);
         User user = User.mapRequestToUser(request);
         /*if(!errors.isEmpty()){
             CompanyDao company_dao = dao.getCompanyDao();
@@ -450,6 +453,11 @@ public class Controller extends HttpServlet {
         user.setCompany(company);
         UserDao user_dao = dao.getUserDao();
         user_dao.create(user);
+        
+        Mail.send(password, user.getEmail());
+        
+        //Mail.main(null);
+        
         response.sendRedirect("/intern_project/users");
     }
     
@@ -621,6 +629,7 @@ public class Controller extends HttpServlet {
         }    
         Question question = question_dao.show(id);
         List<Response> responses = response_dao.showByIdQuestion(question.getId_question());
+        
         request.setAttribute("question", question);
         request.setAttribute("responses", responses);
         returnView(request, response, "/WEB-INF/question/edit_question.jsp");

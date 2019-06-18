@@ -47,12 +47,6 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-4 col-form-label">Password</label>
-                                <div class="col-sm-8">
-                                    <input type="password" class="form-control" id="inputPassword" name="password" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label for="inputType" class="col-sm-4 col-form-label">Type</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="inputType" name="is_admin" required value=${user.is_admin}>
