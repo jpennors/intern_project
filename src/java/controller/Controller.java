@@ -43,7 +43,8 @@ import model.Response;
 @WebServlet(name = "Controller", urlPatterns = {"/", "/home", "/login", "/logout", "/Controller",
     "/create_user", "/delete_user", "/users", "/edit_user/*", "/create_questionnaire",
     "/questionnaires", "/edit_questionnaire/*", "/questions", "/delete_question", "/create_question",
-    "/delete_response", "/create_response", "/edit_response", "/parcours", "/parcours/validate"})
+    "/delete_response", "/create_response", "/edit_response", "/parcours", "/parcours/validate",
+    "/parcours/resultat"})
 public class Controller extends HttpServlet {
     
     @Override
@@ -213,6 +214,37 @@ public class Controller extends HttpServlet {
                         
                     case "/intern_project/parcours":
                         getParcours(request,response);
+                        break;
+                        
+                    case "/intern_project/parcours/resultat":
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        parcours_dao = dao.getParcoursDao();
+                        user = (User)request.getAttribute("logged_user");
+                        parcours = parcours_dao.indexForUser(user.getId_user());
+                        questionnaire_dao = dao.getQuestionnaireDao();
+                        
+                        Parcours parcours_user = null;
+                        for(int i =0; i<parcours.size(); i++){
+                            if(parcours.get(i).getId().equals(id)){
+                                parcours_user = parcours.get(i);
+                                parcours_user.setCount_answers(parcours_dao.countAnswers(parcours.get(i).getId()));
+                                parcours_user.setCount_good_answers(parcours_dao.countGoodAnswers(parcours.get(i).getId()));  
+                            }
+                        }
+                        System.out.println(parcours_user.getQuestionnaire_id().getId_questionnaire());
+                        List<Question> questions = questionnaire_dao.getQuestion(parcours_user.getQuestionnaire_id().getId_questionnaire());
+                        ResponseDao response_dao = dao.getResponseDao();
+
+                        for(int i=0; i<questions.size(); i++){
+
+                            List<Response> responses =  response_dao.showByIdQuestion(questions.get(i).getId_question());
+                            questions.get(i).set_response(responses);
+                        }
+
+                        request.setAttribute("questions", questions);
+                        //request.setAttribute("questions", parcours_user.getQuestionnaire_id().get);
+                        request.setAttribute("parcours", parcours_user);
+                        returnView(request, response, "/WEB-INF/stagiaire/parcours_result.jsp");
                         break;
                     
                     default : 
@@ -839,11 +871,15 @@ public class Controller extends HttpServlet {
         ResponseDao response_dao = dao.getResponseDao();
         
         for(int i=0; i<questions.size(); i++){
-            Integer response_id = Integer.parseInt(request.getParameter(questions.get(i).getId_question().toString()));
-            parcours_dao.insertParcoursQuestion(parcours_id, questions.get(i).getId_question(), response_id);
+            if(questions.get(i).getStatus()){
+                Integer response_id = Integer.parseInt(request.getParameter(questions.get(i).getId_question().toString()));
+                parcours_dao.insertParcoursQuestion(parcours_id, questions.get(i).getId_question(), response_id);
+            }
         }
         
-        response.sendRedirect("/intern_project");
+        
+        
+        response.sendRedirect("/intern_project/parcours/resultat?id=" + parcours_id.toString());
     }
     
 }
