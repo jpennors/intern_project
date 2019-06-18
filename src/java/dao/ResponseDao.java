@@ -79,11 +79,9 @@ public class ResponseDao implements DAOInterface<Response>{
             if(response.getValidity()== true){
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_FALSE, true, response.getQuestion_id() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe toutes réponses à faux" +status);
                 
                 preparedStatement = initialisationRequetePreparee( connexion, SQL_UPDATE_VALIDITY_TRUE, true, response.getId() );
                 status = preparedStatement.executeUpdate();
-                System.out.println("passe la réponse vrai"+status);
             
             }
             
